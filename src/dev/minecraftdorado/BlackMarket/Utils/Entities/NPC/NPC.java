@@ -20,11 +20,11 @@ import dev.minecraftdorado.BlackMarket.Utils.Utils;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.Skins.SkinData.Skin;
 import dev.minecraftdorado.BlackMarket.Utils.Packets.Reflections;
 import dev.minecraftdorado.BlackMarket.Utils.Packets.ServerVersion;
-import net.minecraft.server.v1_15_R1.DataWatcherRegistry;
 
 public class NPC {
 	
 	private static final Class<?> EntityPlayer = Reflections.getNMSClass("EntityPlayer"),
+			World = Reflections.getNMSClass("World"),
 			CraftWorld = Reflections.getOBCClass("CraftWorld"),
 			CraftServer = Reflections.getOBCClass("CraftServer"),
 	        MinecraftServer = Reflections.getNMSClass("MinecraftServer"),
@@ -41,8 +41,8 @@ public class NPC {
 	        EntityHuman = Reflections.getNMSClass("EntityHuman"),
 	        EnumPlayerInfoAction = Reflections.getNMSClass("PacketPlayOutPlayerInfo$EnumPlayerInfoAction"),
 	        DataWatcher = Reflections.getNMSClass("DataWatcher"),
-	        DataWatcherObject = Reflections.getNMSClass("DataWatcherObject"),
-	        DataWatcherSerializer = Reflections.getNMSClass("DataWatcherSerializer")
+	        DataWatcherObject = Reflections.existNMSClass("DataWatcherObject") ? Reflections.getNMSClass("DataWatcherObject") : null,
+	        DataWatcherSerializer = Reflections.existNMSClass("DataWatcherSerializer") ? Reflections.getNMSClass("DataWatcherSerializer") : null
 	        ;
 	
 	private static Constructor<?> EntityPlayerConstructor = null,
@@ -53,7 +53,8 @@ public class NPC {
 	        PacketPlayOutPlayerInfoConstructor = null,
 	        PacketPlayOutEntityLookConstructor = null,
 	        PacketPlayOutNamedEntitySpawnConstructor = null,
-	        DataWatcherObjectConstructor = null
+	        DataWatcherObjectConstructor = null,
+	        PlayerInteractManagerConstructor = null
 	        ;
 	
 	private static Method setLocation = null,
@@ -65,32 +66,38 @@ public class NPC {
 			;
 	
 	static {
-	      try {
-	         EntityPlayerConstructor = EntityPlayer.getConstructor(MinecraftServer, WorldServer, GameProfile.class, PlayerInteractManager);
-	         setLocation = Entity.getMethod("setLocation", double.class, double.class, double.class, float.class, float.class);
-	         setPositionRotation = Entity.getMethod("setPositionRotation", double.class, double.class, double.class, float.class, float.class);
-	         getId = Entity.getMethod("getId");
-	         
-	         PacketPlayOutEntityDestroyConstructor = PacketPlayOutEntityDestroy.getConstructor(int[].class);
-	         PacketPlayOutEntityMetadataConstructor = PacketPlayOutEntityMetadata.getConstructor(int.class, DataWatcher, boolean.class);
-	         PacketPlayOutEntityTeleportConstructor = PacketPlayOutEntityTeleport.getConstructor(Entity);
-	         PacketPlayOutEntityHeadRotationConstructor = PacketPlayOutEntityHeadRotation.getConstructor(Entity, byte.class);
-	         
-	         Class<?> ArrayEntityPlayer = Class.forName("[Lnet.minecraft.server." + ServerVersion.getVersion() + ".EntityPlayer;");
-	         PacketPlayOutPlayerInfoConstructor = PacketPlayOutPlayerInfo.getConstructor(EnumPlayerInfoAction, ArrayEntityPlayer);
-	         
-	         getServer = CraftServer.getMethod("getServer");
-	         getDataWatcher = Entity.getMethod("getDataWatcher");
-	         
-	         PacketPlayOutEntityLookConstructor = PacketPlayOutEntityLook.getConstructor(int.class, byte.class, byte.class, boolean.class);
-	         
-	         PacketPlayOutNamedEntitySpawnConstructor = PacketPlayOutNamedEntitySpawn.getConstructor(EntityHuman);
-	         
-	         set = DataWatcher.getMethod("set", DataWatcherObject, Object.class);
-	         DataWatcherObjectConstructor = DataWatcherObject.getConstructor(int.class, DataWatcherSerializer);
-	      }catch(Exception ex) {
-	    	  ex.printStackTrace();
-	      }
+		try {
+	        EntityPlayerConstructor = EntityPlayer.getConstructor(MinecraftServer, WorldServer, GameProfile.class, PlayerInteractManager);
+	        setLocation = Entity.getMethod("setLocation", double.class, double.class, double.class, float.class, float.class);
+	        setPositionRotation = Entity.getMethod("setPositionRotation", double.class, double.class, double.class, float.class, float.class);
+	        getId = Entity.getMethod("getId");
+	        
+	        PacketPlayOutEntityDestroyConstructor = PacketPlayOutEntityDestroy.getConstructor(int[].class);
+	        PacketPlayOutEntityMetadataConstructor = PacketPlayOutEntityMetadata.getConstructor(int.class, DataWatcher, boolean.class);
+	        PacketPlayOutEntityTeleportConstructor = PacketPlayOutEntityTeleport.getConstructor(Entity);
+	        PacketPlayOutEntityHeadRotationConstructor = PacketPlayOutEntityHeadRotation.getConstructor(Entity, byte.class);
+	        
+	        Class<?> ArrayEntityPlayer = Class.forName("[Lnet.minecraft.server." + ServerVersion.getVersion() + ".EntityPlayer;");
+	        PacketPlayOutPlayerInfoConstructor = PacketPlayOutPlayerInfo.getConstructor(EnumPlayerInfoAction, ArrayEntityPlayer);
+	        
+	        getServer = CraftServer.getMethod("getServer");
+	        getDataWatcher = Entity.getMethod("getDataWatcher");
+	        
+	        PacketPlayOutEntityLookConstructor = PacketPlayOutEntityLook.getConstructor(int.class, byte.class, byte.class, boolean.class);
+	        
+	        PacketPlayOutNamedEntitySpawnConstructor = PacketPlayOutNamedEntitySpawn.getConstructor(EntityHuman);
+	        
+	        
+	        if(!ServerVersion.getVersion().contains("1_8")) {
+	        	PlayerInteractManagerConstructor = PlayerInteractManager.getConstructor(WorldServer);
+	        	set = DataWatcher.getMethod("set", DataWatcherObject, Object.class);
+	        	DataWatcherObjectConstructor = DataWatcherObject.getConstructor(int.class, DataWatcherSerializer);
+	        }else {
+	        	PlayerInteractManagerConstructor = PlayerInteractManager.getConstructor(World);
+	        }
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 	
 	private Object entity;
@@ -103,6 +110,8 @@ public class NPC {
 	private Object packetPlayOutPlayerInfo_add;
 	private Object packetPlayOutPlayerInfo_remove;
 	private Object packetPlayOutEntityDestroy;
+	
+	private boolean spawned = false;
 	
 	public NPC(String name) {
 		this.name = name;
@@ -121,7 +130,12 @@ public class NPC {
 			Object server = getServer.invoke(CraftServer.cast(Bukkit.getServer()));
 			Object world = Reflections.getHandle(CraftWorld.cast(loc.getWorld()));
 			
-			Object npc = EntityPlayerConstructor.newInstance(server, world, profile, PlayerInteractManager.getConstructor(WorldServer).newInstance(world));
+			Object npc = EntityPlayerConstructor.newInstance(
+					server,
+					world,
+					profile,
+					PlayerInteractManagerConstructor
+							.newInstance(world));
 			setLocation.invoke(npc, loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
 			setPositionRotation.invoke(npc, loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
 			this.entity = npc;
@@ -133,9 +147,14 @@ public class NPC {
 			this.packetPlayOutPlayerInfo_add = PacketPlayOutPlayerInfoConstructor.newInstance(EnumPlayerInfoAction.getField("ADD_PLAYER").get(null),array);
 			this.packetPlayOutPlayerInfo_remove = PacketPlayOutPlayerInfoConstructor.newInstance(EnumPlayerInfoAction.getField("REMOVE_PLAYER").get(null), array);
 	        this.packetPlayOutEntityDestroy = PacketPlayOutEntityDestroyConstructor.newInstance((Object) new int[]{id});
+	        spawned = true;
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+	
+	public boolean isSpawned() {
+		return spawned;
 	}
 	
 	public String getName() {
@@ -181,32 +200,63 @@ public class NPC {
 	            if (viewers.add(player)) {
 	            	Utils.sendPacket(player, packetPlayOutPlayerInfo_add);
 	            	Utils.sendPacket(player, PacketPlayOutNamedEntitySpawnConstructor.newInstance(getEntity()));
-	        		
-	                
-	                /*
-	                Object data = getDataWatcher.invoke(entity);
-	                set.invoke(data,
-	                		new net.minecraft.server.v1_15_R1.DataWatcherObject<>(16, DataWatcherRegistry.a),
-	                		(byte) 127
-	                		);
-	                */
 	            	
+	            	Object a_field = null;
+	            	int index = 16;
 	            	
-	            	/*
-	            	 * 	Only for 1.15
-	            	 */
+	            	switch(ServerVersion.getVersion()) {
+	            	case "v1_8_R3":
+	            		index = 10;
+	            		((net.minecraft.server.v1_8_R3.DataWatcher) getDataWatcher.invoke(entity)).watch(index, (byte) 127);
+	            		break;
+	            	case "v1_9_R1":
+	            		a_field = net.minecraft.server.v1_9_R1.DataWatcherRegistry.a;
+	            		break;
+	            	case "v1_9_R2":
+	            		a_field = net.minecraft.server.v1_9_R2.DataWatcherRegistry.a;
+	            		break;
+	            	case "v1_10_R1":
+	            		a_field = net.minecraft.server.v1_10_R1.DataWatcherRegistry.a;
+	            		break;
+	            	case "v1_11_R1":
+	            		a_field = net.minecraft.server.v1_11_R1.DataWatcherRegistry.a;
+	            		break;
+	            	case "v1_12_R1":
+	            		a_field = net.minecraft.server.v1_12_R1.DataWatcherRegistry.a;
+	            		break;
+	            	case "v1_13_R1":
+	            		a_field = net.minecraft.server.v1_13_R1.DataWatcherRegistry.a;
+	            		break;
+	            	case "v1_13_R2":
+	            		a_field = net.minecraft.server.v1_13_R2.DataWatcherRegistry.a;
+	            		break;
+	            	case "v1_14_R1":
+	            		a_field = net.minecraft.server.v1_14_R1.DataWatcherRegistry.a;
+	            		break;
+	            	case "v1_15_R1":
+	            		a_field = net.minecraft.server.v1_15_R1.DataWatcherRegistry.a;
+	            		index = 16;
+	            		break;
+	            	case "v1_16_R1":
+	            		a_field = net.minecraft.server.v1_16_R1.DataWatcherRegistry.a;
+	            		break;
+	            	case "v1_16_R2":
+	            		a_field = net.minecraft.server.v1_16_R2.DataWatcherRegistry.a;
+	            		break;
+	            	default:
+	            		Bukkit.getConsoleSender().sendMessage("§cServer version: " + ServerVersion.getVersion());
+	            		break;
+	            	}
 	            	
-	            	
-	                Object data = getDataWatcher.invoke(entity);
-	                set.invoke(data,
-	                		DataWatcherObjectConstructor.newInstance(16,
-	                				
-	                				
-	                				
-	                				DataWatcherRegistry.a
-	                				),
-	                		(byte) 127
-	                		);
+	            	if(a_field != null) {
+	            		Object data = getDataWatcher.invoke(entity);
+	            		set.invoke(data,
+	            				DataWatcherObjectConstructor.newInstance(index,
+	            						a_field
+	            						),
+	            				(byte) 127
+	            				);
+	            	}
 	                
 	                Bukkit.getConsoleSender().sendMessage("§cDebug 5");
 	                

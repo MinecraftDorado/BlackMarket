@@ -62,28 +62,30 @@ public class NPCManager {
 		
 		Bukkit.getScheduler().runTaskTimer(MainClass.main, ()->{
 			list.values().forEach(npc -> {
-				a = null;
-				
-				try {
-					Class<?> EntityPlayer = Reflections.getNMSClass("EntityPlayer");
-					Method getBukkitEntity = EntityPlayer.getMethod("getBukkitEntity");
+				if(npc.isSpawned()) {
+					a = null;
 					
-					Class<?> CraftEntity = Reflections.getOBCClass("entity.CraftEntity");
-					Method getNearbyEntities = CraftEntity.getMethod("getNearbyEntities", double.class, double.class, double.class);
-					
-					for(Entity e : (List<Entity>) getNearbyEntities.invoke(getBukkitEntity.invoke(EntityPlayer.cast(npc.getEntity())), 10, 5, 10)) {
-						if(e.getType().equals(EntityType.PLAYER)) {
-							if(a == null || npc.getLocation().distance(a) > npc.getLocation().distance(e.getLocation()))
-								a = e.getLocation();
+					try {
+						Class<?> EntityPlayer = Reflections.getNMSClass("EntityPlayer");
+						Method getBukkitEntity = EntityPlayer.getMethod("getBukkitEntity");
+						
+						Class<?> CraftEntity = Reflections.getOBCClass("entity.CraftEntity");
+						Method getNearbyEntities = CraftEntity.getMethod("getNearbyEntities", double.class, double.class, double.class);
+						
+						for(Entity e : (List<Entity>) getNearbyEntities.invoke(getBukkitEntity.invoke(EntityPlayer.cast(npc.getEntity())), 10, 5, 10)) {
+							if(e.getType().equals(EntityType.PLAYER)) {
+								if(a == null || npc.getLocation().distance(a) > npc.getLocation().distance(e.getLocation()))
+									a = e.getLocation();
+							}
 						}
+						
+						if(a != null) {
+							a = npc.getLocation().setDirection(a.subtract(npc.getLocation()).toVector());
+							npc.updateHeadRotation(a.getYaw(), a.getPitch());
+						}
+					}catch(Exception ex) {
+						ex.printStackTrace();
 					}
-					
-					if(a != null) {
-						a = npc.getLocation().setDirection(a.subtract(npc.getLocation()).toVector());
-						npc.updateHeadRotation(a.getYaw(), a.getPitch());
-					}
-				}catch(Exception ex) {
-					ex.printStackTrace();
 				}
 			});
 		}, 5, 5);

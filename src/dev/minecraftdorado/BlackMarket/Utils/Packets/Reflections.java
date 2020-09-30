@@ -13,6 +13,15 @@ public class Reflections {
 	    }
 	}
 	
+	public static boolean existNMSClass(String className) {
+		try {
+			Class.forName("net.minecraft.server." + ServerVersion.getVersion() + "." + className);
+		}catch(Exception ex) {
+			return false;
+		}
+		return true;
+	}
+	
 	public static Class<?> getOBCClass(String className) {
 		try {
 			return Class.forName("org.bukkit.craftbukkit." + ServerVersion.getVersion() + "." + className);
