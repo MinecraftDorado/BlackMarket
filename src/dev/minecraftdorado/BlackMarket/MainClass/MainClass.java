@@ -2,12 +2,10 @@ package dev.minecraftdorado.BlackMarket.MainClass;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedLeaveEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.minecraftdorado.BlackMarket.Commands.sell;
@@ -22,7 +20,6 @@ import dev.minecraftdorado.BlackMarket.Utils.Inventory.InventoryManager;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Events.InventoryClickEvent;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils.Category;
-import dev.minecraftdorado.BlackMarket.Utils.Market.BlackItem;
 import dev.minecraftdorado.BlackMarket.Utils.Market.Market;
 import dev.minecraftdorado.BlackMarket.Utils.Market.PlayerData;
 
@@ -44,11 +41,6 @@ public class MainClass extends JavaPlugin {
 		new Config();
 		new PlayerData();
 		new CategoryUtils();
-		
-		for (int i = 0; i < 50; i++) {
-			Market.addItem(new BlackItem(new ItemStack(Material.SADDLE), 10, null));
-			Market.addItem(new BlackItem(new ItemStack(Material.EMERALD), 10, null));
-		}
 		
 		NPC npc = new NPC("Hello World §e!");
 		npc.setSkin(SkinData.getSkin("skin_fisher"));
@@ -104,5 +96,6 @@ public class MainClass extends JavaPlugin {
 			});
 			PacketReader.get(player).uninject();
 		});
+		PlayerData.save();
 	}
 }

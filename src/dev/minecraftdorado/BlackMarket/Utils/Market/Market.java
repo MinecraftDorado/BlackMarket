@@ -25,6 +25,10 @@ public class Market {
 		return id;
 	}
 	
+	public static void setId(int ID) {
+		id = ID;
+	}
+	
 	public static void addItem(BlackItem bItem) {
 		list.put(bItem.getId(), bItem);
 	}

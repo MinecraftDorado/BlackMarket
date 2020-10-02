@@ -20,7 +20,7 @@ public class sell implements CommandExecutor {
 		
 		if(args.length == 1)
 			try {
-				int value = Integer.parseInt(args[0]);
+				double value = Double.parseDouble(args[0]);
 				
 				Player p = (Player) sender;
 				
