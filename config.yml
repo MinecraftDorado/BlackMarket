@@ -1,0 +1,47 @@
+
+
+items:
+   next:
+      type: PAPER
+      name: "&eNext page (%actual_page%-%pages%)"
+   previous:
+      type: PAPER
+      name: "&ePrevious page (%actual_page%-%pages%)"
+   close:
+      type: ARROW
+      name: "&cExit"
+   back:
+      type: ARROW
+      name: "&cReturn"
+   order_type:
+      type: BOOK
+      name: "&bOrder type"
+      lore:
+      - "&8- &7%order_normal%"
+      - "&8- &7%order_id%"
+      - "&8- &7%order_amount%"
+      - ""
+      - "&eClick to change!"
+   filter:
+      type: HOPPER
+      name: "&bFilters"
+      lore:
+      - "&7Select which items you"
+      - "&7want Chester to collect"
+      - "&7from the ground."
+      - ""
+      - "&eClick to change!"
+   info:
+      type: CHEST
+      name: "&bInformations"
+      lore:
+      - "&7Name: %chester%"
+      - "&7Heath: %health%/%max_health%"
+      - "&7PerkPoints: %perk_points%"
+   invalid_slot:
+      type: GRAY_STAINED_GLASS_PANE
+      name: "&cSlot yet to be unlocked"
+      lore:
+      - "&8» &7Price: &b$%price%"
+      - ""
+      - "&eClick to purchase!"

@@ -41,7 +41,6 @@ public class PacketReader {
     
     public void readPacket(Object packet){
     	if(packet.getClass().getSimpleName().equalsIgnoreCase("PacketPlayInUseEntity")){
-    		Bukkit.getConsoleSender().sendMessage("§bObj - use entity");
     		int id = (Integer)Reflections.getField(packet, "a");
             
             if(!Reflections.getField(packet, "action").toString().equals("INTERACT_AT")) return;

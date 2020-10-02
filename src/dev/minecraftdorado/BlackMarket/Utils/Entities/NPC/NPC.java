@@ -258,8 +258,6 @@ public class NPC {
 	            				);
 	            	}
 	                
-	                Bukkit.getConsoleSender().sendMessage("§cDebug 5");
-	                
 	                updateMetadata(player);
 	        		
 	        		Bukkit.getScheduler().scheduleSyncDelayedTask(MainClass.main, new Runnable() {
