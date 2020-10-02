@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerBedLeaveEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -57,9 +58,9 @@ public class MainClass extends JavaPlugin {
 		
 		Bukkit.getPluginManager().registerEvents(new Listener() {
 			@EventHandler
-			private void a(PlayerJoinEvent e) {
-				new PacketReader(e.getPlayer()).inject();
-			}
+			private void join(PlayerJoinEvent e) {PacketReader.get(e.getPlayer()).inject();}
+			@EventHandler
+			private void leave(PlayerBedLeaveEvent e) {PacketReader.get(e.getPlayer()).uninject();}
 			@EventHandler
 			private void a(NPCInteractEvent e) {
 				e.getPlayer().sendMessage("§c" + e.getNPC().getName());
@@ -91,6 +92,7 @@ public class MainClass extends JavaPlugin {
 			}
 		}, this);
 		Bukkit.getPluginManager().registerEvents(new InventoryManager(), this);
+		Bukkit.getOnlinePlayers().forEach(player -> PacketReader.get(player).inject());
 	}
 	
 	public void onDisable() {
@@ -100,6 +102,7 @@ public class MainClass extends JavaPlugin {
 			npcM.list.values().forEach(npc ->{
 				npc.hide(player);
 			});
+			PacketReader.get(player).uninject();
 		});
 	}
 }
