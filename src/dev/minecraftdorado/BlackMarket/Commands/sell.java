@@ -30,6 +30,7 @@ public class sell implements CommandExecutor {
 					if(PlayerData.get(p.getUniqueId()).addItem(bItem)) {
 						sender.sendMessage("§aItem added!");
 						p.getInventory().getItemInHand().setType(Material.AIR);
+						p.getInventory().setItemInHand(null);
 					}else
 						sender.sendMessage("§cLimit !");
 				}else

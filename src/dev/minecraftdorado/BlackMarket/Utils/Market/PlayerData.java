@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils.Category;
+
 public class PlayerData {
 	
 	private static HashMap<UUID, Data> list = new HashMap<>();
@@ -24,6 +26,8 @@ public class PlayerData {
 		private UUID uuid;
 		private ArrayList<BlackItem> items = new ArrayList<>();
 		private int limit = 5;
+		
+		private Category category = null;
 		
 		public Data(UUID uuid) {
 			this.uuid = uuid;
@@ -48,6 +52,14 @@ public class PlayerData {
 		
 		public int getLimit() {
 			return limit;
+		}
+		
+		public void setCategory(Category category) {
+			this.category = category;
+		}
+		
+		public Category getCategory() {
+			return category;
 		}
 	}
 }

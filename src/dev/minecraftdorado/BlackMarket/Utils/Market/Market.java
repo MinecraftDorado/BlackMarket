@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 
 import dev.minecraftdorado.BlackMarket.Utils.Config;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.InventoryManager.Inv;
+import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils;
+import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils.Category;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.UMaterial;
 
 public class Market {
@@ -55,20 +57,19 @@ public class Market {
 		inv.setBackgroud(UMaterial.GRAY_STAINED_GLASS_PANE.getItemStack(), false);
 		inv.setBackgroud(UMaterial.BLACK_STAINED_GLASS_PANE.getItemStack(), true);
 		
-		inv.setItem(0, Config.getItemStack("filter"));
-		inv.setItem(9, Config.getItemStack("filter"));
-		inv.setItem(18, Config.getItemStack("filter"));
-		inv.setItem(27, Config.getItemStack("filter"));
-		inv.setItem(36, Config.getItemStack("filter"));
-		inv.setItem(45, Config.getItemStack("filter"));
+		Category cat = PlayerData.get(player.getUniqueId()).getCategory();
+		
+		CategoryUtils.getCategories().forEach(category -> {
+			inv.setItem((category.getRow()-1) * 9, category.getItemStack(category.equals(cat)));
+		});
 		
 		ArrayList<BlackItem> l = new ArrayList<>();
 		
+		Category category = PlayerData.get(player.getUniqueId()).getCategory();
+		
 		for(BlackItem bItem : list.values())
-			/*
-			 * Future Order
-			 */
-			l.add(bItem);
+			if(category == null || category.getMaterials().isEmpty() || category.getMaterials().contains(UMaterial.match(bItem.getItemStack())))
+				l.add(bItem);
 		
 		
 		int slot = 10;

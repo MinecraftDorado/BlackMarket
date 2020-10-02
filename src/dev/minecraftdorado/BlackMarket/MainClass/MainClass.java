@@ -19,6 +19,8 @@ import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.Events.NPCInteractEven
 import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.Skins.SkinData;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.InventoryManager;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Events.InventoryClickEvent;
+import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils;
+import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils.Category;
 import dev.minecraftdorado.BlackMarket.Utils.Market.BlackItem;
 import dev.minecraftdorado.BlackMarket.Utils.Market.Market;
 import dev.minecraftdorado.BlackMarket.Utils.Market.PlayerData;
@@ -40,9 +42,11 @@ public class MainClass extends JavaPlugin {
 		new SkinData();
 		new Config();
 		new PlayerData();
+		new CategoryUtils();
 		
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 50; i++) {
 			Market.addItem(new BlackItem(new ItemStack(Material.SADDLE), 10, null));
+			Market.addItem(new BlackItem(new ItemStack(Material.EMERALD), 10, null));
 		}
 		
 		NPC npc = new NPC("Hello World §e!");
@@ -59,6 +63,7 @@ public class MainClass extends JavaPlugin {
 			@EventHandler
 			private void a(NPCInteractEvent e) {
 				e.getPlayer().sendMessage("§c" + e.getNPC().getName());
+				PlayerData.get(e.getPlayer().getUniqueId()).setCategory(null);
 				Market.setPlayerPage(e.getPlayer().getUniqueId(), 0);
 				InventoryManager.openInventory(e.getPlayer(), Market.getMarketInventory(e.getPlayer()));
 			}
@@ -73,6 +78,15 @@ public class MainClass extends JavaPlugin {
 						Market.setPlayerPage(e.getPlayer().getUniqueId(), Market.getPlayerPage(e.getPlayer().getUniqueId())+1);
 						InventoryManager.openInventory(e.getPlayer(), Market.getMarketInventory(e.getPlayer()));
 					}
+					Category cat = PlayerData.get(e.getPlayer().getUniqueId()).getCategory();
+					CategoryUtils.getCategories().forEach(category -> {
+						if(e.getItemStack().equals(category.getItemStack(category.equals(cat)))) { // si establezco por defecto en false, no serviria para recargar la misma categoria
+							PlayerData.get(e.getPlayer().getUniqueId()).setCategory(category);
+							Market.setPlayerPage(e.getPlayer().getUniqueId(), 0);
+							InventoryManager.updateInventory(e.getPlayer(), Market.getMarketInventory(e.getPlayer()));
+							return;
+						}
+					});
 				}
 			}
 		}, this);
@@ -81,6 +95,8 @@ public class MainClass extends JavaPlugin {
 	
 	public void onDisable() {
 		Bukkit.getOnlinePlayers().forEach(player -> {
+			if(player.getOpenInventory() != null && player.getOpenInventory().getTopInventory().getTitle().equals(Market.getMarketTitle()))
+				player.closeInventory();
 			npcM.list.values().forEach(npc ->{
 				npc.hide(player);
 			});

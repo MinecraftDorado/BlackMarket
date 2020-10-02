@@ -1,0 +1,7 @@
+name: "All"
+row: 1
+item:
+    type: NETHER_STAR
+    name: "&b%category_name%"
+    lore:
+    - "&7All items"
