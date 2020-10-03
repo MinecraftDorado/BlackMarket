@@ -2,24 +2,21 @@ package dev.minecraftdorado.BlackMarket.MainClass;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerBedLeaveEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.minecraftdorado.BlackMarket.Commands.sell;
+import dev.minecraftdorado.BlackMarket.Listeners.MarketListener;
+import dev.minecraftdorado.BlackMarket.Listeners.PlayerListener;
 import dev.minecraftdorado.BlackMarket.Utils.Packets.PacketReader;
+import net.milkbowl.vault.economy.Economy;
 import dev.minecraftdorado.BlackMarket.Utils.Config;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.Hologram.HologramManager;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.NPC;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.NPCManager;
-import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.Events.NPCInteractEvent;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.Skins.SkinData;
+import dev.minecraftdorado.BlackMarket.Utils.Hook.VaultHook;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.InventoryManager;
-import dev.minecraftdorado.BlackMarket.Utils.Inventory.Events.InventoryClickEvent;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils;
-import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils.Category;
 import dev.minecraftdorado.BlackMarket.Utils.Market.Market;
 import dev.minecraftdorado.BlackMarket.Utils.Market.PlayerData;
 
@@ -29,12 +26,20 @@ public class MainClass extends JavaPlugin {
 	public static HologramManager hm;
 	public static NPCManager npcM;
 	
+	public static Economy econ;
+	
 	public void onEnable() {
 		main = this;
-		hm = new HologramManager();
+		
+		if(!VaultHook.setupEconomy()) {
+			Bukkit.getConsoleSender().sendMessage("§cVault is needed !");
+			this.getPluginLoader().disablePlugin(this);
+			return;
+		}
 		
 		getServer().getPluginCommand("sell").setExecutor(new sell());
 		
+		hm = new HologramManager();
 		npcM = new NPCManager();
 		
 		new SkinData();
@@ -48,41 +53,8 @@ public class MainClass extends JavaPlugin {
 		
 		npcM.add(npc);
 		
-		Bukkit.getPluginManager().registerEvents(new Listener() {
-			@EventHandler
-			private void join(PlayerJoinEvent e) {PacketReader.get(e.getPlayer()).inject();}
-			@EventHandler
-			private void leave(PlayerBedLeaveEvent e) {PacketReader.get(e.getPlayer()).uninject();}
-			@EventHandler
-			private void a(NPCInteractEvent e) {
-				e.getPlayer().sendMessage("§c" + e.getNPC().getName());
-				PlayerData.get(e.getPlayer().getUniqueId()).setCategory(null);
-				Market.setPlayerPage(e.getPlayer().getUniqueId(), 0);
-				InventoryManager.openInventory(e.getPlayer(), Market.getMarketInventory(e.getPlayer()));
-			}
-			@EventHandler
-			private void a(InventoryClickEvent e) {
-				if(e.getInv().getTitle().equals(Market.getMarketTitle())) {
-					if(e.getItemStack().equals(Config.getItemStack("previous", e.getPlayer()))) {
-						Market.setPlayerPage(e.getPlayer().getUniqueId(), Market.getPlayerPage(e.getPlayer().getUniqueId())-1);
-						InventoryManager.openInventory(e.getPlayer(), Market.getMarketInventory(e.getPlayer()));
-					}
-					if(e.getItemStack().equals(Config.getItemStack("next", e.getPlayer()))) {
-						Market.setPlayerPage(e.getPlayer().getUniqueId(), Market.getPlayerPage(e.getPlayer().getUniqueId())+1);
-						InventoryManager.openInventory(e.getPlayer(), Market.getMarketInventory(e.getPlayer()));
-					}
-					Category cat = PlayerData.get(e.getPlayer().getUniqueId()).getCategory();
-					CategoryUtils.getCategories().forEach(category -> {
-						if(e.getItemStack().equals(category.getItemStack(category.equals(cat)))) { // si establezco por defecto en false, no serviria para recargar la misma categoria
-							PlayerData.get(e.getPlayer().getUniqueId()).setCategory(category);
-							Market.setPlayerPage(e.getPlayer().getUniqueId(), 0);
-							InventoryManager.updateInventory(e.getPlayer(), Market.getMarketInventory(e.getPlayer()));
-							return;
-						}
-					});
-				}
-			}
-		}, this);
+		Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
+		Bukkit.getPluginManager().registerEvents(new MarketListener(), this);
 		Bukkit.getPluginManager().registerEvents(new InventoryManager(), this);
 		Bukkit.getOnlinePlayers().forEach(player -> PacketReader.get(player).inject());
 	}

@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import dev.minecraftdorado.BlackMarket.Utils.Config;
+import dev.minecraftdorado.BlackMarket.Utils.Market.BlackItem;
 
 public class InventoryManager implements Listener {
 	
@@ -158,6 +159,8 @@ public class InventoryManager implements Listener {
 		int row;
 		Inventory inv;
 		
+		HashMap<Integer, BlackItem> bList = new HashMap<>();
+		
 		public Inv(String title, int row) {
 			this.title = title;
 			this.row = row;
@@ -208,6 +211,14 @@ public class InventoryManager implements Listener {
 					inv.setItem(8 + (i*9), item);
 				}
 			}
+		}
+		
+		public HashMap<Integer, BlackItem> getBlackList(){
+			return bList;
+		}
+		
+		public void addBlackItem(BlackItem bItem, int slot) {
+			bList.put(slot, bItem);
 		}
 	}
 }

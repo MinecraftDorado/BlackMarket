@@ -10,6 +10,7 @@ import dev.minecraftdorado.BlackMarket.Utils.Config;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.InventoryManager.Inv;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils.Category;
+import dev.minecraftdorado.BlackMarket.Utils.Market.BlackItem.Status;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.UMaterial;
 
 public class Market {
@@ -72,8 +73,9 @@ public class Market {
 		Category category = PlayerData.get(player.getUniqueId()).getCategory();
 		
 		for(BlackItem bItem : list.values())
-			if(category == null || category.getMaterials().isEmpty() || category.getMaterials().contains(UMaterial.match(bItem.getItemStack())))
-				l.add(bItem);
+			if(bItem.getStatus().equals(Status.ON_SALE))
+				if(category == null || category.getMaterials().isEmpty() || category.getMaterials().contains(UMaterial.match(bItem.getItemStack())))
+					l.add(bItem);
 		
 		
 		int slot = 10;
@@ -86,8 +88,9 @@ public class Market {
 				slot = slot + 4;
 			else
 				slot++;
-			
-			inv.setItem(slot, l.get((page*24) + i).getItemStack());
+			int id = (page*24) + i;
+			inv.setItem(slot, l.get(id).getItemStack());
+			inv.addBlackItem(l.get(id), slot);
 			items++;
 		}
 		

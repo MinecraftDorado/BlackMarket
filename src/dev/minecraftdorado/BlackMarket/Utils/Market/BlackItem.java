@@ -16,6 +16,8 @@ public class BlackItem {
 	
 	private UUID owner;
 	
+	private Status status = Status.ON_SALE;
+	
 	public BlackItem(ItemStack item, double value, UUID owner, int id) {
 		this.id = id;
 		if(Market.getId() < id)
@@ -64,5 +66,17 @@ public class BlackItem {
 	
 	public UUID getOwner() {
 		return owner;
+	}
+	
+	public Status getStatus() {
+		return status;
+	}
+	
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+	
+	public enum Status {
+		SOLD, ON_SALE, TIME_OUT;
 	}
 }
