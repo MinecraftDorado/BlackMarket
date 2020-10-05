@@ -72,10 +72,18 @@ public class Market {
 		
 		Category category = PlayerData.get(player.getUniqueId()).getCategory();
 		
-		for(BlackItem bItem : list.values())
-			if(bItem.getStatus().equals(Status.ON_SALE))
+		ArrayList<Integer> toRemove = new ArrayList<>();
+		
+		for(BlackItem bItem : list.values()) {
+			if(bItem.getStatus().equals(Status.ON_SALE)) {
 				if(category == null || category.getMaterials().isEmpty() || category.getMaterials().contains(UMaterial.match(bItem.getItemStack())))
 					l.add(bItem);
+			}else
+				toRemove.add(bItem.getId());
+		}
+		
+		if(!toRemove.isEmpty())
+			toRemove.forEach(id -> list.remove(id));
 		
 		
 		int slot = 10;

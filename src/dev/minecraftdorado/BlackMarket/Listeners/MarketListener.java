@@ -47,9 +47,7 @@ public class MarketListener implements Listener {
 			// Item on sale
 			if(!e.getInv().getBlackList().isEmpty() && e.getInv().getBlackList().keySet().contains(e.getSlot())) {
 				BlackItem bItem = e.getInv().getBlackList().get(e.getSlot());
-				e.getPlayer().sendMessage("§cDebug §6#" + bItem.getId());
-				
-				if(bItem.getOwner().equals(e.getPlayer().getUniqueId()))
+				if(!bItem.getOwner().equals(e.getPlayer().getUniqueId()))
 					if(MainClass.econ.has(e.getPlayer(), bItem.getValue()))
 						if(bItem.getStatus().equals(Status.ON_SALE)) {
 							if(canAddItem(e.getPlayer(), bItem.getOriginal())) {
@@ -59,6 +57,7 @@ public class MarketListener implements Listener {
 								e.getPlayer().sendMessage("§eThanks for buy!");
 								
 								MainClass.econ.withdrawPlayer(e.getPlayer(), bItem.getValue());
+								MainClass.econ.depositPlayer(Bukkit.getOfflinePlayer(bItem.getOwner()), bItem.getValue());
 								return;
 							}
 							e.getPlayer().sendMessage("§cInventory full!");
