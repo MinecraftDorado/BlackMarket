@@ -43,7 +43,7 @@ public class BlackItem {
 		// Expiration time
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
-		cal.add(Calendar.MINUTE, 5);
+		cal.add(Calendar.MINUTE, 60*24);
 		this.date = cal.getTime();
 	}
 	
@@ -70,6 +70,7 @@ public class BlackItem {
 		
 		Duration d = Duration.between(new Date().toInstant(), date.toInstant());
 		String df = "" + d.getSeconds();
+		if(Integer.parseInt(df) < 0) df = "0";
 		
 		lore.add("§8To expire: §b" + df + "s");
 		lore.add("");
@@ -97,7 +98,7 @@ public class BlackItem {
 	}
 	
 	public enum Status {
-		SOLD, ON_SALE, TIME_OUT;
+		SOLD, ON_SALE, TIME_OUT, TAKED;
 	}
 	
 	public Date getDate() {

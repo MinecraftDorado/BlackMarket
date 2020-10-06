@@ -22,7 +22,7 @@ public class PlayerData {
 			for(File f : file.listFiles()) {
 				YamlConfiguration yml = YamlConfiguration.loadConfiguration(f);
 				
-				if(Status.valueOf(yml.getString("status")).equals(Status.ON_SALE)) {
+				if(!Status.valueOf(yml.getString("status")).equals(Status.SOLD)) {
 					UUID owner = UUID.fromString(yml.getString("owner"));
 					
 					BlackItem bItem = new BlackItem(yml.getItemStack("item"), yml.getDouble("value"), owner, Status.valueOf(yml.getString("status")), new Date(yml.getLong("date")), Integer.parseInt(f.getName().replace(".yml", "")));
@@ -103,6 +103,17 @@ public class PlayerData {
 		
 		public Category getCategory() {
 			return category;
+		}
+
+		public ArrayList<BlackItem> getStorage() {
+			ArrayList<BlackItem> list = new ArrayList<>();
+			
+			items.forEach(item -> {
+				if(item.getStatus().equals(Status.TIME_OUT))
+					list.add(item);
+			});
+			
+			return list;
 		}
 	}
 }

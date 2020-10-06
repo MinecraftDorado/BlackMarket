@@ -12,11 +12,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -118,6 +120,7 @@ public class Utils {
 			try {
 				um = UMaterial.valueOf(Material.getMaterial(Integer.valueOf(s[0])).name());
 			}catch(Exception ex2) {
+				ex2.printStackTrace();
 			}
 		}
 		
@@ -138,5 +141,24 @@ public class Utils {
 	
 	public static ItemStack getMaterial(String key) {
 		return getMaterial(key, true);
+	}
+	
+	public static boolean canAddItem(Player player, ItemStack item) {
+		Inventory inv = Bukkit.createInventory(null, 45);
+		int slot = 0;
+		for(ItemStack i : player.getInventory().getContents())
+			if(i != null && !i.getType().equals(Material.AIR)) {
+				inv.setItem(slot, i);
+				slot++;
+			}
+		inv.addItem(item);
+		
+		int a = 0;
+		for(ItemStack i : inv.getContents())
+			if(i != null && !i.getType().equals(Material.AIR))
+				a++;
+		if(a > 36)
+			return false;
+		return true;
 	}
 }

@@ -103,6 +103,9 @@ public class Market {
 		}
 		
 		inv.setItem(49, Config.getItemStack("close"));
+		inv.setItem(50, Config.getItemStack("info"));
+		inv.setItem(51, Config.getItemStack("order_type"));
+		inv.setItem(52, Config.getItemStack("storage"));
 		
 		if(page != 0)
 			inv.setItem(46, Config.getItemStack("previous", player));

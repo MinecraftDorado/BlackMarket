@@ -7,6 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import dev.minecraftdorado.BlackMarket.Commands.sell;
 import dev.minecraftdorado.BlackMarket.Listeners.MarketListener;
 import dev.minecraftdorado.BlackMarket.Listeners.PlayerListener;
+import dev.minecraftdorado.BlackMarket.Listeners.StorageListener;
 import dev.minecraftdorado.BlackMarket.Utils.Packets.PacketReader;
 import net.milkbowl.vault.economy.Economy;
 import dev.minecraftdorado.BlackMarket.Utils.Config;
@@ -19,6 +20,7 @@ import dev.minecraftdorado.BlackMarket.Utils.Inventory.InventoryManager;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils;
 import dev.minecraftdorado.BlackMarket.Utils.Market.Market;
 import dev.minecraftdorado.BlackMarket.Utils.Market.PlayerData;
+import dev.minecraftdorado.BlackMarket.Utils.Market.Storage;
 
 public class MainClass extends JavaPlugin {
 	
@@ -55,13 +57,15 @@ public class MainClass extends JavaPlugin {
 		
 		Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 		Bukkit.getPluginManager().registerEvents(new MarketListener(), this);
+		Bukkit.getPluginManager().registerEvents(new StorageListener(), this);
 		Bukkit.getPluginManager().registerEvents(new InventoryManager(), this);
 		Bukkit.getOnlinePlayers().forEach(player -> PacketReader.get(player).inject());
 	}
 	
 	public void onDisable() {
 		Bukkit.getOnlinePlayers().forEach(player -> {
-			if(player.getOpenInventory() != null && player.getOpenInventory().getTopInventory().getTitle().equals(Market.getMarketTitle()))
+			if(player.getOpenInventory() != null &&
+					(player.getOpenInventory().getTopInventory().getTitle().equals(Market.getMarketTitle()) || player.getOpenInventory().getTopInventory().getTitle().equals(Storage.getStorageTitle())))
 				player.closeInventory();
 			npcM.list.values().forEach(npc ->{
 				npc.hide(player);

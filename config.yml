@@ -10,6 +10,9 @@ items:
    close:
       type: ARROW
       name: "&cExit"
+   back:
+      type: ARROW
+      name: "&cReturn"
    order_type:
       type: BOOK
       name: "&bOrder type"
@@ -20,7 +23,15 @@ items:
       - ""
       - "&eClick to change!"
    info:
-      type: BOOK
+      type: REDSTONE_TORCH_ON
       name: "&bInformation"
       lore:
-      - "&7"
+      - "&7Cmd to sold /sell <amount>"
+      - "&4(Time to expired 24 hours)"
+   storage:
+      type: CHEST
+      name: "&bStorage"
+      lore:
+      - "&7Your unsold items"
+      - ""
+      - "&eClick to open!"
