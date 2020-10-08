@@ -1,4 +1,11 @@
-
+order:
+   format: "%active% %value%"
+   active: "&c»&4"
+   values:
+      id: "IDs"
+      type: "Material"
+      amount: "Amount"
+      value: "Value"
 
 items:
    next:
@@ -17,9 +24,10 @@ items:
       type: BOOK
       name: "&bOrder type"
       lore:
-      - "&8- &7%order_normal%"
       - "&8- &7%order_id%"
+      - "&8- &7%order_type%"
       - "&8- &7%order_amount%"
+      - "&8- &7%order_value%"
       - ""
       - "&eClick to change!"
    info:

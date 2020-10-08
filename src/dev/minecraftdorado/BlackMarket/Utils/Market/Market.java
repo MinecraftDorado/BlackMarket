@@ -10,6 +10,7 @@ import dev.minecraftdorado.BlackMarket.Utils.Config;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.InventoryManager.Inv;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils.Category;
+import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.OrderUtils;
 import dev.minecraftdorado.BlackMarket.Utils.Market.BlackItem.Status;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.UMaterial;
 
@@ -82,6 +83,21 @@ public class Market {
 				toRemove.add(bItem.getId());
 		}
 		
+		
+		switch(PlayerData.get(player.getUniqueId()).getOrder()) {
+		case AMOUNT:
+			l = OrderUtils.sortByAmount(l);
+			break;
+		case TYPE:
+			l = OrderUtils.sortByType(l);
+			break;
+		case VALUE:
+			l = OrderUtils.sortByValue(l);
+			break;
+		default:
+			break;
+		}
+		
 		if(!toRemove.isEmpty())
 			toRemove.forEach(id -> list.remove(id));
 		
@@ -104,7 +120,7 @@ public class Market {
 		
 		inv.setItem(49, Config.getItemStack("close"));
 		inv.setItem(50, Config.getItemStack("info"));
-		inv.setItem(51, Config.getItemStack("order_type"));
+		inv.setItem(51, Config.getItemStack("order_type", player));
 		inv.setItem(52, Config.getItemStack("storage"));
 		
 		if(page != 0)

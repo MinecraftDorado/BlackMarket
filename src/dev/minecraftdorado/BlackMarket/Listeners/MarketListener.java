@@ -10,6 +10,7 @@ import dev.minecraftdorado.BlackMarket.Utils.Inventory.InventoryManager;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Events.InventoryClickEvent;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils.Category;
+import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.OrderUtils.OrderType;
 import dev.minecraftdorado.BlackMarket.Utils.Market.BlackItem;
 import dev.minecraftdorado.BlackMarket.Utils.Market.Market;
 import dev.minecraftdorado.BlackMarket.Utils.Market.PlayerData;
@@ -48,6 +49,34 @@ public class MarketListener implements Listener {
 					return;
 				}
 			});
+			// Select order
+			if(e.getItemStack().equals(Config.getItemStack("order_type", e.getPlayer()))) {
+				OrderType order = PlayerData.get(e.getPlayer().getUniqueId()).getOrder();
+				boolean a = false;
+				
+				if(e.getItemStack().getItemMeta().hasLore()) {
+					for (int i = 0; i < e.getItemStack().getItemMeta().getLore().size(); i++) {
+						String l = e.getItemStack().getItemMeta().getLore().get(i);
+						if(l.contains(Config.getMessage("order.active"))) {
+							a = true;
+							continue;
+						}
+						if(a || i == 0) {
+							for(OrderType type : OrderType.values())
+								if(l.contains(Config.getMessage("order.values." + type.name().toLowerCase()))) {
+									order = type;
+									break;
+								}
+							if(a)
+								break;
+						}
+					}
+					PlayerData.get(e.getPlayer().getUniqueId()).setOrder(order);
+					Market.setPlayerPage(e.getPlayer().getUniqueId(), 0);
+					InventoryManager.openInventory(e.getPlayer(), Market.getMarketInventory(e.getPlayer()));
+					return;
+				}
+			}
 			// Item on sale
 			if(!e.getInv().getBlackList().isEmpty() && e.getInv().getBlackList().keySet().contains(e.getSlot())) {
 				BlackItem bItem = e.getInv().getBlackList().get(e.getSlot());

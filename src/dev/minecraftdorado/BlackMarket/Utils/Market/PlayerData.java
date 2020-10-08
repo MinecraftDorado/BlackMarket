@@ -10,6 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import dev.minecraftdorado.BlackMarket.MainClass.MainClass;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils.Category;
+import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.OrderUtils.OrderType;
 import dev.minecraftdorado.BlackMarket.Utils.Market.BlackItem.Status;
 
 public class PlayerData {
@@ -64,7 +65,8 @@ public class PlayerData {
 		
 		private UUID uuid;
 		private ArrayList<BlackItem> items = new ArrayList<>();
-		private int limit = 50;
+		private int limit = 5;
+		private OrderType order = OrderType.ID;
 		
 		private Category category = null;
 		
@@ -114,6 +116,14 @@ public class PlayerData {
 			});
 			
 			return list;
+		}
+		
+		public void setOrder(OrderType order) {
+			this.order = order;
+		}
+		
+		public OrderType getOrder() {
+			return order;
 		}
 	}
 }

@@ -25,8 +25,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import dev.minecraftdorado.BlackMarket.MainClass.MainClass;
+import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.OrderUtils.OrderType;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.UMaterial;
 import dev.minecraftdorado.BlackMarket.Utils.Market.Market;
+import dev.minecraftdorado.BlackMarket.Utils.Market.PlayerData;
 import dev.minecraftdorado.BlackMarket.Utils.Packets.Reflections;
 
 public class Utils {
@@ -98,8 +100,19 @@ public class Utils {
 	}
 	
 	public static String applyVariables(String s, Player player) {
-		if(s.contains("%actual_page%")) s = s.replace("%actual_page%", "" + (Market.getPlayerPage(player.getUniqueId())+1));
-		if(s.contains("%pages%")) s = s.replace("%pages%", "" + Market.getPages());
+		if(s.contains("%")) {
+			if(s.contains("%actual_page%")) s = s.replace("%actual_page%", "" + (Market.getPlayerPage(player.getUniqueId())+1));
+			if(s.contains("%pages%")) s = s.replace("%pages%", "" + Market.getPages());
+			for(OrderType type : OrderType.values()) {
+				if(s.contains("%order_" + type.name().toLowerCase() + "%")) {
+					s = s.replace("%order_" + type.name().toLowerCase() + "%"
+							, orderFormat.replace("%active%"
+									, PlayerData.get(player.getUniqueId()).getOrder().equals(type) ? Config.getMessage("order.active") : "")
+							.replace("%value%", Config.getMessage("order.values." + type.name().toLowerCase())));
+					break;
+				}
+			}
+		}
 		return s;
 	}
 	
