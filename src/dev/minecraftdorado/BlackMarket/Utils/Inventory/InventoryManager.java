@@ -69,6 +69,16 @@ public class InventoryManager implements Listener {
 		history.put(player, a);
 	}
 	
+	public static void closeInventory() {
+		Bukkit.getOnlinePlayers().forEach(p -> {
+			if(p.getOpenInventory() != null &&
+					p.getOpenInventory().getTopInventory() != null &&
+					getLastInv(p) != null &&
+					p.getOpenInventory().getTopInventory().getTitle().equals(getLastInv(p).getTitle()))
+				p.closeInventory();
+		});
+	}
+	
 	@EventHandler
 	protected static void interactEvent(InventoryClickEvent e) {
 		if(e.getClickedInventory() != null) {

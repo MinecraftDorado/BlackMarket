@@ -33,8 +33,7 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler
 	private void interact(NPCInteractEvent e) {
-		e.getPlayer().sendMessage("§c" + e.getNPC().getName());
-		// set default values
+		// Set default values
 		PlayerData.get(e.getPlayer().getUniqueId()).setCategory(null);
 		Market.setPlayerPage(e.getPlayer().getUniqueId(), 0);
 		InventoryManager.openInventory(e.getPlayer(), Market.getMarketInventory(e.getPlayer()));

@@ -7,6 +7,16 @@ order:
       amount: "Amount"
       value: "Value"
 
+limit: 5 # items by user
+expired_time: 1440 # 1440 minutes = 24 hours
+
+item_onsale:
+- "&8Owner: &b%owner%"
+- "&8Value: &6%value%$"
+- "&8To expire: &b%expired%"
+- ""
+- "&eClick to buy!"
+
 items:
    next:
       type: PAPER

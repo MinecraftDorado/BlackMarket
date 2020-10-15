@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import dev.minecraftdorado.BlackMarket.MainClass.MainClass;
+import dev.minecraftdorado.BlackMarket.Utils.Config;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils.Category;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.OrderUtils.OrderType;
 import dev.minecraftdorado.BlackMarket.Utils.Market.BlackItem.Status;
@@ -65,7 +66,7 @@ public class PlayerData {
 		
 		private UUID uuid;
 		private ArrayList<BlackItem> items = new ArrayList<>();
-		private int limit = 5;
+		private int limit = Config.getLimit();
 		private OrderType order = OrderType.ID;
 		
 		private Category category = null;

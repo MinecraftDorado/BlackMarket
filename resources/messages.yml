@@ -1,0 +1,29 @@
+no_permission: "&cYou don't have permission to use this command!"
+command:
+  sell:
+    message: "&eItem added!"
+    error_limit: "&cYou have reached the limit of published objects!"
+    error_item_not_found: "&cYour hand is empty, you need an item to sell!"
+    error_value: "&cValue invalid!"
+    usage: "&cUsage /sell <value>"
+    only_player: "&cThis command only can be used by Players!"
+  reload:
+    message: "&eReloaded configuration!"
+  open:
+    only_player: "&cThis command only can be used by Players!"
+
+help:
+- "&aBlackMarket - Commands:"
+- "&8 » &7/bm reload &8- &7(&fReload config&7)"
+- "&8 » &7/bm open &8- &7(&fOpen the BlackMarket&7)"
+
+market:
+  buy: "&eThanks for buy!"
+  inventory_full: "&cInventory full!"
+  item_invalid: "&cThis item is not for sale!"
+  missing_money: "&cYou haven't a money to buy this!"
+  item_owner: "&cYou can't buy your items!"
+
+menus:
+  market: "BlackMarket"
+  storage: "BlackMarket - Storage"

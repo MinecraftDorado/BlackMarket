@@ -101,19 +101,19 @@ public class Utils {
 	
 	public static String applyVariables(String s, Player player) {
 		if(s.contains("%")) {
-			if(s.contains("%actual_page%")) s = s.replace("%actual_page%", "" + (Market.getPlayerPage(player.getUniqueId())+1));
+			if(s.contains("%actual_page%")) s = s.replace("%actual_page%", "" + (Market.getPlayerPage(player)+1));
 			if(s.contains("%pages%")) s = s.replace("%pages%", "" + Market.getPages());
 			for(OrderType type : OrderType.values()) {
 				if(s.contains("%order_" + type.name().toLowerCase() + "%")) {
 					s = s.replace("%order_" + type.name().toLowerCase() + "%"
 							, orderFormat.replace("%active%"
-									, PlayerData.get(player.getUniqueId()).getOrder().equals(type) ? Config.getMessage("order.active") : "")
-							.replace("%value%", Config.getMessage("order.values." + type.name().toLowerCase())));
+									, PlayerData.get(player.getUniqueId()).getOrder().equals(type) ? MainClass.main.getConfig().getString("order.active") : "")
+							.replace("%value%", MainClass.main.getConfig().getString("order.values." + type.name().toLowerCase())));
 					break;
 				}
 			}
 		}
-		return s;
+		return ChatColor.translateAlternateColorCodes('&', s);
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -173,5 +173,24 @@ public class Utils {
 		if(a > 36)
 			return false;
 		return true;
+	}
+	
+	public static String getTime(long pTime) {
+		if(pTime >= 60*60*24) {
+			String x = String.format("%02d:%02d", pTime / 60 /60 / 24, (pTime / 60 /60) % 24);
+			String[] split = x.split(":");
+			x = split[0] + "d " + split[1] + "h";
+			return x;
+		}
+		if(pTime >= 60*60) {
+			String x = String.format("%02d:%02d", pTime / 60 /60, (pTime / 60) % 60);
+			String[] split = x.split(":");
+			x = split[0] + "h " + split[1] + "m";
+			return x;
+		}
+	    String x = String.format("%02d:%02d", pTime / 60, pTime % 60);
+	    String[] split = x.split(":");
+		x = split[0] + "m " + split[1] + "s";
+		return x;
 	}
 }

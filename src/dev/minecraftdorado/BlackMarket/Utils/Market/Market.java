@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import dev.minecraftdorado.BlackMarket.MainClass.MainClass;
 import dev.minecraftdorado.BlackMarket.Utils.Config;
+import dev.minecraftdorado.BlackMarket.Utils.Inventory.InventoryManager;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.InventoryManager.Inv;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils.Category;
@@ -18,6 +21,19 @@ public class Market {
 	
 	private static HashMap<Integer, BlackItem> list = new HashMap<>();
 	private static int id = 0;
+	
+	public Market() {
+		Bukkit.getScheduler().runTaskTimer(MainClass.main, new Runnable() {
+			// Market updater
+			@Override
+			public void run() {
+				Bukkit.getOnlinePlayers().forEach(p -> {
+					if(p.getOpenInventory() != null && p.getOpenInventory().getTopInventory().getTitle().equals(getMarketTitle()))
+						InventoryManager.openInventory(p, getMarketInventory(p));
+				});
+			}
+		}, 100, 100);
+	}
 	
 	public static void addId() {
 		id++;
@@ -42,12 +58,13 @@ public class Market {
 	}
 	
 	public static String getMarketTitle() {
-		return "BlackMarket";
+		return Config.getMessage("menus.market");
 	}
 	
 	private static HashMap<UUID, Integer> playerPage = new HashMap<>();
 	
-	public static int getPlayerPage(UUID uuid) {
+	public static int getPlayerPage(Player player) {
+		UUID uuid = player.getUniqueId();
 		if(!playerPage.containsKey(uuid))
 			playerPage.put(uuid, 0);
 		return playerPage.get(uuid);
@@ -58,7 +75,7 @@ public class Market {
 	}
 	
 	public static Inv getMarketInventory(Player player) {
-		int page = getPlayerPage(player.getUniqueId());
+		int page = getPlayerPage(player);
 		Inv inv = new Inv(getMarketTitle(), 6);
 		inv.setBackgroud(UMaterial.GRAY_STAINED_GLASS_PANE.getItemStack(), false);
 		inv.setBackgroud(UMaterial.BLACK_STAINED_GLASS_PANE.getItemStack(), true);

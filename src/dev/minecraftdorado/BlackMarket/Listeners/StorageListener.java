@@ -1,5 +1,6 @@
 package dev.minecraftdorado.BlackMarket.Listeners;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import dev.minecraftdorado.BlackMarket.Utils.Config;
@@ -16,22 +17,24 @@ public class StorageListener implements Listener {
 	@EventHandler
 	private void invClick(InventoryClickEvent e) {
 		if(e.getInv().getTitle().equals(Storage.getStorageTitle())) {
+			Player p = e.getPlayer();
+			
 			// ItemStack "back"
-			if(e.getItemStack().equals(Config.getItemStack("back", e.getPlayer()))) {
-				Market.setPlayerPage(e.getPlayer().getUniqueId(), 0);
-				InventoryManager.openInventory(e.getPlayer(), Market.getMarketInventory(e.getPlayer()));
+			if(e.getItemStack().equals(Config.getItemStack("back", p))) {
+				Market.setPlayerPage(p.getUniqueId(), 0);
+				InventoryManager.openInventory(p, Market.getMarketInventory(p));
 				return;
 			}
 			// Take item
 			if(!e.getInv().getBlackList().isEmpty() && e.getInv().getBlackList().keySet().contains(e.getSlot())) {
 				BlackItem bItem = e.getInv().getBlackList().get(e.getSlot());
 				
-				if(Utils.canAddItem(e.getPlayer(), bItem.getOriginal())){
+				if(Utils.canAddItem(p, bItem.getOriginal())){
 					bItem.setStatus(Status.TAKED);
-					e.getPlayer().getInventory().addItem(bItem.getOriginal());
-					e.getPlayer().closeInventory();
+					p.getInventory().addItem(bItem.getOriginal());
+					p.closeInventory();
 				}else
-					e.getPlayer().sendMessage("§cInventory full!");
+					Config.sendMessage("market.item_full", p);
 			}
 		}
 	}

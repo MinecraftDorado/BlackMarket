@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import dev.minecraftdorado.BlackMarket.Commands.bm;
+import dev.minecraftdorado.BlackMarket.Commands.bmTab;
 import dev.minecraftdorado.BlackMarket.Commands.sell;
 import dev.minecraftdorado.BlackMarket.Listeners.MarketListener;
 import dev.minecraftdorado.BlackMarket.Listeners.PlayerListener;
@@ -20,7 +22,6 @@ import dev.minecraftdorado.BlackMarket.Utils.Inventory.InventoryManager;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils;
 import dev.minecraftdorado.BlackMarket.Utils.Market.Market;
 import dev.minecraftdorado.BlackMarket.Utils.Market.PlayerData;
-import dev.minecraftdorado.BlackMarket.Utils.Market.Storage;
 
 public class MainClass extends JavaPlugin {
 	
@@ -40,6 +41,8 @@ public class MainClass extends JavaPlugin {
 		}
 		
 		getServer().getPluginCommand("sell").setExecutor(new sell());
+		getServer().getPluginCommand("bm").setExecutor(new bm());
+		getServer().getPluginCommand("bm").setTabCompleter(new bmTab());
 		
 		hm = new HologramManager();
 		npcM = new NPCManager();
@@ -48,6 +51,7 @@ public class MainClass extends JavaPlugin {
 		new Config();
 		new PlayerData();
 		new CategoryUtils();
+		new Market();
 		
 		NPC npc = new NPC("Hello World §e!");
 		npc.setSkin(SkinData.getSkin("skin_fisher"));
@@ -63,10 +67,8 @@ public class MainClass extends JavaPlugin {
 	}
 	
 	public void onDisable() {
+		InventoryManager.closeInventory();
 		Bukkit.getOnlinePlayers().forEach(player -> {
-			if(player.getOpenInventory() != null &&
-					(player.getOpenInventory().getTopInventory().getTitle().equals(Market.getMarketTitle()) || player.getOpenInventory().getTopInventory().getTitle().equals(Storage.getStorageTitle())))
-				player.closeInventory();
 			npcM.list.values().forEach(npc ->{
 				npc.hide(player);
 			});

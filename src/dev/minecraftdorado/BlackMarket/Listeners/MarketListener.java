@@ -1,6 +1,8 @@
 package dev.minecraftdorado.BlackMarket.Listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import dev.minecraftdorado.BlackMarket.MainClass.MainClass;
@@ -22,48 +24,50 @@ public class MarketListener implements Listener {
 	@EventHandler
 	private void invClick(InventoryClickEvent e) {
 		if(e.getInv().getTitle().equals(Market.getMarketTitle())) {
+			Player p = e.getPlayer();
+			
 			// ItemStack "previous"
-			if(e.getItemStack().equals(Config.getItemStack("previous", e.getPlayer()))) {
-				Market.setPlayerPage(e.getPlayer().getUniqueId(), Market.getPlayerPage(e.getPlayer().getUniqueId())-1);
-				InventoryManager.openInventory(e.getPlayer(), Market.getMarketInventory(e.getPlayer()));
+			if(e.getItemStack().equals(Config.getItemStack("previous", p))) {
+				Market.setPlayerPage(p.getUniqueId(), Market.getPlayerPage(p)-1);
+				InventoryManager.openInventory(p, Market.getMarketInventory(p));
 				return;
 			}
 			// ItemStack "next"
-			if(e.getItemStack().equals(Config.getItemStack("next", e.getPlayer()))) {
-				Market.setPlayerPage(e.getPlayer().getUniqueId(), Market.getPlayerPage(e.getPlayer().getUniqueId())+1);
-				InventoryManager.openInventory(e.getPlayer(), Market.getMarketInventory(e.getPlayer()));
+			if(e.getItemStack().equals(Config.getItemStack("next", p))) {
+				Market.setPlayerPage(p.getUniqueId(), Market.getPlayerPage(p)+1);
+				InventoryManager.openInventory(p, Market.getMarketInventory(p));
 				return;
 			}
 			// ItemStack "storage"
-			if(e.getItemStack().equals(Config.getItemStack("storage", e.getPlayer()))) {
-				InventoryManager.openInventory(e.getPlayer(), Storage.getStorageInventory(e.getPlayer()));
+			if(e.getItemStack().equals(Config.getItemStack("storage", p))) {
+				InventoryManager.openInventory(p, Storage.getStorageInventory(p));
 				return;
 			}
 			// Select category
-			Category cat = PlayerData.get(e.getPlayer().getUniqueId()).getCategory();
+			Category cat = PlayerData.get(p.getUniqueId()).getCategory();
 			CategoryUtils.getCategories().forEach(category -> {
 				if(e.getItemStack().equals(category.getItemStack(category.equals(cat)))) {
-					PlayerData.get(e.getPlayer().getUniqueId()).setCategory(category);
-					Market.setPlayerPage(e.getPlayer().getUniqueId(), 0);
-					InventoryManager.updateInventory(e.getPlayer(), Market.getMarketInventory(e.getPlayer()));
+					PlayerData.get(p.getUniqueId()).setCategory(category);
+					Market.setPlayerPage(p.getUniqueId(), 0);
+					InventoryManager.updateInventory(p, Market.getMarketInventory(p));
 					return;
 				}
 			});
 			// Select order
-			if(e.getItemStack().equals(Config.getItemStack("order_type", e.getPlayer()))) {
-				OrderType order = PlayerData.get(e.getPlayer().getUniqueId()).getOrder();
+			if(e.getItemStack().equals(Config.getItemStack("order_type", p))) {
+				OrderType order = PlayerData.get(p.getUniqueId()).getOrder();
 				boolean a = false;
 				
 				if(e.getItemStack().getItemMeta().hasLore()) {
 					for (int i = 0; i < e.getItemStack().getItemMeta().getLore().size(); i++) {
 						String l = e.getItemStack().getItemMeta().getLore().get(i);
-						if(l.contains(Config.getMessage("order.active"))) {
+						if(l.contains(ChatColor.translateAlternateColorCodes('&', MainClass.main.getConfig().getString("order.active")))) {
 							a = true;
 							continue;
 						}
 						if(a || i == 0) {
 							for(OrderType type : OrderType.values())
-								if(l.contains(Config.getMessage("order.values." + type.name().toLowerCase()))) {
+								if(l.contains(ChatColor.translateAlternateColorCodes('&', MainClass.main.getConfig().getString("order.values." + type.name().toLowerCase())))) {
 									order = type;
 									break;
 								}
@@ -71,35 +75,35 @@ public class MarketListener implements Listener {
 								break;
 						}
 					}
-					PlayerData.get(e.getPlayer().getUniqueId()).setOrder(order);
-					Market.setPlayerPage(e.getPlayer().getUniqueId(), 0);
-					InventoryManager.openInventory(e.getPlayer(), Market.getMarketInventory(e.getPlayer()));
+					PlayerData.get(p.getUniqueId()).setOrder(order);
+					Market.setPlayerPage(p.getUniqueId(), 0);
+					InventoryManager.openInventory(p, Market.getMarketInventory(p));
 					return;
 				}
 			}
 			// Item on sale
 			if(!e.getInv().getBlackList().isEmpty() && e.getInv().getBlackList().keySet().contains(e.getSlot())) {
 				BlackItem bItem = e.getInv().getBlackList().get(e.getSlot());
-				if(!bItem.getOwner().equals(e.getPlayer().getUniqueId()))
-					if(MainClass.econ.has(e.getPlayer(), bItem.getValue()))
+				if(!bItem.getOwner().equals(p.getUniqueId()))
+					if(MainClass.econ.has(p, bItem.getValue()))
 						if(bItem.getStatus().equals(Status.ON_SALE)) {
-							if(Utils.canAddItem(e.getPlayer(), bItem.getOriginal())) {
+							if(Utils.canAddItem(p, bItem.getOriginal())) {
 								bItem.setStatus(Status.SOLD);
-								e.getPlayer().getInventory().addItem(bItem.getOriginal());
-								e.getPlayer().closeInventory();
-								e.getPlayer().sendMessage("§eThanks for buy!");
+								p.getInventory().addItem(bItem.getOriginal());
+								p.closeInventory();
+								Config.sendMessage("market.buy", p);
 								
-								MainClass.econ.withdrawPlayer(e.getPlayer(), bItem.getValue());
+								MainClass.econ.withdrawPlayer(p, bItem.getValue());
 								MainClass.econ.depositPlayer(Bukkit.getOfflinePlayer(bItem.getOwner()), bItem.getValue());
 								return;
 							}
-							e.getPlayer().sendMessage("§cInventory full!");
+							Config.sendMessage("market.inventory_full", p);
 						}else
-							e.getPlayer().sendMessage("§cThis item is not for sale!");
+							Config.sendMessage("market.item_invalid", p);
 					else
-						e.getPlayer().sendMessage("§cYou haven't a money to buy this!");
+						Config.sendMessage("market.missing_money", p);
 				else
-					e.getPlayer().sendMessage("§cYou can't buy your items!");
+					Config.sendMessage("market.item_owner", p);
 			}
 		}
 	}

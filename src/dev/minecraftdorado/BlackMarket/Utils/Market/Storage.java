@@ -11,7 +11,7 @@ import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.UMaterial;
 public class Storage {
 	
 	public static String getStorageTitle() {
-		return "Storage";
+		return Config.getMessage("menus.storage");
 	}
 	
 	public static Inv getStorageInventory(Player player) {

@@ -6,6 +6,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import dev.minecraftdorado.BlackMarket.Utils.Config;
 import dev.minecraftdorado.BlackMarket.Utils.Market.BlackItem;
 import dev.minecraftdorado.BlackMarket.Utils.Market.PlayerData;
 
@@ -14,32 +15,32 @@ public class sell implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String args2, String[] args) {
 		
 		if(!(sender instanceof Player)) {
-			sender.sendMessage("§cOnly for players!");
+			sender.sendMessage(Config.getMessage("command.sell.only_player"));
 			return false;
 		}
+		
+		Player p = (Player) sender;
 		
 		if(args.length == 1)
 			try {
 				double value = Double.parseDouble(args[0]);
 				
-				Player p = (Player) sender;
-				
 				if(p.getInventory().getItemInHand() != null && !p.getInventory().getItemInHand().getType().equals(Material.AIR)) {
 					BlackItem bItem = new BlackItem(p.getInventory().getItemInHand(), value, p.getUniqueId());
 					
 					if(PlayerData.get(p.getUniqueId()).addItem(bItem)) {
-						sender.sendMessage("§aItem added!");
+						Config.sendMessage("command.sell.message", p);
 						p.getInventory().getItemInHand().setType(Material.AIR);
 						p.getInventory().setItemInHand(null);
 					}else
-						sender.sendMessage("§cLimit !");
+						Config.sendMessage("command.sell.error_limit", p);
 				}else
-					sender.sendMessage("§cItem not found!");
+					Config.sendMessage("command.sell.error_item_not_found", p);
 			}catch(Exception ex) {
-				sender.sendMessage("§cValue invalid!");
+				Config.sendMessage("command.sell.error_value", p);
 			}
 		else
-			sender.sendMessage("§cUsage /sell <value>");
+			Config.sendMessage("command.sell.usage", p);
 		return false;
 	}
 }

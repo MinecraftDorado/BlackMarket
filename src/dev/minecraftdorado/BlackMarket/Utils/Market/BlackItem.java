@@ -8,8 +8,12 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import dev.minecraftdorado.BlackMarket.Utils.Config;
+import dev.minecraftdorado.BlackMarket.Utils.Utils;
 
 public class BlackItem {
 	
@@ -43,7 +47,7 @@ public class BlackItem {
 		// Expiration time
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
-		cal.add(Calendar.MINUTE, 60*24);
+		cal.add(Calendar.MINUTE, Config.getExpiredTime());
 		this.date = cal.getTime();
 	}
 	
@@ -65,17 +69,15 @@ public class BlackItem {
 		
 		List<String> lore = meta.hasLore() ? meta.getLore() : new ArrayList<>();
 		
-		lore.add("§8Owner: §b" + Bukkit.getOfflinePlayer(owner).getName());
-		lore.add("§8Value: §6$" + value);
-		
 		Duration d = Duration.between(new Date().toInstant(), date.toInstant());
-		String df = "" + d.getSeconds();
-		if(Integer.parseInt(df) < 0) df = "0";
 		
-		lore.add("§8To expire: §b" + df + "s");
-		lore.add("");
-		lore.add("§eClick to buy!");
-		lore.add("§8§o#" + id);
+		Config.getDesc().forEach(s -> {
+			if(s.contains("%owner%")) s = s.replace("%owner%", Bukkit.getOfflinePlayer(owner).getName());
+			if(s.contains("%value%")) s = s.replace("%value%", value + "");
+			if(s.contains("%expired%")) s = s.replace("%expired%", (d.getSeconds() > 0 ? Utils.getTime(d.getSeconds()) : 0)  + "");
+			
+			lore.add(ChatColor.translateAlternateColorCodes('&', s));
+		});
 		
 		meta.setLore(lore);
 		black.setItemMeta(meta);
