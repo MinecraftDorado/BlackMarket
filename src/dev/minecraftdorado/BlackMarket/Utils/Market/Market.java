@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import dev.minecraftdorado.BlackMarket.MainClass.MainClass;
 import dev.minecraftdorado.BlackMarket.Utils.Config;
@@ -27,12 +28,34 @@ public class Market {
 			// Market updater
 			@Override
 			public void run() {
+				
+				HashMap<Integer, ItemStack> l = new HashMap<>();
+				
 				Bukkit.getOnlinePlayers().forEach(p -> {
-					if(p.getOpenInventory() != null && p.getOpenInventory().getTopInventory().getTitle().equals(getMarketTitle()))
-						InventoryManager.openInventory(p, getMarketInventory(p));
+					if(p.getOpenInventory() != null && p.getOpenInventory().getTopInventory().getTitle().equals(getMarketTitle())) {
+						boolean update = true;
+						Inv inv = InventoryManager.getLastInv(p);
+						
+						for(int slot : InventoryManager.getLastInv(p).getBlackList().keySet()) {
+							BlackItem bItem = InventoryManager.getLastInv(p).getBlackList().get(slot);
+							
+							if(!l.containsKey(bItem.getId()))
+								if(!bItem.getStatus().equals(Status.ON_SALE)) {
+									InventoryManager.openInventory(p, getMarketInventory(p));
+									update = false;
+									break;
+								}else
+									l.put(bItem.getId(), bItem.getItemStack());
+							
+							inv.setItem(slot, l.get(bItem.getId()));
+						}
+						if(update)
+							InventoryManager.updateInventory(p, inv);
+						
+					}
 				});
 			}
-		}, 100, 100);
+		}, 20, 20);
 	}
 	
 	public static void addId() {

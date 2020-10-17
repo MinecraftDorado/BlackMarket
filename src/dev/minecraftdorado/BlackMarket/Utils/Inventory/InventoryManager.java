@@ -54,7 +54,13 @@ public class InventoryManager implements Listener {
 	}
 	
 	public static void updateInventory(Player player, Inv inv) {
-		player.openInventory(inv.inv);
+		
+		Inventory iv = player.getOpenInventory().getTopInventory();
+		
+		for(int slot = 0; slot < iv.getSize(); slot++)
+			iv.setItem(slot, inv.getItem(slot));
+		
+		player.updateInventory();
 		
 		ArrayList<Inv> a = getHistory(player);
 		

@@ -176,18 +176,19 @@ public class Utils {
 	}
 	
 	public static String getTime(long pTime) {
-		if(pTime >= 60*60*24) {
+		if(pTime >= 60*60*24) { // day : hour
 			String x = String.format("%02d:%02d", pTime / 60 /60 / 24, (pTime / 60 /60) % 24);
 			String[] split = x.split(":");
 			x = split[0] + "d " + split[1] + "h";
 			return x;
 		}
-		if(pTime >= 60*60) {
+		if(pTime >= 60*60) { // hour : minute
 			String x = String.format("%02d:%02d", pTime / 60 /60, (pTime / 60) % 60);
 			String[] split = x.split(":");
 			x = split[0] + "h " + split[1] + "m";
 			return x;
 		}
+		// minute : second
 	    String x = String.format("%02d:%02d", pTime / 60, pTime % 60);
 	    String[] split = x.split(":");
 		x = split[0] + "m " + split[1] + "s";
