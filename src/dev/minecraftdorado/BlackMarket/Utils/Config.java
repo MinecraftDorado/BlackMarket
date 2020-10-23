@@ -1,20 +1,26 @@
 package dev.minecraftdorado.BlackMarket.Utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import dev.minecraftdorado.BlackMarket.MainClass.MainClass;
+import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.NPC;
+import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.Skins.SkinData;
 
 public class Config {
 	
@@ -23,6 +29,7 @@ public class Config {
 	private static List<String> desc;
 	private static YamlConfiguration msgFile;
 	private static int expiredTime, limit;
+	private static ArrayList<NPC> npcs = new ArrayList<>();
 	
 	public Config() {
 		load();
@@ -52,6 +59,18 @@ public class Config {
 		desc = yml.getStringList("item_onsale");
 		expiredTime = yml.isSet("expired_time") ? yml.getInt("expired_time") : 1440;
 		limit = yml.isSet("limit") ? yml.getInt("limit") : 5;
+		
+		if(yml.isSet("npc_list"))
+			for(String s : yml.getStringList("npc_list")) {
+				String[] args = s.split(",");
+				
+				Location loc = new Location(Bukkit.getWorld(args[0]), Double.valueOf(args[1]), Double.valueOf(args[2]), Double.valueOf(args[3]));
+				
+				NPC npc = new NPC(loc);
+				if(args.length == 5)
+					npc.setSkin(SkinData.getSkin(args[4]));
+				npcs.add(npc);
+			}
 		
 		if(!new File(MainClass.main.getDataFolder(), "messages.yml").exists())
 			Utils.extract("resources/messages.yml", "messages.yml");
@@ -114,5 +133,28 @@ public class Config {
 
 	public static int getLimit() {
 		return limit;
+	}
+	
+	public static ArrayList<NPC> getNPCs(){
+		return npcs;
+	}
+	
+	public static void saveNPCs(Collection<NPC> list) {
+		npcs.clear();
+		FileConfiguration yml = MainClass.main.getConfig();
+		
+		List<String> l = new ArrayList<>();
+		
+		for(NPC npc : list) {
+			Location loc = npc.getLocation();
+			l.add(loc.getWorld().getName() + "," + loc.getX() + "," + loc.getY() + "," + loc.getZ() +(npc.getSkin() != null ?  "," + npc.getSkin().getName() : ""));
+			npcs.add(npc);
+		}
+		yml.set("npc_list", l);
+		try {
+			yml.save(new File(MainClass.main.getDataFolder(), "config.yml"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

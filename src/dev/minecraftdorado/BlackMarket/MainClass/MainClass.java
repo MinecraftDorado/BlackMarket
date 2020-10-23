@@ -1,7 +1,6 @@
 package dev.minecraftdorado.BlackMarket.MainClass;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.minecraftdorado.BlackMarket.Commands.bm;
@@ -14,7 +13,6 @@ import dev.minecraftdorado.BlackMarket.Utils.Packets.PacketReader;
 import net.milkbowl.vault.economy.Economy;
 import dev.minecraftdorado.BlackMarket.Utils.Config;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.Hologram.HologramManager;
-import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.NPC;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.NPCManager;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.Skins.SkinData;
 import dev.minecraftdorado.BlackMarket.Utils.Hook.VaultHook;
@@ -44,20 +42,14 @@ public class MainClass extends JavaPlugin {
 		getServer().getPluginCommand("bm").setExecutor(new bm());
 		getServer().getPluginCommand("bm").setTabCompleter(new bmTab());
 		
-		hm = new HologramManager();
-		npcM = new NPCManager();
-		
 		new SkinData();
 		new Config();
 		new PlayerData();
 		new CategoryUtils();
 		new Market();
 		
-		NPC npc = new NPC("Hello World §e!");
-		npc.setSkin(SkinData.getSkin("skin_fisher"));
-		npc.spawn(new Location(Bukkit.getWorld("world"), 5, 100, 0));
-		
-		npcM.add(npc);
+		hm = new HologramManager();
+		npcM = new NPCManager();
 		
 		Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 		Bukkit.getPluginManager().registerEvents(new MarketListener(), this);
@@ -71,9 +63,11 @@ public class MainClass extends JavaPlugin {
 		Bukkit.getOnlinePlayers().forEach(player -> {
 			npcM.list.values().forEach(npc ->{
 				npc.hide(player);
+				npc.getNameEntity().hide(player);
 			});
 			PacketReader.get(player).uninject();
 		});
 		PlayerData.save();
+		npcM.saveAll();
 	}
 }

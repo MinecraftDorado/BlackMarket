@@ -6,8 +6,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import dev.minecraftdorado.BlackMarket.MainClass.MainClass;
 import dev.minecraftdorado.BlackMarket.Utils.Config;
 import dev.minecraftdorado.BlackMarket.Utils.Utils;
+import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.NPC;
+import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.Skins.SkinData;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.InventoryManager;
 import dev.minecraftdorado.BlackMarket.Utils.Market.Market;
 import dev.minecraftdorado.BlackMarket.Utils.Market.PlayerData;
@@ -37,6 +40,25 @@ public class bm implements CommandExecutor {
 						return false;
 					}
 					break;
+				case "setnpc":
+					if(args.length <= 2) {
+						if(player.hasPermission("blackmarket.setnpc")) {
+							
+							NPC npc = new NPC(player.getLocation());
+							
+							if(args.length == 2)
+								npc.setSkin(SkinData.getSkin(args[1]));
+							npc.spawn();
+							
+							MainClass.npcM.add(npc);
+							
+							Config.sendMessage("command.setnpc.message", player);
+						}else
+							Config.sendMessage("no_permission", player);
+						return false;
+					}
+					Config.sendMessage("command.setnpc.usage", player);
+					return false;
 				case "open":
 					if(args.length == 1) {
 						if(player.hasPermission("blackmarket.open")) {
@@ -65,6 +87,9 @@ public class bm implements CommandExecutor {
 				break;
 			case "open":
 				Config.sendMessage("command.open.only_player", sender);
+				return false;
+			case "setnpc":
+				Config.sendMessage("command.setnpc.only_player", sender);
 				return false;
 			}
 		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.join("\n", Config.getYml().getStringList("help"))));

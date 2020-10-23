@@ -12,6 +12,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import dev.minecraftdorado.BlackMarket.MainClass.MainClass;
+import dev.minecraftdorado.BlackMarket.Utils.Config;
 import dev.minecraftdorado.BlackMarket.Utils.Packets.Reflections;
 
 public class NPCManager {
@@ -29,9 +30,18 @@ public class NPCManager {
 	
 	private static HashMap<Player, ArrayList<NPC>> loaded = new HashMap<>();
 	
+	public void saveAll() {
+		Config.saveNPCs(list.values());
+	}
+	
 	Location a = null;
 	@SuppressWarnings("unchecked")
 	public NPCManager() {
+		
+		for(NPC npc : Config.getNPCs()) {
+			npc.spawn();
+			list.put(npc.getId(), npc);
+		}
 		
 		/*
 		 * 	Clicks clear - Display/hide npc

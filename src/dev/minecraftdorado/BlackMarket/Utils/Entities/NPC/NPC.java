@@ -17,6 +17,7 @@ import com.mojang.authlib.properties.Property;
 
 import dev.minecraftdorado.BlackMarket.MainClass.MainClass;
 import dev.minecraftdorado.BlackMarket.Utils.Utils;
+import dev.minecraftdorado.BlackMarket.Utils.Entities.Hologram.Hologram;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.Skins.SkinData.Skin;
 import dev.minecraftdorado.BlackMarket.Utils.Packets.Reflections;
 import dev.minecraftdorado.BlackMarket.Utils.Packets.ServerVersion;
@@ -103,9 +104,11 @@ public class NPC {
 	private Object entity;
 	private int id;
 	
-	private String name;
+	private String name = "BlackMarket";
 	private Skin skin;
 	private Location loc;
+	
+	private Hologram nameEntity;
 	
 	private Object packetPlayOutPlayerInfo_add;
 	private Object packetPlayOutPlayerInfo_remove;
@@ -113,18 +116,23 @@ public class NPC {
 	
 	private boolean spawned = false;
 	
-	public NPC(String name) {
+	public NPC(Location loc, String name) {
+		this.loc = loc;
 		this.name = name;
 	}
 	
-	public void spawn(Location loc){
+	public NPC(Location loc) {
 		this.loc = loc;
+	}
+	
+	public void spawn(){
 		GameProfile profile = new GameProfile(UUID.randomUUID(), "§eClick here!");
-		try {
-			profile.getProperties().put("textures", new Property("textures",skin.getSkin()[0],skin.getSkin()[1]));
-		}catch(Exception ex) {
-			ex.printStackTrace();
-		}
+		if(skin != null)
+			try {
+				profile.getProperties().put("textures", new Property("textures",skin.getSkin()[0],skin.getSkin()[1]));
+			}catch(Exception ex) {
+				ex.printStackTrace();
+			}
 		
 		try {
 			Object server = getServer.invoke(CraftServer.cast(Bukkit.getServer()));
@@ -151,6 +159,8 @@ public class NPC {
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
+		
+		nameEntity = new Hologram(loc.clone().add(0, .08, 0), name);
 	}
 	
 	public boolean isSpawned() {
@@ -190,6 +200,10 @@ public class NPC {
 	
 	public int getId() {
 		return id;
+	}
+	
+	public Hologram getNameEntity() {
+		return nameEntity;
 	}
 	
 	private final Set<Player> viewers = new HashSet<>();

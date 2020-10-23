@@ -32,6 +32,24 @@ public class HologramManager {
 					}
 				});
 			});
+			
+			MainClass.npcM.list.values().forEach(npc -> {
+				Hologram holo = npc.getNameEntity(); 
+				Bukkit.getOnlinePlayers().forEach(player ->{
+					if(holo.getLocation().distance(player.getLocation()) < 50) {
+						ArrayList<Hologram> l = loaded.containsKey(player) ? loaded.get(player) : new ArrayList<>();
+						l.add(holo);
+						loaded.put(player, l);
+						
+						holo.display(player);
+					}else if(loaded.containsKey(player)){
+						ArrayList<Hologram> l = loaded.get(player);
+						l.remove(holo);
+						loaded.put(player, l);
+						holo.hide(player);
+					}
+				});
+			});
 		}, 20, 20);
 	}
 	

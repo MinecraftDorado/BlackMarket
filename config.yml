@@ -1,4 +1,7 @@
-order:
+
+npc_list: 
+
+order: 
    format: "%active% %value%"
    active: "&c»&4"
    values:
