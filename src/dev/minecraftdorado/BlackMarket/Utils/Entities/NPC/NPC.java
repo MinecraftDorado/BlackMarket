@@ -296,6 +296,10 @@ public class NPC {
 				Utils.sendPacket(player, packetPlayOutEntityDestroy);
 	}
 	
+	public void hide() {
+		viewers.forEach(p -> Utils.sendPacket(p, packetPlayOutEntityDestroy));
+	}
+	
 	private void updateMetadata(Player player) throws IllegalAccessException, InvocationTargetException, InstantiationException {
 		Utils.sendPacket(player, PacketPlayOutEntityMetadataConstructor.newInstance(id, getDataWatcher.invoke(entity), true));
 	}

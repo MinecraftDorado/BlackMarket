@@ -19,6 +19,7 @@ public class bmTab implements TabCompleter {
 				list.add("reload");
 				list.add("open");
 				list.add("setnpc");
+				list.add("removenpc");
 			}
 			
 			if(!list.isEmpty()) {

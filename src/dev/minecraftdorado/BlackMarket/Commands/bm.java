@@ -6,6 +6,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import dev.minecraftdorado.BlackMarket.Listeners.PlayerListener;
 import dev.minecraftdorado.BlackMarket.MainClass.MainClass;
 import dev.minecraftdorado.BlackMarket.Utils.Config;
 import dev.minecraftdorado.BlackMarket.Utils.Utils;
@@ -59,6 +60,18 @@ public class bm implements CommandExecutor {
 					}
 					Config.sendMessage("command.setnpc.usage", player);
 					return false;
+				case "removenpc":
+					if(args.length == 1) {
+						if(player.hasPermission("blackmarket.removenpc")) {
+							if(!PlayerListener.npcRemove.contains(player.getUniqueId()))
+								PlayerListener.npcRemove.add(player.getUniqueId());
+							Config.sendMessage("command.removenpc.message", player);
+						}else
+							Config.sendMessage("no_permission", player);
+						return false;
+					}
+					Config.sendMessage("command.setnpc.usage", player);
+					return false;
 				case "open":
 					if(args.length == 1) {
 						if(player.hasPermission("blackmarket.open")) {
@@ -86,10 +99,13 @@ public class bm implements CommandExecutor {
 				}
 				break;
 			case "open":
-				Config.sendMessage("command.open.only_player", sender);
+				Config.sendMessage("only_player", sender);
 				return false;
 			case "setnpc":
-				Config.sendMessage("command.setnpc.only_player", sender);
+				Config.sendMessage("only_player", sender);
+				return false;
+			case "removenpc":
+				Config.sendMessage("only_player", sender);
 				return false;
 			}
 		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.join("\n", Config.getYml().getStringList("help"))));

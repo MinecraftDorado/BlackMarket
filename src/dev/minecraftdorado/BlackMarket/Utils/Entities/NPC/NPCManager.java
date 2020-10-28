@@ -25,6 +25,8 @@ public class NPCManager {
 	}
 	
 	public void remove(NPC npc) {
+		npc.hide();
+		npc.getNameEntity().hide();
 		list.remove(npc.getId());
 	}
 	
