@@ -31,8 +31,8 @@ public class Market {
 				
 				HashMap<Integer, ItemStack> l = new HashMap<>();
 				
-				Bukkit.getOnlinePlayers().forEach(p -> {
-					if(p.getOpenInventory() != null && p.getOpenInventory().getTopInventory().getTitle().equals(getMarketTitle())) {
+				for(Player p : Bukkit.getOnlinePlayers()) {
+					if(p.getOpenInventory() != null && InventoryManager.getLastInv(p) != null && InventoryManager.getLastInv(p).getTitle().equals(getMarketTitle())) {
 						boolean update = true;
 						Inv inv = InventoryManager.getLastInv(p);
 						
@@ -53,7 +53,7 @@ public class Market {
 							InventoryManager.updateInventory(p, inv);
 						
 					}
-				});
+				};
 			}
 		}, 20, 20);
 	}

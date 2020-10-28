@@ -9,14 +9,11 @@ import net.milkbowl.vault.economy.Economy;
 public class VaultHook {
 	
 	public static boolean setupEconomy() {
-        if (Bukkit.getServer().getPluginManager().getPlugin("Vault") == null) {
-            return false;
-        }
-        RegisteredServiceProvider<Economy> rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null) {
-            return false;
-        }
-        MainClass.econ = rsp.getProvider();
+		if (Bukkit.getServer().getPluginManager().getPlugin("Vault") != null) {
+			RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
+			if (economyProvider != null)
+				MainClass.econ = economyProvider.getProvider();
+		}
         return MainClass.econ != null;
     }
 }

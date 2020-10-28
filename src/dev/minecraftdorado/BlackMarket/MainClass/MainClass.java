@@ -32,11 +32,11 @@ public class MainClass extends JavaPlugin {
 	public void onEnable() {
 		main = this;
 		
-		if(!VaultHook.setupEconomy()) {
-			Bukkit.getConsoleSender().sendMessage("§cVault is needed !");
-			this.getPluginLoader().disablePlugin(this);
-			return;
-		}
+		if (!VaultHook.setupEconomy() ) {
+            getLogger().severe(String.format("» Disabled due to no Vault dependency found!", getDescription().getName()));
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
 		
 		getServer().getPluginCommand("sell").setExecutor(new sell());
 		getServer().getPluginCommand("bm").setExecutor(new bm());
@@ -61,13 +61,14 @@ public class MainClass extends JavaPlugin {
 	public void onDisable() {
 		InventoryManager.closeInventory();
 		Bukkit.getOnlinePlayers().forEach(player -> {
-			npcM.list.values().forEach(npc ->{
+			if(npcM != null)
+				npcM.list.values().forEach(npc ->{
 				npc.hide(player);
 				npc.getNameEntity().hide(player);
 			});
 			PacketReader.get(player).uninject();
 		});
 		PlayerData.save();
-		npcM.saveAll();
+		if(npcM != null) npcM.saveAll();
 	}
 }

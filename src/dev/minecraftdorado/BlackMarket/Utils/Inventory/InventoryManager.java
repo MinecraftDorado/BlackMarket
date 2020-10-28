@@ -54,7 +54,6 @@ public class InventoryManager implements Listener {
 	}
 	
 	public static void updateInventory(Player player, Inv inv) {
-		
 		Inventory iv = player.getOpenInventory().getTopInventory();
 		
 		for(int slot = 0; slot < iv.getSize(); slot++)
@@ -80,7 +79,7 @@ public class InventoryManager implements Listener {
 			if(p.getOpenInventory() != null &&
 					p.getOpenInventory().getTopInventory() != null &&
 					getLastInv(p) != null &&
-					p.getOpenInventory().getTopInventory().getTitle().equals(getLastInv(p).getTitle()))
+					p.getOpenInventory().getTitle().equals(getLastInv(p).getTitle()))
 				p.closeInventory();
 		});
 	}
@@ -90,7 +89,7 @@ public class InventoryManager implements Listener {
 		if(e.getClickedInventory() != null) {
 			Player player = (Player) e.getWhoClicked();
 			
-			if(!history.containsKey(player) || !e.getView().getTopInventory().equals(history.get(player).get(history.get(player).size()-1).inv)) return;
+			if(!history.containsKey(player) || !e.getView().getTitle().equals(getLastInv(player).getTitle())) return;
 			
 			ItemStack item = e.getCurrentItem();
 			
@@ -104,7 +103,6 @@ public class InventoryManager implements Listener {
 			if(item.equals(Config.getItemStack("close"))) {
 				e.setCancelled(true);
 				player.closeInventory();
-				history.remove(player);
 				return;
 			}
 			
@@ -130,7 +128,7 @@ public class InventoryManager implements Listener {
 		if(e.getInventory() != null) {
 			Player player = (Player) e.getWhoClicked();
 			
-			if(!history.containsKey(player) || !e.getView().getTopInventory().equals(history.get(player).get(history.get(player).size()-1).inv)) return;
+			if(!history.containsKey(player) || !e.getView().getTitle().equals(getLastInv(player).getTitle())) return;
 			
 			dev.minecraftdorado.BlackMarket.Utils.Inventory.Events.InventoryDragEvent event = new dev.minecraftdorado.BlackMarket.Utils.Inventory.Events.InventoryDragEvent(
 					player
@@ -155,7 +153,7 @@ public class InventoryManager implements Listener {
 		
 		if(!history.containsKey(player)) return;
 		
-		if(!e.getView().getTopInventory().equals(getLastInv(player).inv))
+		if(!e.getView().getTitle().equals(getLastInv(player).getTitle()))
 			return;
 		
 		

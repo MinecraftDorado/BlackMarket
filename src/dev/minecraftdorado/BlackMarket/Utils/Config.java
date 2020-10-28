@@ -109,7 +109,7 @@ public class Config {
 			if(msgFile.isSet(key))
 				msgs.put(key, ChatColor.translateAlternateColorCodes('&', msgFile.getString(key)));
 			else {
-				Bukkit.getConsoleSender().sendMessage("§6[BlackMarket] §c» Message not found: " + key);
+				MainClass.main.getLogger().severe(String.format("» Message not found: " + key, MainClass.main.getDescription().getName()));
 				return "";
 			}
 		return msgs.get(key);
