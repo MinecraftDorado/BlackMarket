@@ -32,26 +32,27 @@ public class Market {
 				HashMap<Integer, ItemStack> l = new HashMap<>();
 				
 				for(Player p : Bukkit.getOnlinePlayers()) {
-					if(p.getOpenInventory() != null && InventoryManager.getLastInv(p) != null && InventoryManager.getLastInv(p).getTitle().equals(getMarketTitle())) {
-						boolean update = true;
+					if(p.getOpenInventory() != null && InventoryManager.hasHistory(p)){
 						Inv inv = InventoryManager.getLastInv(p);
-						
-						for(int slot : InventoryManager.getLastInv(p).getBlackList().keySet()) {
-							BlackItem bItem = InventoryManager.getLastInv(p).getBlackList().get(slot);
+						if(inv.getTitle().equals(getMarketTitle())) {
+							boolean update = true;
 							
-							if(!l.containsKey(bItem.getId()))
-								if(!bItem.getStatus().equals(Status.ON_SALE)) {
-									InventoryManager.openInventory(p, getMarketInventory(p));
-									update = false;
-									break;
-								}else
-									l.put(bItem.getId(), bItem.getItemStack());
-							
-							inv.setItem(slot, l.get(bItem.getId()));
+							for(int slot : inv.getBlackList().keySet()) {
+								BlackItem bItem = inv.getBlackList().get(slot);
+								
+								if(!l.containsKey(bItem.getId()))
+									if(!bItem.getStatus().equals(Status.ON_SALE)) {
+							//			InventoryManager.openInventory(p, getMarketInventory(p));
+										update = false;
+										break;
+									}else
+										l.put(bItem.getId(), bItem.getItemStack());
+								
+								inv.setItem(slot, l.get(bItem.getId()));
+							}
+							if(update)
+								InventoryManager.updateInventory(p, inv);
 						}
-						if(update)
-							InventoryManager.updateInventory(p, inv);
-						
 					}
 				};
 			}
@@ -157,7 +158,6 @@ public class Market {
 			inv.addBlackItem(l.get(id), slot);
 			items++;
 		}
-		
 		inv.setItem(49, Config.getItemStack("close"));
 		inv.setItem(50, Config.getItemStack("info"));
 		inv.setItem(51, Config.getItemStack("order_type", player));

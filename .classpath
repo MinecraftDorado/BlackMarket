@@ -19,6 +19,6 @@
 	<classpathentry kind="lib" path="C:/Users/bruno/workspace/spigot-1.15.jar"/>
 	<classpathentry kind="lib" path="C:/Users/bruno/workspace/spigot-1.16.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/bruno/workspace/spigot-1.16.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/bruno/workspace/Vault-1.7.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/bruno/workspace/Vault.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

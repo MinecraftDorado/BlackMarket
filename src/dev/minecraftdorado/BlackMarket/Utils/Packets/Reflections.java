@@ -41,9 +41,7 @@ public class Reflections {
         	field = object.getClass().getDeclaredField(fieldName);
             field.setAccessible(true);
             o = field.get(object);
-        } catch(NoSuchFieldException|IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        } catch(NoSuchFieldException|IllegalAccessException e) {e.printStackTrace();}
         return o;
     }
 	
@@ -52,7 +50,7 @@ public class Reflections {
             Field field = obj.getClass().getDeclaredField(name);
             field.setAccessible(true);
             field.set(obj, value);
-    	}catch(Exception e){}
+    	}catch(Exception e){e.printStackTrace();}
     }
 }
 

@@ -10,6 +10,7 @@ import dev.minecraftdorado.BlackMarket.Utils.Inventory.Events.InventoryClickEven
 import dev.minecraftdorado.BlackMarket.Utils.Market.BlackItem;
 import dev.minecraftdorado.BlackMarket.Utils.Market.BlackItem.Status;
 import dev.minecraftdorado.BlackMarket.Utils.Market.Market;
+import dev.minecraftdorado.BlackMarket.Utils.Market.PlayerData;
 import dev.minecraftdorado.BlackMarket.Utils.Market.Storage;
 
 public class StorageListener implements Listener {
@@ -21,6 +22,7 @@ public class StorageListener implements Listener {
 			
 			// ItemStack "back"
 			if(e.getItemStack().equals(Config.getItemStack("back", p))) {
+				PlayerData.get(e.getPlayer().getUniqueId()).setCategory(null);
 				Market.setPlayerPage(p.getUniqueId(), 0);
 				InventoryManager.openInventory(p, Market.getMarketInventory(p));
 				return;

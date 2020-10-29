@@ -15,6 +15,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import dev.minecraftdorado.BlackMarket.MainClass.MainClass;
 import dev.minecraftdorado.BlackMarket.Utils.Config;
 import dev.minecraftdorado.BlackMarket.Utils.Market.BlackItem;
 
@@ -22,21 +23,23 @@ public class InventoryManager implements Listener {
 	
 	private static HashMap<Player, ArrayList<Inv>> history = new HashMap<>();
 	
+	public static boolean hasHistory(Player player) {
+		return history.containsKey(player);
+	}
+	
 	public static ArrayList<Inv> getHistory(Player player){
-		if(!history.containsKey(player))
-			history.put(player, new ArrayList<Inv>());
+		if(!hasHistory(player))
+				history.put(player, new ArrayList<Inv>());
 		return history.get(player);
 	}
 	
 	public static Inv getLastInv(Player player) {
-		if(history.containsKey(player))
-			return history.get(player).get(history.get(player).size()-1);
-		return null;
+		ArrayList<Inv> history = getHistory(player);
+		return history.size() > 0 ? history.get(history.size()-1) : null;
 	}
 	
 	public static void openInventory(Player player, Inv inv) {
 		ArrayList<Inv> a = getHistory(player);
-		
 		if(a.size() > 0)
 			if(!inv.getTitle().equals(getLastInv(player).getTitle())) {
 				dev.minecraftdorado.BlackMarket.Utils.Inventory.Events.InventoryCloseEvent event = new dev.minecraftdorado.BlackMarket.Utils.Inventory.Events.InventoryCloseEvent(
@@ -57,7 +60,8 @@ public class InventoryManager implements Listener {
 		Inventory iv = player.getOpenInventory().getTopInventory();
 		
 		for(int slot = 0; slot < iv.getSize(); slot++)
-			iv.setItem(slot, inv.getItem(slot));
+			if(inv.getItem(slot) != null)
+				iv.setItem(slot, inv.getItem(slot));
 		
 		player.updateInventory();
 		
@@ -86,23 +90,22 @@ public class InventoryManager implements Listener {
 	
 	@EventHandler
 	protected static void interactEvent(InventoryClickEvent e) {
-		if(e.getClickedInventory() != null) {
+		if(e.getClickedInventory() != null && e.getView().getTopInventory() != null) {
 			Player player = (Player) e.getWhoClicked();
 			
-			if(!history.containsKey(player) || !e.getView().getTitle().equals(getLastInv(player).getTitle())) return;
+			if(player.getOpenInventory() == null || !history.containsKey(player) || getLastInv(player) == null || !e.getView().getTitle().equals(getLastInv(player).getTitle())) return;
 			
 			ItemStack item = e.getCurrentItem();
 			
-			if(item == null || item.getType().equals(Material.AIR)) {
+			if(item == null || item.getType().equals(Material.AIR))
 				if(e.getCursor() != null && !e.getCursor().getType().equals(Material.AIR))
 					item = e.getCursor();
 				else
 					return;
-			}
 			
 			if(item.equals(Config.getItemStack("close"))) {
 				e.setCancelled(true);
-				player.closeInventory();
+				Bukkit.getScheduler().runTask(MainClass.main, ()-> player.closeInventory());
 				return;
 			}
 			
@@ -153,7 +156,7 @@ public class InventoryManager implements Listener {
 		
 		if(!history.containsKey(player)) return;
 		
-		if(!e.getView().getTitle().equals(getLastInv(player).getTitle()))
+		if(getLastInv(player) == null || !e.getView().getTitle().equals(getLastInv(player).getTitle()))
 			return;
 		
 		
@@ -182,7 +185,7 @@ public class InventoryManager implements Listener {
 		}
 		
 		public void setItem(int slot, ItemStack item) {
-			if(item != null)
+			if(item != null && slot < row*9)
 				inv.setItem(slot, item);
 		}
 		
@@ -192,7 +195,9 @@ public class InventoryManager implements Listener {
 		}
 		
 		public ItemStack getItem(int slot) {
-			return inv.getItem(slot);
+			if(slot < row*9)
+				return inv.getItem(slot);
+			return null;
 		}
 		
 		public ItemStack[] getItems() {
@@ -214,15 +219,15 @@ public class InventoryManager implements Listener {
 			item.setItemMeta(meta);
 			if(!onlyBorder)
 				for (int i = 0; i < inv.getSize(); i++)
-					inv.setItem(i, item);
+					setItem(i, item);
 			else {
 				for (int i = 0; i < 9; i++) {
-					inv.setItem(i, item);
-					inv.setItem(i + (row*9 - 9), item);
+					setItem(i, item);
+					setItem(i + (row*9 - 9), item);
 				}
 				for (int i = 0; i < row; i++) {
-					inv.setItem(i*9, item);
-					inv.setItem(8 + (i*9), item);
+					setItem(i*9, item);
+					setItem(8 + (i*9), item);
 				}
 			}
 		}
