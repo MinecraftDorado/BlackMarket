@@ -88,6 +88,7 @@ public class InventoryManager implements Listener {
 					p.getOpenInventory().getTitle().equals(getLastInv(p).getTitle()))
 				p.closeInventory();
 		});
+		history.clear();
 	}
 	
 	@EventHandler
