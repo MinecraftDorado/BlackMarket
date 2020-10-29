@@ -32,7 +32,7 @@ public class Storage {
 				slot = slot + 3;
 			else
 				slot++;
-			inv.setItem(slot, l.get(i).getItemStack());
+			inv.setItem(slot, l.get(i).getOriginal());
 			inv.addBlackItem(l.get(i), slot);
 			items++;
 		}

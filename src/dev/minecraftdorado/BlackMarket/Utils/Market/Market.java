@@ -28,7 +28,6 @@ public class Market {
 			// Market updater
 			@Override
 			public void run() {
-				
 				HashMap<Integer, ItemStack> l = new HashMap<>();
 				
 				for(Player p : Bukkit.getOnlinePlayers()) {
@@ -42,7 +41,7 @@ public class Market {
 								
 								if(!l.containsKey(bItem.getId()))
 									if(!bItem.getStatus().equals(Status.ON_SALE)) {
-							//			InventoryManager.openInventory(p, getMarketInventory(p));
+										Bukkit.getScheduler().runTask(MainClass.main, () -> InventoryManager.updateInventory(p, getMarketInventory(p)));
 										update = false;
 										break;
 									}else

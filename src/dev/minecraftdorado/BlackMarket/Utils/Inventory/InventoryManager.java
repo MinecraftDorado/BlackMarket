@@ -48,8 +48,10 @@ public class InventoryManager implements Listener {
 						);
 				
 				Bukkit.getPluginManager().callEvent(event);
+			}else {
+				updateInventory(player, inv);
+				return;
 			}
-		
 		a.add(inv);
 		if(a.size() > 5) a.remove(0);
 		history.put(player, a);
@@ -105,7 +107,7 @@ public class InventoryManager implements Listener {
 			
 			if(item.equals(Config.getItemStack("close"))) {
 				e.setCancelled(true);
-				Bukkit.getScheduler().runTask(MainClass.main, ()-> player.closeInventory());
+				Bukkit.getScheduler().runTask(MainClass.main, () -> player.closeInventory());
 				return;
 			}
 			

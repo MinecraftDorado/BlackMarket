@@ -89,9 +89,10 @@ public class BlackItem {
 	}
 	
 	public Status getStatus() {
-		if(status.equals(Status.ON_SALE))
-			if(date.before(new Date()))
+		if(status.equals(Status.ON_SALE)) {
+			if(Duration.between(new Date().toInstant(), date.toInstant()).getSeconds() <= 0)
 				status = Status.TIME_OUT;
+		}
 		return status;
 	}
 	
