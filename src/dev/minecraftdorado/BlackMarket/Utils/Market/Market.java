@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import dev.minecraftdorado.BlackMarket.MainClass.MainClass;
 import dev.minecraftdorado.BlackMarket.Utils.Config;
@@ -102,6 +103,16 @@ public class Market {
 		Inv inv = new Inv(getMarketTitle(), 6);
 		inv.setBackgroud(UMaterial.GRAY_STAINED_GLASS_PANE.getItemStack(), false);
 		inv.setBackgroud(UMaterial.BLACK_STAINED_GLASS_PANE.getItemStack(), true);
+		
+		ItemStack item = UMaterial.BLACK_STAINED_GLASS_PANE.getItemStack();
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(" ");
+		item.setItemMeta(meta);
+		
+		inv.setItem(10, item);
+		inv.setItem(19, item);
+		inv.setItem(28, item);
+		inv.setItem(37, item);
 		
 		Category cat = PlayerData.get(player.getUniqueId()).getCategory();
 		

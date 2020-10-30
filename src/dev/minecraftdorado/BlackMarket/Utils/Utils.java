@@ -11,6 +11,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,6 +25,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import dev.minecraftdorado.BlackMarket.MainClass.MainClass;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.OrderUtils.OrderType;
@@ -194,4 +197,35 @@ public class Utils {
 		x = split[0] + "m " + split[1] + "s";
 		return x;
 	}
+	
+	public static int getLimit(UUID uuid) {
+		final AtomicInteger max = new AtomicInteger();
+		
+		if (Bukkit.getOfflinePlayer(uuid).isOp())
+			return -1;
+		else
+			max.set(Config.getDefaultLimit());
+		
+        if(Bukkit.getOfflinePlayer(uuid).isOnline()) {
+        	Bukkit.getPlayer(uuid).getEffectivePermissions().stream().map(PermissionAttachmentInfo::getPermission).map(String::toLowerCase).filter(value -> value.startsWith("blackmarket.limit")).map(value -> value.replace("blackmarket.limit", "")).forEach(value -> {
+        		if (value.equalsIgnoreCase("*")) {
+        			max.set(-1);
+        			return;
+        		}
+        		
+        		if (max.get() == -1)
+        			return;
+        		
+        		try {
+        			int amount = Integer.parseInt(value);
+        			
+        			if (amount > max.get())
+        				max.set(amount);
+        		} catch (NumberFormatException ignored) {
+        		}
+        	});
+        }
+        
+        return max.get();
+    }
 }

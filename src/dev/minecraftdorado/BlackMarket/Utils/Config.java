@@ -28,7 +28,7 @@ public class Config {
 	private static HashMap<String, String> msgs = new HashMap<>();
 	private static List<String> desc;
 	private static YamlConfiguration msgFile;
-	private static int expiredTime, limit;
+	private static int expiredTime, defaultLimit;
 	private static ArrayList<NPC> npcs = new ArrayList<>();
 	
 	public Config() {
@@ -58,7 +58,7 @@ public class Config {
 		
 		desc = yml.getStringList("item_onsale");
 		expiredTime = yml.isSet("expired_time") ? yml.getInt("expired_time") : 1440;
-		limit = yml.isSet("limit") ? yml.getInt("limit") : 5;
+		defaultLimit = yml.isSet("limit") ? yml.getInt("limit") : 5;
 		
 		if(yml.isSet("npc_list"))
 			for(String s : yml.getStringList("npc_list")) {
@@ -131,8 +131,8 @@ public class Config {
 		return expiredTime;
 	}
 
-	public static int getLimit() {
-		return limit;
+	public static int getDefaultLimit() {
+		return defaultLimit;
 	}
 	
 	public static ArrayList<NPC> getNPCs(){

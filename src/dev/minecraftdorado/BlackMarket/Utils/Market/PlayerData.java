@@ -9,7 +9,7 @@ import java.util.UUID;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import dev.minecraftdorado.BlackMarket.MainClass.MainClass;
-import dev.minecraftdorado.BlackMarket.Utils.Config;
+import dev.minecraftdorado.BlackMarket.Utils.Utils;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils.Category;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.OrderUtils.OrderType;
 import dev.minecraftdorado.BlackMarket.Utils.Market.BlackItem.Status;
@@ -23,8 +23,8 @@ public class PlayerData {
 		if(file.exists() && file.listFiles().length != 0) {
 			for(File f : file.listFiles()) {
 				YamlConfiguration yml = YamlConfiguration.loadConfiguration(f);
-				
-				if(!Status.valueOf(yml.getString("status")).equals(Status.SOLD)) {
+				Status status = Status.valueOf(yml.getString("status"));
+				if(!status.equals(Status.SOLD) && !status.equals(Status.TAKED)) {
 					UUID owner = UUID.fromString(yml.getString("owner"));
 					
 					BlackItem bItem = new BlackItem(yml.getItemStack("item"), yml.getDouble("value"), owner, Status.valueOf(yml.getString("status")), new Date(yml.getLong("date")), Integer.parseInt(f.getName().replace(".yml", "")));
@@ -66,7 +66,6 @@ public class PlayerData {
 		
 		private UUID uuid;
 		private ArrayList<BlackItem> items = new ArrayList<>();
-		private int limit = Config.getLimit();
 		private OrderType order = OrderType.ID;
 		
 		private Category category = null;
@@ -84,20 +83,24 @@ public class PlayerData {
 		}
 		
 		public boolean addItem(BlackItem bItem) {
-			int i = 0;
+			int i = 0, ti = 0;
 			for(BlackItem item : items)
 				if(item.getStatus().equals(Status.ON_SALE))
 					i++;
-			if(i < limit) {
-				items.add(bItem);
-				Market.addItem(bItem);
-				return true;
-			}
+				else if(item.getStatus().equals(Status.TIME_OUT))
+					ti++;
+			int limit = getLimit();
+			if(i < limit || limit == -1) // on_sale items
+				if(ti+i < 28) { // storage limit
+					items.add(bItem);
+					Market.addItem(bItem);
+					return true;
+				}
 			return false;
 		}
 		
 		public int getLimit() {
-			return limit;
+			return Utils.getLimit(uuid);
 		}
 		
 		public void setCategory(Category category) {
