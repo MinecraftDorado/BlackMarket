@@ -12,7 +12,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -141,7 +140,8 @@ public class Config {
 	
 	public static void saveNPCs(Collection<NPC> list) {
 		npcs.clear();
-		FileConfiguration yml = MainClass.main.getConfig();
+		File file = new File(MainClass.main.getDataFolder(), "config.yml");
+		YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
 		
 		List<String> l = new ArrayList<>();
 		
@@ -152,7 +152,7 @@ public class Config {
 		}
 		yml.set("npc_list", l);
 		try {
-			yml.save(new File(MainClass.main.getDataFolder(), "config.yml"));
+			yml.save(file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
