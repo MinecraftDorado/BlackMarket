@@ -127,12 +127,8 @@ public class NPC {
 	
 	public void spawn(){
 		GameProfile profile = new GameProfile(UUID.randomUUID(), "§eClick here!");
-		if(skin != null)
-			try {
-				profile.getProperties().put("textures", new Property("textures",skin.getSkin()[0],skin.getSkin()[1]));
-			}catch(Exception ex) {
-				ex.printStackTrace();
-			}
+		if(skin != null && skin.isPremium())
+			profile.getProperties().put("textures", new Property("textures",skin.getSkin()[0],skin.getSkin()[1]));
 		
 		try {
 			Object server = getServer.invoke(CraftServer.cast(Bukkit.getServer()));

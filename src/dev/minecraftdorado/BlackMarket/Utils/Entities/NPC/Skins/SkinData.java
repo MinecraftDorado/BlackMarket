@@ -1,14 +1,9 @@
 package dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.Skins;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -85,7 +80,7 @@ public class SkinData {
 					try {
 						conf.save(file);
 					} catch (IOException e) {
-						e.printStackTrace();
+						MainClass.main.getLogger().severe(String.format("» Skin not loaded: " + name, MainClass.main.getDescription().getName()));
 					}
 				}
 			}else {
@@ -118,56 +113,36 @@ public class SkinData {
     	String texture = null, signature = null;
     	boolean ready = false;
     	
-    	int intentos = 2;
+    	int tries = 2;
     	
     	while (ready == false) {
-    		if(intentos == 0) {
+    		if(tries != 0) {
+    			tries --;
+    			try {
+    				String uuid;
+    				try {
+	    				URL url_0 = new URL("https://api.mojang.com/users/profiles/minecraft/" + name);
+	    				InputStreamReader reader_0 = new InputStreamReader(url_0.openStream());
+	    				uuid = new JsonParser().parse(reader_0).getAsJsonObject().get("id").getAsString();
+	    			}catch(Exception ex) {
+	    				MainClass.main.getLogger().severe(String.format("» Player not premium: " + name, MainClass.main.getDescription().getName()));
+	    				break;
+	    			}
+
+					URL url_1 = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid + "?unsigned=false");
+					InputStreamReader reader_1 = new InputStreamReader(url_1.openStream());
+					JsonObject textureProperty = new JsonParser().parse(reader_1).getAsJsonObject().get("properties").getAsJsonArray().get(0).getAsJsonObject();
+					
+					texture = textureProperty.get("value").getAsString();
+					signature = textureProperty.get("signature").getAsString();
+    				ready = true;
+    			} catch (IOException e) {
+    				e.printStackTrace();
+    				ready = false;
+    			}
+    		}else
     			ready = true;
-    			return new String[] {texture, signature};
-    		}
-    		intentos--;
-    		try {
-                
-                String uuid = readJsonFromUrl("https://api.mojang.com/users/profiles/minecraft/" + name);
-                
-        /*        URL url_0 = new URL("https://api.mojang.com/users/profiles/minecraft/" + name);
-                InputStreamReader reader_0 = new InputStreamReader(url_0.openStream());
-                String uuid = new JsonParser().parse(reader_0).getAsJsonObject().get("id").getAsString();	*/
-                
-                URL url_1 = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid + "?unsigned=false");
-                InputStreamReader reader_1 = new InputStreamReader(url_1.openStream());
-                JsonObject textureProperty = new JsonParser().parse(reader_1).getAsJsonObject().get("properties").getAsJsonArray().get(0).getAsJsonObject();
-                texture = textureProperty.get("value").getAsString();
-                signature = textureProperty.get("signature").getAsString();
-                
-                ready = true;
-            } catch (IOException e) {
-            	ready = false;
-            }
 		}
     	return new String[] {texture, signature};
     }
-    
-    private static String readAll(Reader rd) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        int cp;
-        while ((cp = rd.read()) != -1) {
-          sb.append((char) cp);
-        }
-        return sb.toString();
-      }
-
-      public static String readJsonFromUrl(String url) throws MalformedURLException, IOException  {
-        InputStream is = new URL(url).openStream();
-        try {
-          BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-          String a = readAll(rd);
-          
-          a = a.split(",")[0].replace('"', ' ').replaceAll(" ", "").replace("{id:", "");
-          
-          return a;
-        } finally {
-          is.close();
-        }
-      }
 }
