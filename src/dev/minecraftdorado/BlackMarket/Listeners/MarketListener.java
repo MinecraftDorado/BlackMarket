@@ -94,7 +94,7 @@ public class MarketListener implements Listener {
 								Config.sendMessage("market.buy", p);
 								
 								MainClass.econ.withdrawPlayer(p, bItem.getValue());
-								MainClass.econ.depositPlayer(Bukkit.getOfflinePlayer(bItem.getOwner()), bItem.getValue());
+								MainClass.econ.depositPlayer(Bukkit.getOfflinePlayer(bItem.getOwner()), bItem.getValue() - (bItem.getValue() * Config.getTaxes() / 100));
 								return;
 							}
 							Config.sendMessage("market.inventory_full", p);

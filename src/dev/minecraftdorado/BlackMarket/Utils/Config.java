@@ -27,7 +27,7 @@ public class Config {
 	private static HashMap<String, String> msgs = new HashMap<>();
 	private static List<String> desc;
 	private static YamlConfiguration msgFile;
-	private static int expiredTime, defaultLimit;
+	private static int expiredTime, defaultLimit, taxes;
 	private static ArrayList<NPC> npcs = new ArrayList<>();
 	
 	public Config() {
@@ -58,6 +58,7 @@ public class Config {
 		desc = yml.getStringList("item_onsale");
 		expiredTime = yml.isSet("expired_time") ? yml.getInt("expired_time") : 1440;
 		defaultLimit = yml.isSet("limit") ? yml.getInt("limit") : 5;
+		taxes = yml.isSet("taxes") ? yml.getInt("taxes") : 7;
 		
 		if(yml.isSet("npc_list"))
 			for(String s : yml.getStringList("npc_list")) {
@@ -156,5 +157,9 @@ public class Config {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static int getTaxes() {
+		return taxes;
 	}
 }

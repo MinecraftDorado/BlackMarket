@@ -9,6 +9,9 @@ order:
       type: "Material"
       amount: "Amount"
       value: "Value"
+
+taxes: 7 # percent
+
 limit: 5 # items by user
 expired_time: 1440 # 1440 minutes = 24 hours
 
