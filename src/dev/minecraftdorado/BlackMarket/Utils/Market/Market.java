@@ -101,10 +101,10 @@ public class Market {
 	public static Inv getMarketInventory(Player player) {
 		int page = getPlayerPage(player);
 		Inv inv = new Inv(getMarketTitle(), 6);
-		inv.setBackgroud(UMaterial.GRAY_STAINED_GLASS_PANE.getItemStack(), false);
-		inv.setBackgroud(UMaterial.BLACK_STAINED_GLASS_PANE.getItemStack(), true);
+		inv.setBackgroud(Config.getMarketBackground(), false);
+		inv.setBackgroud(Config.getMarketBorder(), true);
 		
-		ItemStack item = UMaterial.BLACK_STAINED_GLASS_PANE.getItemStack();
+		ItemStack item = Config.getMarketBorder();
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(" ");
 		item.setItemMeta(meta);

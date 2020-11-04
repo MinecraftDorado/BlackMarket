@@ -16,6 +16,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
 import dev.minecraftdorado.BlackMarket.MainClass.MainClass;
+import dev.minecraftdorado.BlackMarket.Utils.Config;
 import dev.minecraftdorado.BlackMarket.Utils.Utils;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.Hologram.Hologram;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.Skins.SkinData.Skin;
@@ -104,7 +105,7 @@ public class NPC {
 	private Object entity;
 	private int id;
 	
-	private String name = "BlackMarket";
+	private String name = Config.getMessage("npc.name");
 	private Skin skin;
 	private Location loc;
 	
@@ -116,17 +117,12 @@ public class NPC {
 	
 	private boolean spawned = false;
 	
-	public NPC(Location loc, String name) {
-		this.loc = loc;
-		this.name = name;
-	}
-	
 	public NPC(Location loc) {
 		this.loc = loc;
 	}
 	
 	public void spawn(){
-		GameProfile profile = new GameProfile(UUID.randomUUID(), "§eClick here!");
+		GameProfile profile = new GameProfile(UUID.randomUUID(), Config.getMessage("npc.click"));
 		if(skin != null && skin.isPremium())
 			profile.getProperties().put("textures", new Property("textures",skin.getSkin()[0],skin.getSkin()[1]));
 		
@@ -157,6 +153,15 @@ public class NPC {
 		}
 		
 		nameEntity = new Hologram(loc.clone().add(0, .08, 0), name);
+	}
+	
+	public void respawn() {
+		Set<Player> v = viewers;
+		hide();
+		name = Config.getMessage("npc.name");
+		nameEntity.hide();
+		spawn();
+		v.forEach(viewer -> display(viewer));
 	}
 	
 	public boolean isSpawned() {
@@ -294,6 +299,7 @@ public class NPC {
 	
 	public void hide() {
 		viewers.forEach(p -> Utils.sendPacket(p, packetPlayOutEntityDestroy));
+		viewers.clear();
 	}
 	
 	private void updateMetadata(Player player) throws IllegalAccessException, InvocationTargetException, InstantiationException {

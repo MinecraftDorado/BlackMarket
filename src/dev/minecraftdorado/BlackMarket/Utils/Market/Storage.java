@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 
 import dev.minecraftdorado.BlackMarket.Utils.Config;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.InventoryManager.Inv;
-import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.UMaterial;
 
 public class Storage {
 	
@@ -17,8 +16,8 @@ public class Storage {
 	public static Inv getStorageInventory(Player player) {
 		Inv inv = new Inv(getStorageTitle(), 6);
 		
-		inv.setBackgroud(UMaterial.GRAY_STAINED_GLASS_PANE.getItemStack(), false);
-		inv.setBackgroud(UMaterial.BLACK_STAINED_GLASS_PANE.getItemStack(), true);
+		inv.setBackgroud(Config.getStorageBackground(), false);
+		inv.setBackgroud(Config.getStorageBorder(), true);
 		
 		ArrayList<BlackItem> l = PlayerData.get(player.getUniqueId()).getStorage();
 		

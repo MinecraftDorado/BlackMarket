@@ -1,14 +1,22 @@
 
-npc_list: 
+npc_list:
 
-order: 
-   format: "%active% %value%"
-   active: "&c»&4"
-   values:
-      id: "IDs"
-      type: "Material"
-      amount: "Amount"
-      value: "Value"
+order:
+  format: "%active% %value%"
+  active: "&c»&4"
+  values:
+    id: "IDs"
+    type: "Material"
+    amount: "Amount"
+    value: "Value"
+
+menus:
+  market:
+    background: GRAY_STAINED_GLASS_PANE
+    border: BLACK_STAINED_GLASS_PANE
+  storage:
+    background: GRAY_STAINED_GLASS_PANE
+    border: BLACK_STAINED_GLASS_PANE
 
 taxes: 7 # percent
 
@@ -23,38 +31,38 @@ item_onsale:
 - "&eClick to buy!"
 
 items:
-   next:
-      type: PAPER
-      name: "&eNext page (%actual_page%-%pages%)"
-   previous:
-      type: PAPER
-      name: "&ePrevious page (%actual_page%-%pages%)"
-   close:
-      type: ARROW
-      name: "&cExit"
-   back:
-      type: ARROW
-      name: "&cReturn"
-   order_type:
-      type: BOOK
-      name: "&bOrder type"
-      lore:
-      - "&8- &7%order_id%"
-      - "&8- &7%order_type%"
-      - "&8- &7%order_amount%"
-      - "&8- &7%order_value%"
-      - ""
-      - "&eClick to change!"
-   info:
-      type: REDSTONE_TORCH_ON
-      name: "&bInformation"
-      lore:
-      - "&7Cmd to sold /sell <amount>"
-      - "&4(Time to expired 24 hours)"
-   storage:
-      type: CHEST
-      name: "&bStorage"
-      lore:
-      - "&7Your unsold items"
-      - ""
-      - "&eClick to open!"
+  next:
+    type: PAPER
+    name: "&eNext page (%actual_page%-%pages%)"
+  previous:
+    type: PAPER
+    name: "&ePrevious page (%actual_page%-%pages%)"
+  close:
+    type: ARROW
+    name: "&cExit"
+  back:
+    type: ARROW
+    name: "&cReturn"
+  order_type:
+    type: BOOK
+    name: "&bOrder type"
+    lore:
+    - "&8- &7%order_id%"
+    - "&8- &7%order_type%"
+    - "&8- &7%order_amount%"
+    - "&8- &7%order_value%"
+    - ""
+    - "&eClick to change!"
+  info:
+    type: REDSTONE_TORCH_ON
+    name: "&bInformation"
+    lore:
+    - "&7Cmd to sold /sell <amount>"
+    - "&4(Time to expired 24 hours)"
+  storage:
+    type: CHEST
+    name: "&bStorage"
+    lore:
+    - "&7Your unsold items"
+    - ""
+    - "&eClick to open!"

@@ -29,6 +29,7 @@ public class Config {
 	private static YamlConfiguration msgFile;
 	private static int expiredTime, defaultLimit, taxes;
 	private static ArrayList<NPC> npcs = new ArrayList<>();
+	private static ItemStack market_background, market_border, storage_background, storage_border;
 	
 	public Config() {
 		load();
@@ -40,13 +41,17 @@ public class Config {
 		msgs.clear();
 		desc = null;
 		load();
+		
+		for(NPC npc : MainClass.npcM.list.values())
+			npc.respawn();
 	}
 	
 	public static void load() {
-		if(!new File(MainClass.main.getDataFolder(), "config.yml").exists())
-			MainClass.main.saveDefaultConfig();
-		
 		File file = new File(MainClass.main.getDataFolder(), "config.yml");
+		
+		if(!file.exists())
+			Utils.extract("config.yml", "config.yml");
+		
 		YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
 		
 		yml.getConfigurationSection("items").getKeys(false).forEach(key -> {
@@ -60,6 +65,18 @@ public class Config {
 		defaultLimit = yml.isSet("limit") ? yml.getInt("limit") : 5;
 		taxes = yml.isSet("taxes") ? yml.getInt("taxes") : 7;
 		
+		market_background = yml.isSet("menus.market.background") ? Utils.getMaterial(yml.getString("menus.market.background")) : Utils.getMaterial("GRAY_STAINED_GLASS_PANE");
+		market_border = yml.isSet("menus.market.border") ? Utils.getMaterial(yml.getString("menus.market.border")) : Utils.getMaterial("BLACK_STAINED_GLASS_PANE");
+		storage_background = yml.isSet("menus.storage.background") ? Utils.getMaterial(yml.getString("menus.storage.background")) : Utils.getMaterial("GRAY_STAINED_GLASS_PANE");
+		storage_border= yml.isSet("menus.storage.border") ? Utils.getMaterial(yml.getString("menus.storage.border")) : Utils.getMaterial("BLACK_STAINED_GLASS_PANE");
+		
+		File msg = new File(MainClass.main.getDataFolder(), "messages.yml");
+		
+		if(!msg.exists())
+			Utils.extract("resources/messages.yml", "messages.yml");
+		
+		msgFile = YamlConfiguration.loadConfiguration(msg);
+		
 		if(yml.isSet("npc_list"))
 			for(String s : yml.getStringList("npc_list")) {
 				String[] args = s.split(",");
@@ -71,11 +88,6 @@ public class Config {
 					npc.setSkin(SkinData.getSkin(args[4]));
 				npcs.add(npc);
 			}
-		
-		if(!new File(MainClass.main.getDataFolder(), "messages.yml").exists())
-			Utils.extract("resources/messages.yml", "messages.yml");
-		
-		msgFile = YamlConfiguration.loadConfiguration(new File(MainClass.main.getDataFolder(), "messages.yml"));
 	}
 	
 	public static YamlConfiguration getYml() {
@@ -161,5 +173,21 @@ public class Config {
 	
 	public static int getTaxes() {
 		return taxes;
+	}
+	
+	public static ItemStack getMarketBackground() {
+		return market_background;
+	}
+
+	public static ItemStack getMarketBorder() {
+		return market_border;
+	}
+	
+	public static ItemStack getStorageBackground() {
+		return storage_background;
+	}
+	
+	public static ItemStack getStorageBorder() {
+		return storage_border;
 	}
 }

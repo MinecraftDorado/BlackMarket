@@ -34,3 +34,7 @@ market:
 menus:
   market: "BlackMarket"
   storage: "BlackMarket - Storage"
+
+npc:
+  name: "BlackMarket"
+  click: "&eClick here!"
