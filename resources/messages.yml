@@ -6,6 +6,7 @@ command:
     error_limit: "&cYou have reached the limit of published objects!"
     error_item_not_found: "&cYour hand is empty, you need an item to sell!"
     error_value: "&cValue invalid!"
+    error_minimum_price: "&cThe minimum price is %price%!"
     usage: "&cUsage /sell <value>"
   reload:
     message: "&eReloaded configuration!"

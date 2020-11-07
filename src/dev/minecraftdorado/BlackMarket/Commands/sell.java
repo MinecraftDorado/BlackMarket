@@ -25,17 +25,20 @@ public class sell implements CommandExecutor {
 			try {
 				double value = Double.parseDouble(args[0]);
 				
-				if(p.getInventory().getItemInHand() != null && !p.getInventory().getItemInHand().getType().equals(Material.AIR)) {
-					BlackItem bItem = new BlackItem(p.getInventory().getItemInHand(), value, p.getUniqueId());
-					
-					if(PlayerData.get(p.getUniqueId()).addItem(bItem)) {
-						Config.sendMessage("command.sell.message", p);
-						p.getInventory().getItemInHand().setType(Material.AIR);
-						p.getInventory().setItemInHand(null);
+				if(value >= Config.getMinimumPrice())
+					if(p.getInventory().getItemInHand() != null && !p.getInventory().getItemInHand().getType().equals(Material.AIR)) {
+						BlackItem bItem = new BlackItem(p.getInventory().getItemInHand(), value, p.getUniqueId());
+						
+						if(PlayerData.get(p.getUniqueId()).addItem(bItem)) {
+							Config.sendMessage("command.sell.message", p);
+							p.getInventory().getItemInHand().setType(Material.AIR);
+							p.getInventory().setItemInHand(null);
+						}else
+							Config.sendMessage("command.sell.error_limit", p);
 					}else
-						Config.sendMessage("command.sell.error_limit", p);
-				}else
-					Config.sendMessage("command.sell.error_item_not_found", p);
+						Config.sendMessage("command.sell.error_item_not_found", p);
+				else
+					p.sendMessage(Config.getMessage("command.sell.error_minimum_price").replace("%price%", Config.getMinimumPrice() + ""));
 			}catch(Exception ex) {
 				Config.sendMessage("command.sell.error_value", p);
 			}

@@ -28,6 +28,7 @@ public class Config {
 	private static List<String> desc;
 	private static YamlConfiguration msgFile;
 	private static int expiredTime, defaultLimit, taxes;
+	private static double minimum_price;
 	private static ArrayList<NPC> npcs = new ArrayList<>();
 	private static ItemStack market_background, market_border, storage_background, storage_border;
 	
@@ -64,6 +65,7 @@ public class Config {
 		expiredTime = yml.isSet("expired_time") ? yml.getInt("expired_time") : 1440;
 		defaultLimit = yml.isSet("limit") ? yml.getInt("limit") : 5;
 		taxes = yml.isSet("taxes") ? yml.getInt("taxes") : 7;
+		minimum_price = yml.isSet("minimum_price") ? yml.getDouble("minimum_price") : 1.0;
 		
 		market_background = yml.isSet("menus.market.background") ? Utils.getMaterial(yml.getString("menus.market.background")) : Utils.getMaterial("GRAY_STAINED_GLASS_PANE");
 		market_border = yml.isSet("menus.market.border") ? Utils.getMaterial(yml.getString("menus.market.border")) : Utils.getMaterial("BLACK_STAINED_GLASS_PANE");
@@ -189,5 +191,9 @@ public class Config {
 	
 	public static ItemStack getStorageBorder() {
 		return storage_border;
+	}
+	
+	public static double getMinimumPrice() {
+		return minimum_price;
 	}
 }
