@@ -14,6 +14,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import dev.minecraftdorado.BlackMarket.Utils.Config;
 import dev.minecraftdorado.BlackMarket.Utils.Utils;
+import dev.minecraftdorado.BlackMarket.Utils.DataBase.MySQL.dbMySQL;
+import dev.minecraftdorado.BlackMarket.Utils.Config.StorageType;
 
 public class BlackItem {
 	
@@ -49,6 +51,7 @@ public class BlackItem {
 		cal.setTime(new Date());
 		cal.add(Calendar.MINUTE, Config.getExpiredTime());
 		this.date = cal.getTime();
+		dbMySQL.addBlackItem(this);
 	}
 	
 	public int getId() {
@@ -91,13 +94,15 @@ public class BlackItem {
 	public Status getStatus() {
 		if(status.equals(Status.ON_SALE)) {
 			if(Duration.between(new Date().toInstant(), date.toInstant()).getSeconds() <= 0)
-				status = Status.TIME_OUT;
+				setStatus(Status.TIME_OUT);
 		}
 		return status;
 	}
 	
 	public void setStatus(Status status) {
 		this.status = status;
+		if(Config.getStorageType().equals(StorageType.MySQL))
+			dbMySQL.updateStatus(this);
 	}
 	
 	public enum Status {

@@ -68,8 +68,8 @@ public class MySQL {
     				statement.close();
     		}
     	}catch(Exception ex){
-    		MainClass.main.getLogger().severe(String.format("» MySQL can't create the table: " + url.toString(), MainClass.main.getDescription().getName()));
-    		ex.printStackTrace();
+    		String[] s = url.toString().split("/");
+    		MainClass.main.getLogger().severe(String.format("» MySQL can't create the table or already exist: " + s[s.length-1], MainClass.main.getDescription().getName()));
     	}
     }
 }

@@ -13,6 +13,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import dev.minecraftdorado.BlackMarket.MainClass.MainClass;
 import dev.minecraftdorado.BlackMarket.Utils.Config;
+import dev.minecraftdorado.BlackMarket.Utils.UpdateChecker;
+import dev.minecraftdorado.BlackMarket.Utils.UpdateChecker.UpdateReason;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.Events.NPCInteractEvent;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.InventoryManager;
 import dev.minecraftdorado.BlackMarket.Utils.Market.Market;
@@ -28,7 +30,26 @@ public class PlayerListener implements Listener {
 	 */
 	
 	@EventHandler
-	private void join(PlayerJoinEvent e) {PacketReader.get(e.getPlayer()).inject();}
+	private void join(PlayerJoinEvent e) {
+		PacketReader.get(e.getPlayer()).inject();
+		
+		if(e.getPlayer().hasPermission("blackmarket.admin"))
+			UpdateChecker.init(MainClass.main, 79819).requestUpdateCheck().whenComplete((result, ee) -> {
+				if (result.requiresUpdate()) {
+			        e.getPlayer().sendMessage("§6[BlackMarket] §7» " + String.format("An update is available! BlackMarket %s may be downloaded on SpigotMC", result.getNewestVersion()));
+			        return;
+			    }
+				
+				UpdateReason reason = result.getReason();
+				if (reason == UpdateReason.UP_TO_DATE)
+					e.getPlayer().sendMessage("§6[BlackMarket] §7» " + String.format("Your version of BlackMarket (%s) is up to date!", result.getNewestVersion()));
+				else if (reason == UpdateReason.UNRELEASED_VERSION)
+					e.getPlayer().sendMessage("§6[BlackMarket] §7» " + String.format("Your version of BlackMarket (%s) is more recent than the one publicly available. Are you on a development build?", result.getNewestVersion()));
+				else
+					e.getPlayer().sendMessage("§6[BlackMarket] §7» " + "Could not check for a new version of BlackMarket. Reason: " + reason);
+				}
+			);
+	}
 	
 	/*
 	 * Uninject PacketReader

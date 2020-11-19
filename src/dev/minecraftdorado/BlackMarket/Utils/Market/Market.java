@@ -128,7 +128,7 @@ public class Market {
 		
 		for(BlackItem bItem : list.values()) {
 			if(bItem.getStatus().equals(Status.ON_SALE)) {
-				if(category == null || category.getMaterials().isEmpty() || category.getMaterials().contains(UMaterial.match(bItem.getItemStack())))
+				if(category == null || category.getMaterials().isEmpty() || category.contain(UMaterial.match(bItem.getItemStack())))
 					l.add(bItem);
 			}else
 				toRemove.add(bItem.getId());

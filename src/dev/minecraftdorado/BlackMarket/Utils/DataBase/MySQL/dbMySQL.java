@@ -48,11 +48,7 @@ public class dbMySQL {
 	public static void save() {
 		for(Data data : PlayerData.list.values())
 			for(BlackItem bItem : data.getItems())
-				try {
-					addBlackItem(bItem);
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+				updateStatus(bItem);
 	}
 	
 	private static void loadBlackItems() throws SQLException {
@@ -87,8 +83,10 @@ public class dbMySQL {
         }
 	}
 	
-	private static void updateStatus(BlackItem bItem) throws SQLException {
-		if(con == null || con.isClosed()) con = sql.getConnection();
+	public static void updateStatus(BlackItem bItem) {
+		try {
+			if(con == null || con.isClosed()) con = sql.getConnection();
+		} catch(Exception e) {e.printStackTrace();}
         
         try {
         	PreparedStatement preparedStatement = null;
@@ -105,8 +103,10 @@ public class dbMySQL {
         }
 	}
 	
-	private static void addBlackItem(BlackItem bItem) throws SQLException {
-		if(con == null || con.isClosed()) con = sql.getConnection();
+	public static void addBlackItem(BlackItem bItem) {
+		try {
+			if(con == null || con.isClosed()) con = sql.getConnection();
+		} catch(Exception e) {e.printStackTrace();}
         
         try {
         	PreparedStatement preparedStatement = null;
@@ -121,6 +121,7 @@ public class dbMySQL {
 				updateStatus(bItem);
 				return;
 			}
+			
 			resultSet.close();
 			preparedStatement.close();
 			queryBuilder = new StringBuilder();

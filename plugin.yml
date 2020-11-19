@@ -1,9 +1,35 @@
 main: dev.minecraftdorado.BlackMarket.MainClass.MainClass
 name: BlackMarket
 author: MinecraftDorado
-version: 1.1
+version: 1.11
 api-version: 1.13
 softdepend: [Vault]
 commands:
   sell:
   bm:
+
+permissions:
+  blackmarket.admin:
+    description: Allows the use of all commands
+    default: op
+    children:
+      blackmarket.limit.*: true
+      blackmarket.reload: true
+      blackmarket.npc: true
+      blackmarket.open: true
+  blackmarket.npc:
+    description: Allows the use of commands for NPCs
+    default: op
+    children:
+      blackmarket.setnpc: true
+      blackmarket.removenpc: true
+  blackmarket.setnpc:
+    description: Allows usage of the /bm setnpc command
+  blackmarket.removenpc:
+    description: Allows usage of the /bm removenpc command
+  blackmarket.limit:
+    description: Limit of published articles
+  blackmarket.reload:
+    description: Allows usage of the /bm reload command
+  blackmarket.open:
+    description: Allows usage of the /bm open command

@@ -12,6 +12,8 @@ import dev.minecraftdorado.BlackMarket.Listeners.StorageListener;
 import dev.minecraftdorado.BlackMarket.Utils.Packets.PacketReader;
 import net.milkbowl.vault.economy.Economy;
 import dev.minecraftdorado.BlackMarket.Utils.Config;
+import dev.minecraftdorado.BlackMarket.Utils.UpdateChecker;
+import dev.minecraftdorado.BlackMarket.Utils.UpdateChecker.UpdateReason;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.Hologram.HologramManager;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.NPCManager;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.Skins.SkinData;
@@ -37,6 +39,22 @@ public class MainClass extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+		
+		UpdateChecker.init(this, 85558).requestUpdateCheck().whenComplete((result, e) -> {
+			if (result.requiresUpdate()) {
+		        this.getLogger().info(String.format("An update is available! BlackMarket %s may be downloaded on SpigotMC", result.getNewestVersion()));
+		        return;
+		    }
+			
+			UpdateReason reason = result.getReason();
+			if (reason == UpdateReason.UP_TO_DATE)
+				this.getLogger().info(String.format("Your version of BlackMarket (%s) is up to date!", result.getNewestVersion()));
+			else if (reason == UpdateReason.UNRELEASED_VERSION)
+				this.getLogger().info(String.format("Your version of BlackMarket (%s) is more recent than the one publicly available. Are you on a development build?", result.getNewestVersion()));
+			else
+				this.getLogger().warning("Could not check for a new version of BlackMarket. Reason: " + reason);
+			}
+		);
 		
 		getServer().getPluginCommand("sell").setExecutor(new sell());
 		getServer().getPluginCommand("bm").setExecutor(new bm());

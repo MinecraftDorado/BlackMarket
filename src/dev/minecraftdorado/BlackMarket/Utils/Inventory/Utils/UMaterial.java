@@ -1567,7 +1567,9 @@ public enum UMaterial implements Versionable {
                                 : a : null;
                 if(type != null) {
                     final String g = base + type + (max != 1 && l <= max ? "_" + l : "") + (extended ? "_EXTENDED" : "");
-                    return valueOf(g);
+                    try {
+                    	return valueOf(g);
+                    }catch(Exception e) {return valueOf(g + "_1");}
                 } else {
                     return UMaterial.POTION;
                 }
