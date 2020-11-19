@@ -24,6 +24,14 @@ taxes: 7 # percent
 limit: 5 # items by user
 expired_time: 1440 # 1440 minutes = 24 hours
 
+mysql:
+  enable: false
+  host: "localhost"
+  port: 3306
+  user: "root"
+  pass: ""
+  database: "server"
+
 item_onsale:
 - "&8Owner: &b%owner%"
 - "&8Value: &6%value%$"

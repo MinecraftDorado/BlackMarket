@@ -31,6 +31,7 @@ public class Config {
 	private static double minimum_price;
 	private static ArrayList<NPC> npcs = new ArrayList<>();
 	private static ItemStack market_background, market_border, storage_background, storage_border;
+	private static StorageType storageType;
 	
 	public Config() {
 		load();
@@ -71,6 +72,8 @@ public class Config {
 		market_border = yml.isSet("menus.market.border") ? Utils.getMaterial(yml.getString("menus.market.border")) : Utils.getMaterial("BLACK_STAINED_GLASS_PANE");
 		storage_background = yml.isSet("menus.storage.background") ? Utils.getMaterial(yml.getString("menus.storage.background")) : Utils.getMaterial("GRAY_STAINED_GLASS_PANE");
 		storage_border= yml.isSet("menus.storage.border") ? Utils.getMaterial(yml.getString("menus.storage.border")) : Utils.getMaterial("BLACK_STAINED_GLASS_PANE");
+		
+		storageType = yml.isSet("mysql.enable") ? yml.getBoolean("mysql.enable") ? StorageType.MySQL : StorageType.File : StorageType.File;
 		
 		File msg = new File(MainClass.main.getDataFolder(), "messages.yml");
 		
@@ -195,5 +198,13 @@ public class Config {
 	
 	public static double getMinimumPrice() {
 		return minimum_price;
+	}
+	
+	public static StorageType getStorageType() {
+		return storageType;
+	}
+	
+	public enum StorageType {
+		File, MySQL
 	}
 }

@@ -12,6 +12,7 @@ import dev.minecraftdorado.BlackMarket.Utils.Market.PlayerData;
 
 public class sell implements CommandExecutor {
 
+	@SuppressWarnings("deprecation")
 	public boolean onCommand(CommandSender sender, Command cmd, String args2, String[] args) {
 		
 		if(!(sender instanceof Player)) {

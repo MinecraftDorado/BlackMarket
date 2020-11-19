@@ -22,6 +22,15 @@ public class Reflections {
 		return true;
 	}
 	
+	public static boolean existMethod(String className, String method, Class<?>... parameterTypes) {
+		try {
+			Class.forName(className).getMethod(method, parameterTypes);
+		}catch(Exception ex) {
+			return false;
+		}
+		return true;
+	}
+	
 	public static Class<?> getOBCClass(String className) {
 		try {
 			return Class.forName("org.bukkit.craftbukkit." + ServerVersion.getVersion() + "." + className);

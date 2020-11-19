@@ -74,6 +74,7 @@ public class Utils {
 	public static HashMap<String, ItemStack> items = new HashMap<>();
 	public static String orderFormat;
 	
+	@SuppressWarnings("deprecation")
 	public static ItemStack getItemStack(File file, String key) {
 		String a = file.getName().split(".yml")[0] + "_" + key;
 		if(items.containsKey(a))
@@ -134,7 +135,10 @@ public class Utils {
 			um = UMaterial.valueOf(s[0]);
 		}catch(Exception ex) {
 			try {
-				um = UMaterial.valueOf(Material.getMaterial(Integer.valueOf(s[0])).name());
+				if(Reflections.existMethod(Material.class.toString(), "getMaterial", Integer.class)) {
+					Method getMaterial = Material.class.getMethod("getMaterial", Integer.class);
+					um= UMaterial.valueOf(((Material) getMaterial.invoke(null, Integer.valueOf(s[0]))).name());
+				}
 			}catch(Exception ex2) {
 				ex2.printStackTrace();
 			}
