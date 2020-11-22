@@ -85,29 +85,30 @@ public class bm implements CommandExecutor {
 					break;
 				}
 		}else
-			switch(args[0]) {
-			case "reload":
-				if(args.length == 1) {
-					InventoryManager.closeInventory();
-					
-					Utils.items.clear();
-					Config.reload();
-					PlayerData.save();
-					
-					Config.sendMessage("command.reload.message", sender);
+			if(args.length >= 1)
+				switch(args[0]) {
+				case "reload":
+					if(args.length == 1) {
+						InventoryManager.closeInventory();
+						
+						Utils.items.clear();
+						Config.reload();
+						PlayerData.save();
+						
+						Config.sendMessage("command.reload.message", sender);
+						return false;
+					}
+					break;
+				case "open":
+					Config.sendMessage("only_player", sender);
+					return false;
+				case "setnpc":
+					Config.sendMessage("only_player", sender);
+					return false;
+				case "removenpc":
+					Config.sendMessage("only_player", sender);
 					return false;
 				}
-				break;
-			case "open":
-				Config.sendMessage("only_player", sender);
-				return false;
-			case "setnpc":
-				Config.sendMessage("only_player", sender);
-				return false;
-			case "removenpc":
-				Config.sendMessage("only_player", sender);
-				return false;
-			}
 		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.join("\n", Config.getYml().getStringList("help"))));
 		
 		return false;

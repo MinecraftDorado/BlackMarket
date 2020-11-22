@@ -1,7 +1,7 @@
 main: dev.minecraftdorado.BlackMarket.MainClass.MainClass
 name: BlackMarket
 author: MinecraftDorado
-version: 1.11
+version: 1.12
 api-version: 1.13
 softdepend: [Vault]
 commands:

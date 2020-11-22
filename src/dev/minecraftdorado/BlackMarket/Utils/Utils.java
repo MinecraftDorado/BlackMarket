@@ -80,25 +80,41 @@ public class Utils {
 		if(items.containsKey(a))
 			return items.get(a).clone();
 		YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
-		ConfigurationSection k = yml.getConfigurationSection(key);
-		ItemStack item = new ItemStack(getMaterial(k.getString("type"), false));
+		
+		ItemStack item = new ItemStack(Material.BARRIER);
 		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', k.getString("name")));
 		for(ItemFlag flag : ItemFlag.values())
 			meta.addItemFlags(flag);
-		ArrayList<String> lore = new ArrayList<>();
-		k.getStringList("lore").forEach(l -> {
-			lore.add(ChatColor.translateAlternateColorCodes('&', l));
-		});
-		meta.setLore(lore);
-		item.setItemMeta(meta);
-		if(k.contains("owner")) {
-			if(meta instanceof SkullMeta) {
-				SkullMeta sm = (SkullMeta) item.getItemMeta();
-				sm.setOwner(k.getString("owner"));
-				item.setItemMeta(sm);
+		
+		if(yml.isSet(key)) {
+			ConfigurationSection k = yml.getConfigurationSection(key);
+			if(k.isSet("type"))
+				item = new ItemStack(getMaterial(k.getString("type"), false));
+			meta = item.getItemMeta();
+			
+			if(k.isSet("name"))
+				meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', k.getString("name")));
+			
+			for(ItemFlag flag : ItemFlag.values())
+				meta.addItemFlags(flag);
+			
+			if(k.isSet("lore")) {
+				ArrayList<String> lore = new ArrayList<>();
+				k.getStringList("lore").forEach(l -> {
+					lore.add(ChatColor.translateAlternateColorCodes('&', l));
+				});
+				meta.setLore(lore);
+			}
+			item.setItemMeta(meta);
+			if(k.isSet("owner")) {
+				if(meta instanceof SkullMeta) {
+					SkullMeta sm = (SkullMeta) item.getItemMeta();
+					sm.setOwner(k.getString("owner"));
+					item.setItemMeta(sm);
+				}
 			}
 		}
+		
 		items.put(a, item);
 		return item.clone();
 	}
