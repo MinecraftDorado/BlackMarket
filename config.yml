@@ -24,6 +24,8 @@ taxes: 7 # percent
 limit: 5 # items by user
 expired_time: 1440 # 1440 minutes = 24 hours
 
+blacklist_enable: false
+
 mysql:
   enable: false
   host: "localhost"

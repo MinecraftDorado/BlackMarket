@@ -32,6 +32,7 @@ public class Config {
 	private static ArrayList<NPC> npcs = new ArrayList<>();
 	private static ItemStack market_background, market_border, storage_background, storage_border;
 	private static StorageType storageType;
+	private static boolean blacklist_enable;
 	
 	public Config() {
 		load();
@@ -74,6 +75,8 @@ public class Config {
 		storage_border= yml.isSet("menus.storage.border") ? Utils.getMaterial(yml.getString("menus.storage.border")) : Utils.getMaterial("BLACK_STAINED_GLASS_PANE");
 		
 		storageType = yml.isSet("mysql.enable") ? yml.getBoolean("mysql.enable") ? StorageType.MySQL : StorageType.File : StorageType.File;
+		
+		blacklist_enable = yml.isSet("blacklist_enable") ? yml.getBoolean("blacklist_enable") : false;
 		
 		File msg = new File(MainClass.main.getDataFolder(), "messages.yml");
 		
@@ -206,5 +209,9 @@ public class Config {
 	
 	public enum StorageType {
 		File, MySQL
+	}
+	
+	public static boolean blackListIsEnable() {
+		return blacklist_enable;
 	}
 }

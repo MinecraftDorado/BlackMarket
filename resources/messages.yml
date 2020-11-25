@@ -5,6 +5,7 @@ command:
     message: "&eItem added!"
     error_limit: "&cYou have reached the limit of published objects!"
     error_item_not_found: "&cYour hand is empty, you need an item to sell!"
+    error_item_not_allow: "&cThis material is not valid in the market!"
     error_value: "&cValue invalid!"
     error_minimum_price: "&cThe minimum price is %price%!"
     usage: "&cUsage /sell <value>"

@@ -13,6 +13,7 @@ import dev.minecraftdorado.BlackMarket.Utils.Utils;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.NPC;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.Skins.SkinData;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.InventoryManager;
+import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.BlackList;
 import dev.minecraftdorado.BlackMarket.Utils.Market.Market;
 import dev.minecraftdorado.BlackMarket.Utils.Market.PlayerData;
 
@@ -34,6 +35,7 @@ public class bm implements CommandExecutor {
 							Utils.items.clear();
 							Config.reload();
 							PlayerData.save();
+							BlackList.reload();
 							
 							Config.sendMessage("command.reload.message", player);
 						}else
@@ -94,6 +96,7 @@ public class bm implements CommandExecutor {
 						Utils.items.clear();
 						Config.reload();
 						PlayerData.save();
+						BlackList.reload();
 						
 						Config.sendMessage("command.reload.message", sender);
 						return false;

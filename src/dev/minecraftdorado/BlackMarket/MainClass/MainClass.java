@@ -19,6 +19,7 @@ import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.NPCManager;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.Skins.SkinData;
 import dev.minecraftdorado.BlackMarket.Utils.Hook.VaultHook;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.InventoryManager;
+import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.BlackList;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils;
 import dev.minecraftdorado.BlackMarket.Utils.Market.Market;
 import dev.minecraftdorado.BlackMarket.Utils.Market.PlayerData;
@@ -65,6 +66,10 @@ public class MainClass extends JavaPlugin {
 		new PlayerData();
 		new CategoryUtils();
 		new Market();
+		new BlackList();
+		
+		if(Config.blackListIsEnable())
+			BlackList.load();
 		
 		hm = new HologramManager();
 		npcM = new NPCManager();

@@ -51,7 +51,8 @@ public class BlackItem {
 		cal.setTime(new Date());
 		cal.add(Calendar.MINUTE, Config.getExpiredTime());
 		this.date = cal.getTime();
-		dbMySQL.addBlackItem(this);
+		if(Config.getStorageType().equals(StorageType.MySQL))
+			dbMySQL.addBlackItem(this);
 	}
 	
 	public int getId() {

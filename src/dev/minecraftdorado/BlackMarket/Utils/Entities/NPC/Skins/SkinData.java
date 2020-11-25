@@ -23,7 +23,7 @@ public class SkinData {
 	public SkinData() {
 		
 		YamlConfiguration conf;
-		Utils.extract("customskins.yml", "skindata.yml");
+		Utils.extract("resources/customskins.yml", "skindata.yml");
 		
 		conf = YamlConfiguration.loadConfiguration(file);
 		for(String name : conf.getKeys(false))
