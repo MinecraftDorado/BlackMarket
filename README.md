@@ -7,10 +7,13 @@ BlackMarket allows you to offer your items for a certain time, after it is, the 
 - List view
 - NPCs
 - Taxes
+- BlackList
 - Expired time
 - Custom skins
 - Custom messages
-- Custom menus​
+- Custom menus
+- MySQL or file data
+- Update checker
 
 » Commands:
 - /bm open - (Open the BlackMarket)
@@ -20,9 +23,11 @@ BlackMarket allows you to offer your items for a certain time, after it is, the 
 - /sell [value] - (Sell a item)​
 
 » Permissions:
+- blackmarket.admin
 - blackmarket.open
 - blackmarket.limit.* or blackmarket.limit.5
 - blackmarket.reload
+- blackmarket.npc or:
 - blackmarket.setnpc
 - blackmarket.removenpc​
 
