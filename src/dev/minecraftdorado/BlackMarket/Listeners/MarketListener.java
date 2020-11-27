@@ -1,7 +1,6 @@
 package dev.minecraftdorado.BlackMarket.Listeners;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -61,13 +60,13 @@ public class MarketListener implements Listener {
 				if(e.getItemStack().getItemMeta().hasLore()) {
 					for (int i = 0; i < e.getItemStack().getItemMeta().getLore().size(); i++) {
 						String l = e.getItemStack().getItemMeta().getLore().get(i);
-						if(l.contains(ChatColor.translateAlternateColorCodes('&', MainClass.main.getConfig().getString("order.active")))) {
+						if(l.contains(Config.getString("order.active"))) {
 							a = true;
 							continue;
 						}
 						if(a || i == 0) {
 							for(OrderType type : OrderType.values())
-								if(l.contains(ChatColor.translateAlternateColorCodes('&', MainClass.main.getConfig().getString("order.values." + type.name().toLowerCase())))) {
+								if(l.contains(Config.getString("order.values." + type.name().toLowerCase()))) {
 									order = type;
 									break;
 								}

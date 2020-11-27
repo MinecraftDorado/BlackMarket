@@ -26,7 +26,7 @@ public class Config {
 	private static HashMap<String, ItemStack> items = new HashMap<>();
 	private static HashMap<String, String> msgs = new HashMap<>();
 	private static List<String> desc;
-	private static YamlConfiguration msgFile;
+	private static YamlConfiguration conf, msgFile;
 	private static int expiredTime, defaultLimit, taxes;
 	private static double minimum_price;
 	private static ArrayList<NPC> npcs = new ArrayList<>();
@@ -55,28 +55,28 @@ public class Config {
 		if(!file.exists())
 			Utils.extract("config.yml", "config.yml");
 		
-		YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
+		conf = YamlConfiguration.loadConfiguration(file);
 		
-		yml.getConfigurationSection("items").getKeys(false).forEach(key -> {
+		conf.getConfigurationSection("items").getKeys(false).forEach(key -> {
 			items.put(key, Utils.getItemStack(file, "items." + key));
 		});
 		
-		Utils.orderFormat = yml.isSet("order.format") ? yml.getString("order.format") : "%active% %value%";
+		Utils.orderFormat = conf.isSet("order.format") ? conf.getString("order.format") : "%active% %value%";
 		
-		desc = yml.getStringList("item_onsale");
-		expiredTime = yml.isSet("expired_time") ? yml.getInt("expired_time") : 1440;
-		defaultLimit = yml.isSet("limit") ? yml.getInt("limit") : 5;
-		taxes = yml.isSet("taxes") ? yml.getInt("taxes") : 7;
-		minimum_price = yml.isSet("minimum_price") ? yml.getDouble("minimum_price") : 1.0;
+		desc = conf.getStringList("item_onsale");
+		expiredTime = conf.isSet("expired_time") ? conf.getInt("expired_time") : 1440;
+		defaultLimit = conf.isSet("limit") ? conf.getInt("limit") : 5;
+		taxes = conf.isSet("taxes") ? conf.getInt("taxes") : 7;
+		minimum_price = conf.isSet("minimum_price") ? conf.getDouble("minimum_price") : 1.0;
 		
-		market_background = yml.isSet("menus.market.background") ? Utils.getMaterial(yml.getString("menus.market.background")) : Utils.getMaterial("GRAY_STAINED_GLASS_PANE");
-		market_border = yml.isSet("menus.market.border") ? Utils.getMaterial(yml.getString("menus.market.border")) : Utils.getMaterial("BLACK_STAINED_GLASS_PANE");
-		storage_background = yml.isSet("menus.storage.background") ? Utils.getMaterial(yml.getString("menus.storage.background")) : Utils.getMaterial("GRAY_STAINED_GLASS_PANE");
-		storage_border= yml.isSet("menus.storage.border") ? Utils.getMaterial(yml.getString("menus.storage.border")) : Utils.getMaterial("BLACK_STAINED_GLASS_PANE");
+		market_background = conf.isSet("menus.market.background") ? Utils.getMaterial(conf.getString("menus.market.background")) : Utils.getMaterial("GRAY_STAINED_GLASS_PANE");
+		market_border = conf.isSet("menus.market.border") ? Utils.getMaterial(conf.getString("menus.market.border")) : Utils.getMaterial("BLACK_STAINED_GLASS_PANE");
+		storage_background = conf.isSet("menus.storage.background") ? Utils.getMaterial(conf.getString("menus.storage.background")) : Utils.getMaterial("GRAY_STAINED_GLASS_PANE");
+		storage_border= conf.isSet("menus.storage.border") ? Utils.getMaterial(conf.getString("menus.storage.border")) : Utils.getMaterial("BLACK_STAINED_GLASS_PANE");
 		
-		storageType = yml.isSet("mysql.enable") ? yml.getBoolean("mysql.enable") ? StorageType.MySQL : StorageType.File : StorageType.File;
+		storageType = conf.isSet("mysql.enable") ? conf.getBoolean("mysql.enable") ? StorageType.MySQL : StorageType.File : StorageType.File;
 		
-		blacklist_enable = yml.isSet("blacklist_enable") ? yml.getBoolean("blacklist_enable") : false;
+		blacklist_enable = conf.isSet("blacklist_enable") ? conf.getBoolean("blacklist_enable") : false;
 		
 		File msg = new File(MainClass.main.getDataFolder(), "messages.yml");
 		
@@ -85,8 +85,8 @@ public class Config {
 		
 		msgFile = YamlConfiguration.loadConfiguration(msg);
 		
-		if(yml.isSet("npc_list"))
-			for(String s : yml.getStringList("npc_list")) {
+		if(conf.isSet("npc_list"))
+			for(String s : conf.getStringList("npc_list")) {
 				String[] args = s.split(",");
 				
 				Location loc = new Location(Bukkit.getWorld(args[0]), Double.valueOf(args[1]), Double.valueOf(args[2]), Double.valueOf(args[3]));
@@ -213,5 +213,12 @@ public class Config {
 	
 	public static boolean blackListIsEnable() {
 		return blacklist_enable;
+	}
+	
+	public static String getString(String str) {
+		if(conf.isSet(str))
+			return ChatColor.translateAlternateColorCodes('&', conf.getString(str));
+		MainClass.main.getLogger().severe(String.format("» String not found: " + str, MainClass.main.getDescription().getName()));
+		return str;
 	}
 }

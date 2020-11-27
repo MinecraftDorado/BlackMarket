@@ -127,8 +127,8 @@ public class Utils {
 				if(s.contains("%order_" + type.name().toLowerCase() + "%")) {
 					s = s.replace("%order_" + type.name().toLowerCase() + "%"
 							, orderFormat.replace("%active%"
-									, PlayerData.get(player.getUniqueId()).getOrder().equals(type) ? MainClass.main.getConfig().getString("order.active") : "")
-							.replace("%value%", MainClass.main.getConfig().getString("order.values." + type.name().toLowerCase())));
+									, PlayerData.get(player.getUniqueId()).getOrder().equals(type) ? Config.getString("order.active") : "")
+							.replace("%value%",Config.getString("order.values." + type.name().toLowerCase())));
 					break;
 				}
 			}
