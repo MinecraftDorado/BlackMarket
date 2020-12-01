@@ -23,22 +23,20 @@ BlackMarket allows you to offer your items for a certain time, after it is, the 
 
 ![Commands](https://www.spigotmc.org/attachments/commands-png.573353/)
 Permission: <code>blackmarket.admin</code>
-> ↓
-<br/> Commands:
+> Commands:
 <br/><code>/bm reload</code>: *Reload config*
 <br/><code>/bm setnpc <skin_name></code>: *Set a NPC*
 <br/><code>/bm removenpc</code>: *Remove a NPC*
 
 Permission: <code>blackmarket.open</code>
-> ↓
-<br>  Command:
+> Command:
 <br/><code>/bm open</code>: *Open the BlackMarket*
 
 Command:
-> <br/><code>/sell [value]</code>: *Sell a item*
+> <code>/sell [value]</code>: *Sell a item*
 
-**All permissions:**
-><br/><code>blackmarket.reload</code>: *Allow use reload command*
+All permissions:
+><code>blackmarket.reload</code>: *Allow use reload command*
 <br/><code>blackmarket.npc</code>: *Allow use setnpc and removenpc commands*
 <br/><code>blackmarket.setnpc</code>: *Allow use setnpc command*
 <br/><code>blackmarket.removenpc</code>: *Allow use removenpc command*
