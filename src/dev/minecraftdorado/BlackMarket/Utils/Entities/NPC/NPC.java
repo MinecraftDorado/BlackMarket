@@ -90,12 +90,14 @@ public class NPC {
 	        PacketPlayOutNamedEntitySpawnConstructor = PacketPlayOutNamedEntitySpawn.getConstructor(EntityHuman);
 	        
 	        
-	        if(!ServerVersion.getVersion().contains("1_8")) {
+	        if(ServerVersion.getVersion().contains("1_14") || ServerVersion.getVersion().contains("1_15") || ServerVersion.getVersion().contains("1_16")) {
 	        	PlayerInteractManagerConstructor = PlayerInteractManager.getConstructor(WorldServer);
+	        }else
+	        	PlayerInteractManagerConstructor = PlayerInteractManager.getConstructor(World);
+	        
+	        if(!ServerVersion.getVersion().contains("1_8")) {
 	        	set = DataWatcher.getMethod("set", DataWatcherObject, Object.class);
 	        	DataWatcherObjectConstructor = DataWatcherObject.getConstructor(int.class, DataWatcherSerializer);
-	        }else {
-	        	PlayerInteractManagerConstructor = PlayerInteractManager.getConstructor(World);
 	        }
 		}catch(Exception ex) {
 			ex.printStackTrace();
@@ -225,24 +227,31 @@ public class NPC {
 	            		((net.minecraft.server.v1_8_R3.DataWatcher) getDataWatcher.invoke(entity)).watch(index, (byte) 127);
 	            		break;
 	            	case "v1_9_R1":
+	            		index = 12;
 	            		a_field = net.minecraft.server.v1_9_R1.DataWatcherRegistry.a;
 	            		break;
 	            	case "v1_9_R2":
+	            		index = 12;
 	            		a_field = net.minecraft.server.v1_9_R2.DataWatcherRegistry.a;
 	            		break;
 	            	case "v1_10_R1":
+	            		index = 13;
 	            		a_field = net.minecraft.server.v1_10_R1.DataWatcherRegistry.a;
 	            		break;
 	            	case "v1_11_R1":
+	            		index = 13;
 	            		a_field = net.minecraft.server.v1_11_R1.DataWatcherRegistry.a;
 	            		break;
 	            	case "v1_12_R1":
+	            		index = 13;
 	            		a_field = net.minecraft.server.v1_12_R1.DataWatcherRegistry.a;
 	            		break;
 	            	case "v1_13_R1":
+	            		index = 14;
 	            		a_field = net.minecraft.server.v1_13_R1.DataWatcherRegistry.a;
 	            		break;
 	            	case "v1_13_R2":
+	            		index = 14;
 	            		a_field = net.minecraft.server.v1_13_R2.DataWatcherRegistry.a;
 	            		break;
 	            	case "v1_14_R1":
@@ -250,7 +259,6 @@ public class NPC {
 	            		break;
 	            	case "v1_15_R1":
 	            		a_field = net.minecraft.server.v1_15_R1.DataWatcherRegistry.a;
-	            		index = 16;
 	            		break;
 	            	case "v1_16_R1":
 	            		a_field = net.minecraft.server.v1_16_R1.DataWatcherRegistry.a;
@@ -266,8 +274,10 @@ public class NPC {
 	            	if(a_field != null) {
 	            		Object data = getDataWatcher.invoke(entity);
 	            		set.invoke(data,
-	            				DataWatcherObjectConstructor.newInstance(index,
-	            						a_field
+	            				DataWatcherObjectConstructor
+	            					.newInstance(
+	            							index,
+	            							a_field
 	            						),
 	            				(byte) 127
 	            				);

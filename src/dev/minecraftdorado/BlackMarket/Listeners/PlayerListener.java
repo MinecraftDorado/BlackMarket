@@ -43,7 +43,7 @@ public class PlayerListener implements Listener {
 				UpdateReason reason = result.getReason();
 				if (reason == UpdateReason.UNRELEASED_VERSION)
 					e.getPlayer().sendMessage("§6[BlackMarket] §7» " + String.format("Your version of BlackMarket (%s) is more recent than the one publicly available. Are you on a development build?", result.getNewestVersion()));
-				else
+				else if (reason != UpdateReason.UP_TO_DATE)
 					e.getPlayer().sendMessage("§6[BlackMarket] §7» " + "Could not check for a new version of BlackMarket. Reason: " + reason);
 				}
 			);
