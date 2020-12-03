@@ -66,7 +66,7 @@ public class MarketListener implements Listener {
 						}
 						if(a || i == 0) {
 							for(OrderType type : OrderType.values())
-								if(l.contains(Config.getString("order.values." + type.name().toLowerCase()))) {
+								if(l.contains(Config.getString("order.values." + type.getName()))) {
 									order = type;
 									break;
 								}

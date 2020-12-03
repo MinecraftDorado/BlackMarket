@@ -61,22 +61,23 @@ public class Config {
 			items.put(key, Utils.getItemStack(file, "items." + key));
 		});
 		
-		Utils.orderFormat = conf.isSet("order.format") ? conf.getString("order.format") : "%active% %value%";
+		Utils.orderFormat = (String) getValue(conf, "order.format", "%active% %value%");
 		
 		desc = conf.getStringList("item_onsale");
-		expiredTime = conf.isSet("expired_time") ? conf.getInt("expired_time") : 1440;
-		defaultLimit = conf.isSet("limit") ? conf.getInt("limit") : 5;
-		taxes = conf.isSet("taxes") ? conf.getInt("taxes") : 7;
-		minimum_price = conf.isSet("minimum_price") ? conf.getDouble("minimum_price") : 1.0;
 		
-		market_background = conf.isSet("menus.market.background") ? Utils.getMaterial(conf.getString("menus.market.background")) : Utils.getMaterial("GRAY_STAINED_GLASS_PANE");
-		market_border = conf.isSet("menus.market.border") ? Utils.getMaterial(conf.getString("menus.market.border")) : Utils.getMaterial("BLACK_STAINED_GLASS_PANE");
-		storage_background = conf.isSet("menus.storage.background") ? Utils.getMaterial(conf.getString("menus.storage.background")) : Utils.getMaterial("GRAY_STAINED_GLASS_PANE");
-		storage_border= conf.isSet("menus.storage.border") ? Utils.getMaterial(conf.getString("menus.storage.border")) : Utils.getMaterial("BLACK_STAINED_GLASS_PANE");
+		expiredTime = (int) getValue(conf, "expired_time", 1440);
+		defaultLimit = (int) getValue(conf, "limit", 5);
+		taxes = (int) getValue(conf, "taxes", 7);
+		minimum_price = (double) getValue(conf, "minimum_price", 1.0);
 		
-		storageType = conf.isSet("mysql.enable") ? conf.getBoolean("mysql.enable") ? StorageType.MySQL : StorageType.File : StorageType.File;
+		market_background = Utils.getMaterial((String) getValue(conf, "menus.market.background", "GRAY_STAINED_GLASS_PANE"));
+		market_border = Utils.getMaterial((String) getValue(conf, "menus.market.border", "BLACK_STAINED_GLASS_PANE"));
+		storage_background = Utils.getMaterial((String) getValue(conf, "menus.storage.background", "GRAY_STAINED_GLASS_PANE"));
+		storage_border= Utils.getMaterial((String) getValue(conf, "menus.storage.border", "BLACK_STAINED_GLASS_PANE"));
 		
-		blacklist_enable = conf.isSet("blacklist_enable") ? conf.getBoolean("blacklist_enable") : false;
+		storageType = (boolean) getValue(conf, "mysql.enable", false) ? StorageType.MySQL : StorageType.File;
+		
+		blacklist_enable = (boolean) getValue(conf, "blacklist_enable", false);
 		
 		File msg = new File(MainClass.main.getDataFolder(), "messages.yml");
 		
@@ -100,6 +101,10 @@ public class Config {
 	
 	public static YamlConfiguration getYml() {
 		return msgFile;
+	}
+	
+	private static Object getValue(YamlConfiguration yml, String key, Object valueDefault) {
+		return yml.isSet(key) ? yml.get(key) : valueDefault;
 	}
 	
 	public static ItemStack getItemStack(String key) {

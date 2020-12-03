@@ -3,6 +3,7 @@ package dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Locale;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -13,6 +14,10 @@ public class OrderUtils {
 	
 	public static enum OrderType {
 		ID, AMOUNT, VALUE, TYPE;
+		
+		public String getName() {
+			return this.name().toLowerCase(new Locale("en", "US"));
+		}
 	}
 	
 	public static ArrayList<BlackItem> sortByAmount(ArrayList<BlackItem> unsortMap) {

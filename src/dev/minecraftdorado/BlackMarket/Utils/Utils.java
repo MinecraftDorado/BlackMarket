@@ -123,12 +123,14 @@ public class Utils {
 		if(s.contains("%")) {
 			if(s.contains("%actual_page%")) s = s.replace("%actual_page%", "" + (Market.getPlayerPage(player)+1));
 			if(s.contains("%pages%")) s = s.replace("%pages%", "" + Market.getPages());
-			for(OrderType type : OrderType.values()) {
-				if(s.contains("%order_" + type.name().toLowerCase() + "%")) {
-					s = s.replace("%order_" + type.name().toLowerCase() + "%"
-							, orderFormat.replace("%active%"
-									, PlayerData.get(player.getUniqueId()).getOrder().equals(type) ? Config.getString("order.active") : "")
-							.replace("%value%",Config.getString("order.values." + type.name().toLowerCase())));
+			if(s.contains("%order_"))
+				for(OrderType type : OrderType.values()) {
+					String name = type.getName();
+					if(s.contains("%order_" + name + "%")) {
+						s = s.replace("%order_" + name + "%"
+								, orderFormat.replace("%active%"
+								, PlayerData.get(player.getUniqueId()).getOrder().equals(type) ? Config.getString("order.active") : "")
+								.replace("%value%",Config.getString("order.values." + name)));
 					break;
 				}
 			}
