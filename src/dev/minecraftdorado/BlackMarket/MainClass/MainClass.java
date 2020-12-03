@@ -1,5 +1,6 @@
 package dev.minecraftdorado.BlackMarket.MainClass;
 
+import java.io.File;
 import java.lang.reflect.Method;
 
 import org.bukkit.Bukkit;
@@ -18,6 +19,7 @@ import net.milkbowl.vault.economy.Economy;
 import dev.minecraftdorado.BlackMarket.Utils.Config;
 import dev.minecraftdorado.BlackMarket.Utils.UpdateChecker;
 import dev.minecraftdorado.BlackMarket.Utils.UpdateChecker.UpdateReason;
+import dev.minecraftdorado.BlackMarket.Utils.Utils;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.Hologram.HologramManager;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.NPCManager;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.Skins.SkinData;
@@ -89,6 +91,9 @@ public class MainClass extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new StorageListener(), this);
 		Bukkit.getPluginManager().registerEvents(new InventoryManager(), this);
 		Bukkit.getOnlinePlayers().forEach(player -> PacketReader.get(player).inject());
+
+		if(!new File(MainClass.main.getDataFolder(), "translations.rar").exists())
+			Utils.extract("resources/translations.rar", "translations.rar");
 	}
 	
 	public void onDisable() {
