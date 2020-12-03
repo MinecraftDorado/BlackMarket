@@ -8,12 +8,11 @@ command:
     error_item_not_allow: "&cThis material is not valid in the market!"
     error_value: "&cValue invalid!"
     error_minimum_price: "&cThe minimum price is %price%!"
-    usage: "&cUsage /sell <value>"
+    usage: "&cUsage /%cmd% <value>"
   reload:
     message: "&eReloaded configuration!"
   setnpc:
     message: "&eNPC placed in your position!"
-    usage: "&cUsage /bm setnpc <skin_name>"
   removenpc: 
     message: "&eRight click to a NPC to remove it!"
     removed: "&eNPC removed!"
@@ -25,6 +24,7 @@ help:
 - "&8 » &7/bm open &8- &7(&fOpen the BlackMarket&7)"
 - "&8 » &7/bm setnpc <skin_name> &8- &7(&fSet a NPC&7)"
 - "&8 » &7/bm removenpc &8- &7(&fRemove a NPC&7)"
+- "&8 » &7/bm sell <value> &8- &7(&fPost an item&7)"
 
 market:
   buy: "&eThanks for buy!"

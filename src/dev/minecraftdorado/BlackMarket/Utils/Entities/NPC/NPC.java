@@ -162,7 +162,9 @@ public class NPC {
 		hide();
 		name = Config.getMessage("npc.name");
 		nameEntity.hide();
+		MainClass.npcM.list.remove(getId());
 		spawn();
+		MainClass.npcM.list.put(getId(), this);
 		v.forEach(viewer -> display(viewer));
 	}
 	

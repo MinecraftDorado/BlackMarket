@@ -20,6 +20,7 @@ public class bmTab implements TabCompleter {
 				list.add("open");
 				list.add("setnpc");
 				list.add("removenpc");
+				list.add("sell");
 			}
 			
 			if(!list.isEmpty()) {

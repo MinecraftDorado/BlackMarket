@@ -26,6 +26,9 @@ expired_time: 1440 # 1440 minutes = 24 hours
 
 blacklist_enable: false
 
+sell_alias:
+- sell
+
 mysql:
   enable: false
   host: "localhost"

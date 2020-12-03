@@ -33,6 +33,7 @@ public class Config {
 	private static ItemStack market_background, market_border, storage_background, storage_border;
 	private static StorageType storageType;
 	private static boolean blacklist_enable;
+	private static ArrayList<String> sellAlias = new ArrayList<>();
 	
 	public Config() {
 		load();
@@ -78,6 +79,9 @@ public class Config {
 		storageType = (boolean) getValue(conf, "mysql.enable", false) ? StorageType.MySQL : StorageType.File;
 		
 		blacklist_enable = (boolean) getValue(conf, "blacklist_enable", false);
+		
+		if(conf.isSet("sell_alias"))
+			conf.getStringList("sell_alias").forEach(cmd -> sellAlias.add(cmd));
 		
 		File msg = new File(MainClass.main.getDataFolder(), "messages.yml");
 		
@@ -225,5 +229,9 @@ public class Config {
 			return ChatColor.translateAlternateColorCodes('&', conf.getString(str));
 		MainClass.main.getLogger().severe(String.format("» String not found: " + str, MainClass.main.getDescription().getName()));
 		return str;
+	}
+	
+	public static ArrayList<String> getSellAlias(){
+		return sellAlias;
 	}
 }
