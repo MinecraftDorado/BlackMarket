@@ -3,7 +3,6 @@ package dev.minecraftdorado.BlackMarket.Utils.Market;
 import java.util.ArrayList;
 
 import org.bukkit.entity.Player;
-
 import dev.minecraftdorado.BlackMarket.Utils.Config;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.InventoryManager.Inv;
 
@@ -37,6 +36,7 @@ public class Storage {
 		}
 		
 		inv.setItem(49, Config.getItemStack("back"));
+		inv.setItem(50, Config.getItemStack("take_items"));
 		return inv;
 	}
 }

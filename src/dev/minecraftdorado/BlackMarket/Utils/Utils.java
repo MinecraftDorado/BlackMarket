@@ -186,10 +186,10 @@ public class Utils {
 		int slot = 0;
 		for(ItemStack i : player.getInventory().getContents())
 			if(i != null && !i.getType().equals(Material.AIR)) {
-				inv.setItem(slot, i);
+				inv.setItem(slot, i.clone());
 				slot++;
 			}
-		inv.addItem(item);
+		inv.addItem(item.clone());
 		
 		int a = 0;
 		for(ItemStack i : inv.getContents())

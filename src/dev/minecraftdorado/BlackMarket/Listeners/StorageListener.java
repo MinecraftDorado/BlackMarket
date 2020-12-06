@@ -27,6 +27,22 @@ public class StorageListener implements Listener {
 				InventoryManager.openInventory(p, Market.getMarketInventory(p));
 				return;
 			}
+			// Take all items
+			if(e.getItemStack().equals(Config.getItemStack("take_items"))) {
+				boolean taked = false;
+				for(BlackItem bItem : e.getInv().getBlackList().values())
+					if(bItem.getStatus().equals(Status.TIME_OUT) && Utils.canAddItem(p, bItem.getOriginal())) {
+						bItem.setStatus(Status.TAKED);
+						p.getInventory().addItem(bItem.getOriginal());
+						taked = true;
+					}
+				if(taked) {
+					Config.sendMessage("market.take_items", p);
+					p.closeInventory();
+				}
+				
+				return;
+			}
 			// Take item
 			if(!e.getInv().getBlackList().isEmpty() && e.getInv().getBlackList().keySet().contains(e.getSlot())) {
 				BlackItem bItem = e.getInv().getBlackList().get(e.getSlot());
@@ -36,7 +52,7 @@ public class StorageListener implements Listener {
 					p.getInventory().addItem(bItem.getOriginal());
 					p.closeInventory();
 				}else
-					Config.sendMessage("market.item_full", p);
+					Config.sendMessage("market.inventory_full", p);
 			}
 		}
 	}

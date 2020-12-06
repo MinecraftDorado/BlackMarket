@@ -32,6 +32,7 @@ market:
   item_invalid: "&cThis item is not for sale!"
   missing_money: "&cYou haven't a money to buy this!"
   item_owner: "&cYou can't buy your items!"
+  take_items: "&eItems taken!"
 
 menus:
   market: "BlackMarket"

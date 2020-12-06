@@ -80,3 +80,10 @@ items:
     - "&7Your unsold items"
     - ""
     - "&eClick to open!"
+  take_items:
+    type: NETHER_STAR
+    name: "&bTake items"
+    lore:
+    - "&7Take all items"
+    - ""
+    - "&eClick to take!"
