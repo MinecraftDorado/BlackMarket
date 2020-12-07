@@ -1,5 +1,6 @@
 package dev.minecraftdorado.BlackMarket.Utils.Market;
 
+import java.text.DecimalFormat;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,6 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import dev.minecraftdorado.BlackMarket.Utils.Config;
 import dev.minecraftdorado.BlackMarket.Utils.Utils;
 import dev.minecraftdorado.BlackMarket.Utils.DataBase.MySQL.dbMySQL;
+import net.md_5.bungee.api.chat.TextComponent;
 import dev.minecraftdorado.BlackMarket.Utils.Config.StorageType;
 
 public class BlackItem {
@@ -28,7 +30,9 @@ public class BlackItem {
 	private Status status = Status.ON_SALE;
 	private Date date;
 	
-	public BlackItem(ItemStack item, double value, UUID owner, Status status, Date date, int id) {
+	private boolean notified = false;
+	
+	public BlackItem(ItemStack item, double value, UUID owner, Status status, Date date, int id, boolean notified) {
 		this.id = id;
 		if(Market.getId() < id)
 			Market.setId(id);
@@ -37,6 +41,7 @@ public class BlackItem {
 		this.owner = owner;
 		this.date = date;
 		this.status = status;
+		this.notified = notified;
 	}
 	
 	public BlackItem(ItemStack item, double value, UUID owner) {
@@ -97,6 +102,9 @@ public class BlackItem {
 			if(Duration.between(new Date().toInstant(), date.toInstant()).getSeconds() <= 0)
 				setStatus(Status.TIME_OUT);
 		}
+		if(status.equals(Status.SOLD) && !isNotified())
+			if(Bukkit.getOfflinePlayer(owner).isOnline())
+				sendNotification();
 		return status;
 	}
 	
@@ -112,5 +120,31 @@ public class BlackItem {
 	
 	public Date getDate() {
 		return date;
+	}
+	
+	public boolean isNotified() {
+		return notified;
+	}
+	
+	public void sendNotification() {
+		String[] split = Config.getMessage("market.notification").replace("%value%", "" + getFinalValue()).split("%name%");
+		
+		TextComponent tc = new TextComponent(split[0]);
+		if(item.hasItemMeta() && item.getItemMeta().hasDisplayName())
+			tc.addExtra(item.getItemMeta().getDisplayName());
+		else
+			tc.addExtra(Utils.getTranlatableName(item.getType()));
+		if(split.length > 1)
+			tc.addExtra(split[1]);
+		Bukkit.getPlayer(owner).spigot().sendMessage(tc);
+		
+		notified = true;
+		
+		if(Config.getStorageType().equals(StorageType.MySQL))
+			dbMySQL.updateNotified(this);
+	}
+	
+	public double getFinalValue() {
+		return Double.parseDouble(new DecimalFormat("0.00").format(value - (value * Config.getTaxes() / 100)).replace(",", "."));
 	}
 }

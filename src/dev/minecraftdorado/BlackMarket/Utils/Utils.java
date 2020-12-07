@@ -33,6 +33,8 @@ import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.UMaterial;
 import dev.minecraftdorado.BlackMarket.Utils.Market.Market;
 import dev.minecraftdorado.BlackMarket.Utils.Market.PlayerData;
 import dev.minecraftdorado.BlackMarket.Utils.Packets.Reflections;
+import dev.minecraftdorado.BlackMarket.Utils.Packets.ServerVersion;
+import net.md_5.bungee.api.chat.TranslatableComponent;
 
 public class Utils {
 	
@@ -250,4 +252,27 @@ public class Utils {
         
         return max.get();
     }
+	
+	public static TranslatableComponent getTranlatableName(Material material) {
+		String key = null;
+		
+		try {
+			Class<?> craftMagicNumbers = Reflections.getOBCClass("util.CraftMagicNumbers");
+			Object newItem = null;
+			
+	    	Method m = craftMagicNumbers.getDeclaredMethod("getItem", material.getClass());
+	    	m.setAccessible(true);
+	    	newItem = m.invoke(craftMagicNumbers, material);
+	    	if (newItem == null)
+	    		throw new IllegalArgumentException(material.name() + " material could not be queried!");
+			
+	    	key = (String) Reflections.getNMSClass("Item").getMethod("getName").invoke(newItem);
+		}catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		if(ServerVersion.getVersion().contains("1_8") || ServerVersion.getVersion().contains("1_9") || ServerVersion.getVersion().contains("1_10") || ServerVersion.getVersion().contains("1_11") || ServerVersion.getVersion().contains("1_12"))
+			key+= ".name";
+		return new TranslatableComponent(key);
+	}
 }

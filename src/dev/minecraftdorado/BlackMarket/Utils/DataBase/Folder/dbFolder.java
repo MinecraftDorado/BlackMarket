@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import dev.minecraftdorado.BlackMarket.MainClass.MainClass;
 import dev.minecraftdorado.BlackMarket.Utils.Market.BlackItem;
 import dev.minecraftdorado.BlackMarket.Utils.Market.BlackItem.Status;
+import dev.minecraftdorado.BlackMarket.Utils.Market.Market;
 import dev.minecraftdorado.BlackMarket.Utils.Market.PlayerData;
 
 public class dbFolder {
@@ -20,12 +21,15 @@ public class dbFolder {
 			for(File f : file.listFiles()) {
 				YamlConfiguration yml = YamlConfiguration.loadConfiguration(f);
 				Status status = Status.valueOf(yml.getString("status"));
-				if(!status.equals(Status.SOLD) && !status.equals(Status.TAKED)) {
+				int id = Integer.parseInt(f.getName().replace(".yml", ""));
+				if(status.equals(Status.ON_SALE) || status.equals(Status.TIME_OUT) || (status.equals(Status.SOLD) && !yml.getBoolean("notified"))) {
 					UUID owner = UUID.fromString(yml.getString("owner"));
 					
-					BlackItem bItem = new BlackItem(yml.getItemStack("item"), yml.getDouble("value"), owner, Status.valueOf(yml.getString("status")), new Date(yml.getLong("date")), Integer.parseInt(f.getName().replace(".yml", "")));
+					BlackItem bItem = new BlackItem(yml.getItemStack("item"), yml.getDouble("value"), owner, Status.valueOf(yml.getString("status")), new Date(yml.getLong("date")), id, yml.getBoolean("notified"));
 					PlayerData.get(owner).addItem(bItem);
-				}
+				}else
+					if(Market.getId()<id)
+						Market.setId(id);
 			}
 		}
 	}
@@ -41,6 +45,7 @@ public class dbFolder {
 				yml.set("date", bItem.getDate().getTime());
 				yml.set("status", bItem.getStatus().name());
 				yml.set("item", bItem.getOriginal());
+				yml.set("notified", bItem.isNotified());
 				
 				try {
 					yml.save(f);

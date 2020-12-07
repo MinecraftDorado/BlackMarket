@@ -3,6 +3,7 @@ package dev.minecraftdorado.BlackMarket.Listeners;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
@@ -17,6 +18,7 @@ import dev.minecraftdorado.BlackMarket.Utils.UpdateChecker;
 import dev.minecraftdorado.BlackMarket.Utils.UpdateChecker.UpdateReason;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.Events.NPCInteractEvent;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.InventoryManager;
+import dev.minecraftdorado.BlackMarket.Utils.Market.BlackItem.Status;
 import dev.minecraftdorado.BlackMarket.Utils.Market.Market;
 import dev.minecraftdorado.BlackMarket.Utils.Market.PlayerData;
 import dev.minecraftdorado.BlackMarket.Utils.Packets.PacketReader;
@@ -47,6 +49,14 @@ public class PlayerListener implements Listener {
 					e.getPlayer().sendMessage("§6[BlackMarket] §7» " + "Could not check for a new version of BlackMarket. Reason: " + reason);
 				}
 			);
+		
+		Bukkit.getScheduler().runTask(MainClass.main, () -> {
+			// Sold notifications
+			PlayerData.get(e.getPlayer().getUniqueId()).getItems().forEach(bItem -> {
+				if(bItem.getStatus().equals(Status.SOLD) && !bItem.isNotified())
+					bItem.sendNotification();
+			});
+		});
 	}
 	
 	/*

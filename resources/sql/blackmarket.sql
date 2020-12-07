@@ -7,8 +7,11 @@ CREATE TABLE IF NOT EXISTS `blackitems` (
   `date` VARCHAR(255) NOT NULL,
   `status` VARCHAR(255) NOT NULL,
   `item` VARCHAR(255) NOT NULL,
+  `notified` BOOLEAN NOT NULL default false,
   PRIMARY KEY (`id`),
   KEY (`owner`)
 )
   ENGINE =InnoDB
   DEFAULT CHARSET =latin1;
+
+ALTER TABLE `blackitems` ADD `notified` BOOLEAN NOT NULL default false ;

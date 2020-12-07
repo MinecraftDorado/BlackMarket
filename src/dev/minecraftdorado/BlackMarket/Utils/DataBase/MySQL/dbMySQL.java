@@ -47,8 +47,10 @@ public class dbMySQL {
 	
 	public static void save() {
 		for(Data data : PlayerData.list.values())
-			for(BlackItem bItem : data.getItems())
+			for(BlackItem bItem : data.getItems()) {
 				updateStatus(bItem);
+				updateNotified(bItem);
+			}
 	}
 	
 	private static void loadBlackItems() throws SQLException {
@@ -60,17 +62,17 @@ public class dbMySQL {
         try {
             StringBuilder queryBuilder = new StringBuilder();
             queryBuilder.append("SELECT *");
-            queryBuilder.append("FROM `blackitems`");
+            queryBuilder.append("FROM `blackitems` WHERE notified = false");
 
             preparedStatement = con.prepareStatement(queryBuilder.toString());
             resultSet = preparedStatement.executeQuery();
             
             while (resultSet != null && resultSet.next()) {
             	Status status = Status.valueOf(resultSet.getString("status"));
-            	if(status.equals(Status.ON_SALE) || status.equals(Status.TIME_OUT)) {
+            	if(status.equals(Status.ON_SALE) || status.equals(Status.TIME_OUT) || status.equals(Status.SOLD)) {
             		UUID uuid = UUID.fromString(resultSet.getString("owner"));
             		
-					BlackItem bItem = new BlackItem(ItemStackSerializer.deserialize(resultSet.getString("item")), resultSet.getDouble("value"), uuid, status, new Date(resultSet.getLong("date")), resultSet.getInt("id"));
+					BlackItem bItem = new BlackItem(ItemStackSerializer.deserialize(resultSet.getString("item")), resultSet.getDouble("value"), uuid, status, new Date(resultSet.getLong("date")), resultSet.getInt("id"), resultSet.getBoolean("notified"));
             		
             		PlayerData.get(uuid).addItem(bItem);
             	}
@@ -103,6 +105,26 @@ public class dbMySQL {
         }
 	}
 	
+	public static void updateNotified(BlackItem bItem) {
+		try {
+			if(con == null || con.isClosed()) con = sql.getConnection();
+		} catch(Exception e) {e.printStackTrace();}
+        
+        try {
+        	PreparedStatement preparedStatement = null;
+			StringBuilder queryBuilder = new StringBuilder();
+			queryBuilder.append("UPDATE `blackitems` SET notified = ? WHERE id = ?");
+			
+			preparedStatement = con.prepareStatement(queryBuilder.toString());
+			preparedStatement.setBoolean(1, bItem.isNotified());
+			preparedStatement.setInt(2, bItem.getId());
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+        }
+	}
+	
 	public static void addBlackItem(BlackItem bItem) {
 		try {
 			if(con == null || con.isClosed()) con = sql.getConnection();
@@ -119,6 +141,7 @@ public class dbMySQL {
 			
 			if(resultSet != null && resultSet.next()) {
 				updateStatus(bItem);
+				updateNotified(bItem);
 				return;
 			}
 			
