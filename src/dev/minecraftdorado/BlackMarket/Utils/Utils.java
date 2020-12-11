@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
@@ -107,16 +108,19 @@ public class Utils {
 				});
 				meta.setLore(lore);
 			}
-			item.setItemMeta(meta);
 			if(k.isSet("owner")) {
 				if(meta instanceof SkullMeta) {
-					SkullMeta sm = (SkullMeta) item.getItemMeta();
+					SkullMeta sm = (SkullMeta) meta;
 					sm.setOwner(k.getString("owner"));
 					item.setItemMeta(sm);
 				}
 			}
+		}else {
+			meta.setDisplayName("§cData not found");
+			meta.setLore(Arrays.asList("§4Directory:", "§4» " + file.getAbsolutePath().replace(MainClass.main.getDataFolder().getAbsolutePath(), "blackmarket")));
 		}
 		
+		item.setItemMeta(meta);
 		items.put(a, item);
 		return item.clone();
 	}
