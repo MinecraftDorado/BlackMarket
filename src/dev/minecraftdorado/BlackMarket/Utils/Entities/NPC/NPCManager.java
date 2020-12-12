@@ -53,7 +53,7 @@ public class NPCManager {
 			npcList.clear();
 			list.values().forEach(npc -> {
 				Bukkit.getOnlinePlayers().forEach(player ->{
-					if(npc.getLocation().distance(player.getLocation()) < 50) {
+					if(npc.getLocation().getWorld().equals(player.getWorld()) && npc.getLocation().distance(player.getLocation()) < 50) {
 						ArrayList<NPC> l = loaded.containsKey(player) ? loaded.get(player) : new ArrayList<>();
 						l.add(npc);
 						loaded.put(player, l);

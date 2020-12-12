@@ -18,7 +18,7 @@ public class HologramManager {
 			
 			list.forEach(holo -> {
 				Bukkit.getOnlinePlayers().forEach(player ->{
-					if(holo.getLocation().distance(player.getLocation()) < 50) {
+					if(holo.getLocation().getWorld().equals(player.getWorld()) && holo.getLocation().distance(player.getLocation()) < 50) {
 						ArrayList<Hologram> l = loaded.containsKey(player) ? loaded.get(player) : new ArrayList<>();
 						l.add(holo);
 						loaded.put(player, l);
@@ -36,7 +36,7 @@ public class HologramManager {
 			MainClass.npcM.list.values().forEach(npc -> {
 				Hologram holo = npc.getNameEntity(); 
 				Bukkit.getOnlinePlayers().forEach(player ->{
-					if(holo.getLocation().distance(player.getLocation()) < 50) {
+					if(holo.getLocation().getWorld().equals(player.getWorld()) && holo.getLocation().distance(player.getLocation()) < 50) {
 						ArrayList<Hologram> l = loaded.containsKey(player) ? loaded.get(player) : new ArrayList<>();
 						l.add(holo);
 						loaded.put(player, l);

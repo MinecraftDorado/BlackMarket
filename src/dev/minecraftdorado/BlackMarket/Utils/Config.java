@@ -95,17 +95,21 @@ public class Config {
 		Utils.orderFormat = (String) getValue(lang, "menus.market.items.order.format", "%active% %value%");
 		desc = lang.getStringList("menus.market.items.item_onsale");
 		
-		if(conf.isSet("npc_list"))
-			for(String s : conf.getStringList("npc_list")) {
-				String[] args = s.split(",");
-				
-				Location loc = new Location(Bukkit.getWorld(args[0]), Double.valueOf(args[1]), Double.valueOf(args[2]), Double.valueOf(args[3]));
-				
-				NPC npc = new NPC(loc);
-				if(args.length == 5)
-					npc.setSkin(SkinData.getSkin(args[4]));
-				npcs.add(npc);
-			}
+		File npcsFile = new File(MainClass.main.getDataFolder(), "npcs.yml");
+		if(npcsFile.exists()) {
+			YamlConfiguration npcsYml = YamlConfiguration.loadConfiguration(npcsFile);
+			if(npcsYml.isSet("npc_list"))
+				for(String s : npcsYml.getStringList("npc_list")) {
+					String[] args = s.split(",");
+					
+					Location loc = new Location(Bukkit.getWorld(args[0]), Double.valueOf(args[1]), Double.valueOf(args[2]), Double.valueOf(args[3]));
+					
+					NPC npc = new NPC(loc);
+					if(args.length == 5)
+						npc.setSkin(SkinData.getSkin(args[4]));
+					npcs.add(npc);
+				}
+		}
 	}
 	
 	public static YamlConfiguration getLang() {
@@ -209,7 +213,7 @@ public class Config {
 	
 	public static void saveNPCs(Collection<NPC> list) {
 		npcs.clear();
-		File file = new File(MainClass.main.getDataFolder(), "config.yml");
+		File file = new File(MainClass.main.getDataFolder(), "npcs.yml");
 		YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
 		
 		List<String> l = new ArrayList<>();

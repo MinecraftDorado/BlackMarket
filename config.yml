@@ -63,5 +63,3 @@ blacklist_enable: false
 
 sell_alias:
 - sell
-
-npc_list: []
