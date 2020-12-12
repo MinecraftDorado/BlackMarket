@@ -28,6 +28,7 @@ public class Config {
 	private static HashMap<String, String> msgs = new HashMap<>();
 	private static List<String> desc;
 	private static YamlConfiguration conf, lang;
+	private static File langFile;
 	private static int expiredTime, defaultLimit, taxes;
 	private static double minimum_price;
 	private static ArrayList<NPC> npcs = new ArrayList<>();
@@ -82,15 +83,15 @@ public class Config {
 			for(String lang : new String[]{"en_US","es_ES","tr_TR","pt_BR"})
 				Utils.extract("resources/languages/" + lang + ".yml", "languages/" + lang + ".yml");
 		
-		File l = new File(MainClass.main.getDataFolder(), "languages/" + (conf.isSet("lang") ? conf.getString("lang"): "en_US") + ".yml");
+		langFile = new File(MainClass.main.getDataFolder(), "languages/" + (conf.isSet("lang") ? conf.getString("lang"): "en_US") + ".yml");
 		
-		if(!l.exists()) {
-			MainClass.main.getLogger().severe(String.format("» Language not found: " + l.getName(), MainClass.main.getDescription().getName()));
-			l = langs.listFiles()[0];
-			MainClass.main.getLogger().info(String.format("Language loaded by default " + l.getName()));
+		if(!langFile.exists()) {
+			MainClass.main.getLogger().severe(String.format("» Language not found: " + langFile.getName(), MainClass.main.getDescription().getName()));
+			langFile = langs.listFiles()[0];
+			MainClass.main.getLogger().info(String.format("Language loaded by default " + langFile.getName()));
 		}
 		
-		lang = YamlConfiguration.loadConfiguration(l);
+		lang = YamlConfiguration.loadConfiguration(langFile);
 		
 		Utils.orderFormat = (String) getValue(lang, "menus.market.items.order.format", "%active% %value%");
 		desc = lang.getStringList("menus.market.items.item_onsale");
@@ -116,6 +117,14 @@ public class Config {
 		return lang;
 	}
 	
+	public static File getLangFile() {
+		return langFile;
+	}
+	
+	public static void reloadLang() {
+		lang = YamlConfiguration.loadConfiguration(langFile);
+	}
+	
 	private static Object getValue(YamlConfiguration yml, String key, Object valueDefault) {
 		return yml.isSet(key) ? yml.get(key) : valueDefault;
 	}
@@ -124,19 +133,14 @@ public class Config {
 		if(slots.containsKey(typeKey))
 			return slots.get(typeKey);
 		
-		YamlConfiguration yml = conf;
+		String key = "menus." + typeKey + ".slot";
 		
-		if(!yml.isSet("menus." + typeKey + ".slot")) {
-			File f = Utils.getFileFromResource(MainClass.main.getResource("config.yml"));
-			if(f != null)
-				yml = YamlConfiguration.loadConfiguration(f);
-			MainClass.main.getLogger().severe(String.format("» Item slot not found: menus." + typeKey + ".slot", MainClass.main.getDescription().getName()));
-		}
+		if(Utils.setDefaultData("config.yml", new File(MainClass.main.getDataFolder(), "config.yml"), key))
+			conf = YamlConfiguration.loadConfiguration(new File(MainClass.main.getDataFolder(), "config.yml"));
 		
-		if(yml.isSet("menus." + typeKey + ".slot")) {
-			slots.put(typeKey, yml.getInt("menus." + typeKey + ".slot"));
-			return slots.get(typeKey);
-		}else
+		if(conf.isSet(key))
+			return conf.getInt(key);
+		else
 			return 0;
 	}
 	
@@ -144,17 +148,12 @@ public class Config {
 		if(items.containsKey(typeKey))
 			return items.get(typeKey).clone();
 		
-		YamlConfiguration yml = conf;
+		String key = "menus." + typeKey + ".type";
+		if(Utils.setDefaultData("config.yml", new File(MainClass.main.getDataFolder(), "config.yml"), key))
+			conf = YamlConfiguration.loadConfiguration(new File(MainClass.main.getDataFolder(), "config.yml"));
 		
-		if(!yml.isSet("menus." + typeKey + ".type")) {
-			File f = Utils.getFileFromResource(MainClass.main.getResource("config.yml"));
-			if(f != null)
-				yml = YamlConfiguration.loadConfiguration(f);
-			MainClass.main.getLogger().severe(String.format("» Item type not found: menus." + typeKey + ".type", MainClass.main.getDescription().getName()));
-		}
-		
-		if(yml.isSet("menus." + typeKey + ".type")) {
-			items.put(typeKey, Utils.applyMeta(Utils.getMaterial(yml.getString("menus." + typeKey + ".type")), metaKey));
+		if(conf.isSet(key)) {
+			items.put(typeKey, Utils.applyMeta(Utils.getMaterial(conf.getString(key)), metaKey));
 			return items.get(typeKey);
 		}else
 			return UMaterial.BARRIER.getItemStack();
@@ -177,14 +176,17 @@ public class Config {
 	}
 	
 	public static String getMessage(String key) {
-		if(!msgs.containsKey(key))
-			if(lang.isSet(key))
-				msgs.put(key, ChatColor.translateAlternateColorCodes('&', lang.getString(key)));
-			else {
-				MainClass.main.getLogger().severe(String.format("» Message not found: " + key, MainClass.main.getDescription().getName()));
-				return "";
-			}
-		return msgs.get(key);
+		if(msgs.containsKey(key))
+			return msgs.get(key);
+		
+		if(Utils.setDefaultData("resources/languages/en_US.yml", langFile, key))
+			reloadLang();
+		
+		if(lang.isSet(key)) {
+			msgs.put(key, ChatColor.translateAlternateColorCodes('&', lang.getString(key)));
+			return msgs.get(key);
+		}else
+			return "";
 	}
 	
 	public static void sendMessage(String key, Player player) {

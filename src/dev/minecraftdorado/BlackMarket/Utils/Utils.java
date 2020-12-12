@@ -20,6 +20,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
@@ -73,6 +74,33 @@ public class Utils {
 		}
     }
 	
+	public static boolean setDefaultData(String from, File to, String key) {
+		YamlConfiguration yml = YamlConfiguration.loadConfiguration(to);
+		YamlConfiguration toYml = yml;
+		
+		if(!yml.isSet(key)) {
+			File f = Utils.getFileFromResource(MainClass.main.getResource(from));
+			if(f != null)
+				yml = YamlConfiguration.loadConfiguration(f);
+			MainClass.main.getLogger().severe(String.format("» Data not found in " + to.getName() + ": " + key, MainClass.main.getDescription().getName()));
+		}
+		
+		if(yml.isSet(key)) {
+			Object data = yml.get(key);
+			if(yml != toYml) {
+				toYml.set(key, data);
+				try {
+					toYml.save(to);
+					MainClass.main.getLogger().info(String.format("» Data set in " + to.getName() + ": " + key, MainClass.main.getDescription().getName()));
+					return true;
+				}catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
+		return false;
+	}
+	
 	private static Method sendPacket = null;
 	
 	public static void sendPacket(Player player, Object packet) {
@@ -99,7 +127,7 @@ public class Utils {
 						s = s.replace("%order_" + name + "%"
 								, orderFormat.replace("%active%"
 								, PlayerData.get(player.getUniqueId()).getOrder().equals(type) ? Config.getMessage("menus.market.items.order.active") : "")
-								.replace("%value%",Config.getMessage("menus.market.items.order.values." + name)));
+								.replace("%value%", Config.getMessage("menus.market.items.order.values." + name)));
 					break;
 				}
 			}
@@ -124,8 +152,10 @@ public class Utils {
 			}
 			
 			i.setItemMeta(meta);
-		}else
-			MainClass.main.getLogger().severe(String.format("» Item meta not found: " + metaKey, MainClass.main.getDescription().getName()));
+		}else if(Utils.setDefaultData("resources/languages/en_US.yml", Config.getLangFile(), metaKey)) {
+			Config.reloadLang();
+			return applyMeta(item, metaKey);
+		}
 		return i;
 	}
 	
