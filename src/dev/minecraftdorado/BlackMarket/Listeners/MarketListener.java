@@ -26,19 +26,19 @@ public class MarketListener implements Listener {
 			Player p = e.getPlayer();
 			
 			// ItemStack "previous"
-			if(e.getItemStack().equals(Config.getItemStack("previous", p))) {
+			if(e.getItemStack().equals(Config.getItemStack("market.previous", "menus.market.items.previous", p))) {
 				Market.setPlayerPage(p.getUniqueId(), Market.getPlayerPage(p)-1);
 				InventoryManager.openInventory(p, Market.getMarketInventory(p));
 				return;
 			}
 			// ItemStack "next"
-			if(e.getItemStack().equals(Config.getItemStack("next", p))) {
+			if(e.getItemStack().equals(Config.getItemStack("market.next", "menus.market.items.next", p))) {
 				Market.setPlayerPage(p.getUniqueId(), Market.getPlayerPage(p)+1);
 				InventoryManager.openInventory(p, Market.getMarketInventory(p));
 				return;
 			}
 			// ItemStack "storage"
-			if(e.getItemStack().equals(Config.getItemStack("storage", p))) {
+			if(e.getItemStack().equals(Config.getItemStack("market.storage", "menus.market.items.storage", p))) {
 				InventoryManager.openInventory(p, Storage.getStorageInventory(p));
 				return;
 			}
@@ -53,20 +53,20 @@ public class MarketListener implements Listener {
 				}
 			});
 			// Select order
-			if(e.getItemStack().equals(Config.getItemStack("order_type", p))) {
+			if(e.getItemStack().equals(Config.getItemStack("market.order", "menus.market.items.order", p))) {
 				OrderType order = PlayerData.get(p.getUniqueId()).getOrder();
 				boolean a = false;
 				
 				if(e.getItemStack().getItemMeta().hasLore()) {
 					for (int i = 0; i < e.getItemStack().getItemMeta().getLore().size(); i++) {
 						String l = e.getItemStack().getItemMeta().getLore().get(i);
-						if(l.contains(Config.getString("order.active"))) {
+						if(l.contains(Config.getMessage("menus.market.items.order.active"))) {
 							a = true;
 							continue;
 						}
 						if(a || i == 0) {
 							for(OrderType type : OrderType.values())
-								if(l.contains(Config.getString("order.values." + type.getName()))) {
+								if(l.contains(Config.getMessage("menus.market.items.order.values." + type.getName()))) {
 									order = type;
 									break;
 								}

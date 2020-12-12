@@ -1,0 +1,151 @@
+no_permission: "&cBu komutu kullanma izniniz yok!"
+only_player: "&cBu komut yalnızca Oyuncular tarafından kullanılabilir!"
+command:
+  sell:
+    message: "&eÖğe eklendi!"
+    error_limit: "&cİtem sınırına ulaştınız!"
+    error_item_not_found: "&cEliniz boş, satmak için bir eşyaya ihtiyacınız var!"
+    error_item_not_allow: "&cBu malzeme piyasada geçerli değil!"
+    error_value: "&cDeğer geçersiz!"
+    error_minimum_price: "&cMinimum fiyat %price%!"
+    usage: "&cKullanım  şekli : /%cmd% <value>"
+  reload:
+    message: "&eYapılandırmayı yeniden yüklendi!!"
+  setnpc:
+    message: "&&eNPC konumunuza yerleştirildi!"
+  removenpc: 
+    message: "&eKaldırmak için bir NPC'ye sağ tıklayın!"
+    removed: "&eNPC silindi!"
+    invalid: "&cNPC algılanmadı!"
+
+help:
+- "&aBlackMarket - Komutler:"
+- "&8 » &7/bm reload &8- &7(&fYapılandırmayı yeniden yükle&7)"
+- "&8 » &7/bm open &8- &7(&fBlackMarket'i aç&7)"
+- "&8 » &7/bm setnpc <skin_ismi> &8- &7(&fNpc oluştur&7)"
+- "&8 » &7/bm removenpc &8- &7(&fNpc sil&7)"
+- "&8 » &7/bm sell <value> &8- &7(&fBir öğeyi satışa sunun&7)"
+
+market:
+  buy: "&eSatın aldığınız için teşekkürler!"
+  inventory_full: "&cEnvanterin dolu!"
+  item_invalid: "&cBu öğe satılık değildir!"
+  missing_money: "&cBunu satın alacak paran yok :("
+  item_owner: "&cEşyalarını satın alamazsın!"
+  take_items: "&eAlınan öğeler!"
+  notification: "&a%name% &aöğesi &e%value% &aiçin satıldı!"
+
+menus:
+  market:
+    title: "BlackMarket"
+    items:
+      item_onsale:
+      - "&8Sahibi: &b%owner%"
+      - "&8Fiyatı: &6%value%$"
+      - "&8Süresinin bitmesine: &b%expired%"
+      - ""
+      - "&eSatın almak için tıkla!"
+      next:
+        name: "&eSonraki sayfa (%actual_page%-%pages%)"
+      previous:
+        name: "&eÖnceki sayfa (%actual_page%-%pages%)"
+      close:
+        name: "&cÇıkış"
+      order:
+        name: "&bSipariş türü"
+        lore:
+        - "&8- &7%order_id%"
+        - "&8- &7%order_type%"
+        - "&8- &7%order_amount%"
+        - "&8- &7%order_value%"
+        - ""
+        - "&eTıkla ve değiştir!"
+        format: "%active% %value%"
+        active: "&c»&4"
+        values:
+          id: "IDe"
+          type: "Malzeme"
+          amount: "Miktar"
+          value: "Değer"
+      info:
+        name: "&bInformation"
+        lore:
+        - "&7Satmak için komut /bm sell <miktar>"
+    - '&4(Satılması için sadece &4&l24 &4saat zamanın var!)'
+      storage:
+        name: "&bDepor"
+        lore:
+        - "&7Satılmayan ürünleriniz"
+        - ""
+        - "&eTıkla ve aç!"
+      categories:
+        all:    # categories/all.yml
+          name: "&bHepsi"
+          lore:
+          - "&7Tüm eşyalar"
+        ores:
+          name: "&bMadenler"
+          lore:
+          - "&7Liste:"
+          - "&8 - &7Demir"
+          - "&8 - &7Altın"
+          - "&8 - &7Elmas"
+          - "&8 - &7Emerald"
+          - "&8 - &7..."
+        potions:
+          name: "&bİksirler"
+          lore:
+          - "&7Liste:"
+          - "&8 - &7İksirler"
+          - "&8 - &7Nether wart"
+          - "&8 - &7Blaze tozu"
+          - "&8 - &7Ghast göz yaşı"
+          - "&8 - &7..."
+        redstone:
+          name: "&bRedstone"
+          lore:
+          - "&7Liste:"
+          - "&8 - &7Redstone"
+          - "&8 - &7TNT"
+          - "&8 - &7Dağıtıcı"
+          - "&8 - &7Gözlemci"
+          - "&8 - &7..."
+        tools:
+          name: "&bAletler"
+          lore:
+          - "&7Liste:"
+          - "&8 - &7Makaslar"
+          - "&8 - &7Balta"
+          - "&8 - &7Kazma"
+          - "&8 - &7Kürek"
+          - "&8 - &7..."
+        wood:
+          name: "&bOdunlar"
+          lore:
+          - "&7Liste:"
+          - "&8 - &7Meşe odunu / tahtalar"
+          - "&8 - &7Ladin odunu / tahtalar"
+          - "&8 - &7Orman odunu / tahtalar"
+          - "&8 - &7Akasya odunu / tahtalar"
+          - "&8 - &7..."
+  storage:
+    title: "BlackMarket - Depo"
+    items:
+      back:
+        name: "&cGeri"
+      take_items:
+        name: "&bİtemi al"
+        lore:
+        - "&7Tıkla ve tüm itemleri geri al"
+        - ""
+        - "&eTıkla ve al!"
+
+npc:
+  name: "BlackMarket"
+  click: "&eTıkla bana!"
+
+time_data: # Example 16h 23m
+    day: "g"
+    hour: "s"
+    minute: "d"
+    second: "s"

@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import dev.minecraftdorado.BlackMarket.MainClass.MainClass;
+import dev.minecraftdorado.BlackMarket.Utils.Config;
 import dev.minecraftdorado.BlackMarket.Utils.Utils;
 
 public class CategoryUtils {
@@ -34,15 +35,12 @@ public class CategoryUtils {
 			if(yml.isSet("materials"))
 				yml.getStringList("materials").forEach(mat -> filter.addMaterial(UMaterial.match(mat)));
 			
-			if(yml.isSet("name"))
-				filter.setName(yml.getString("name"));
-			
 			list.put(key, filter);
 		}
 	}
 	
 	public static Category addCategory(Category category) {
-		list.put(category.getName(), category);
+		list.put(category.getKey(), category);
 		return category;
 	}
 	
@@ -59,7 +57,6 @@ public class CategoryUtils {
 	public class Category {
 		
 		private String key;
-		private String name;
 		private int row;
 		
 		private ArrayList<UMaterial> mats = new ArrayList<>();
@@ -73,14 +70,6 @@ public class CategoryUtils {
 			return key;
 		}
 		
-		public void setName(String name) {
-			this.name = name;
-		}
-		
-		public String getName() {
-			return name;
-		}
-		
 		public void setRow(int row) {
 			this.row = row < 7 && row > 0 ? row : 1;
 		}
@@ -92,14 +81,11 @@ public class CategoryUtils {
 		public ItemStack getItemStack(Boolean status) {
 			if(item != null)
 				return item;
-			ItemStack item = Utils.getItemStack(new File(f.getAbsolutePath() + "/" + name + ".yml"), "item");
+			ItemStack item = Config.getItemStack("market.categories." + key.toLowerCase(), "menus.market.items.categories." + key.toLowerCase());
 			ItemMeta meta = item.getItemMeta();
 			
 			if(status)
 				meta.addEnchant(Enchantment.DURABILITY, 1, false);
-			
-			if(meta.hasDisplayName())
-				if(meta.getDisplayName().contains("%category_name%")) meta.setDisplayName(meta.getDisplayName().replace("%category_name%", name));
 			
 			item.setItemMeta(meta);
 			return item;

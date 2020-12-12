@@ -106,7 +106,7 @@ public class InventoryManager implements Listener {
 				else
 					return;
 			
-			if(item.equals(Config.getItemStack("close"))) {
+			if(item.equals(Config.getItemStack("market.close", "menus.market.items.close"))) {
 				e.setCancelled(true);
 				Bukkit.getScheduler().runTask(MainClass.main, () -> player.closeInventory());
 				return;

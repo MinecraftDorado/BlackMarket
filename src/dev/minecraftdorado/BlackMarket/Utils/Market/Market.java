@@ -82,7 +82,7 @@ public class Market {
 	}
 	
 	public static String getMarketTitle() {
-		return Config.getMessage("menus.market");
+		return Config.getMessage("menus.market.title");
 	}
 	
 	private static HashMap<UUID, Integer> playerPage = new HashMap<>();
@@ -168,15 +168,15 @@ public class Market {
 			inv.addBlackItem(l.get(id), slot);
 			items++;
 		}
-		inv.setItem(49, Config.getItemStack("close"));
-		inv.setItem(50, Config.getItemStack("info"));
-		inv.setItem(51, Config.getItemStack("order_type", player));
-		inv.setItem(52, Config.getItemStack("storage"));
+		inv.setItem(49, Config.getItemStack("market.close", "menus.market.items.close"));
+		inv.setItem(50, Config.getItemStack("market.info", "menus.market.items.info"));
+		inv.setItem(51, Config.getItemStack("market.order", "menus.market.items.order", player));
+		inv.setItem(52, Config.getItemStack("market.storage", "menus.market.items.storage"));
 		
 		if(page != 0)
-			inv.setItem(46, Config.getItemStack("previous", player));
+			inv.setItem(46, Config.getItemStack("market.previous", "menus.market.items.previous", player));
 		if(l.size() > ((page+1)*24))
-			inv.setItem(53, Config.getItemStack("next", player));
+			inv.setItem(53, Config.getItemStack("market.next", "menus.market.items.next", player));
 		
 		return inv;
 	}

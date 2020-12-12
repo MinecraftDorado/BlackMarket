@@ -9,7 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
@@ -19,13 +18,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import dev.minecraftdorado.BlackMarket.MainClass.MainClass;
@@ -74,56 +71,7 @@ public class Utils {
 	}
 	
 	private static HashMap<String, ItemStack> mats = new HashMap<>();
-	public static HashMap<String, ItemStack> items = new HashMap<>();
 	public static String orderFormat;
-	
-	@SuppressWarnings("deprecation")
-	public static ItemStack getItemStack(File file, String key) {
-		String a = file.getName().split(".yml")[0] + "_" + key;
-		if(items.containsKey(a))
-			return items.get(a).clone();
-		YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
-		
-		ItemStack item = new ItemStack(Material.BARRIER);
-		ItemMeta meta = item.getItemMeta();
-		for(ItemFlag flag : ItemFlag.values())
-			meta.addItemFlags(flag);
-		
-		if(yml.isSet(key)) {
-			ConfigurationSection k = yml.getConfigurationSection(key);
-			if(k.isSet("type"))
-				item = new ItemStack(getMaterial(k.getString("type"), false));
-			meta = item.getItemMeta();
-			
-			if(k.isSet("name"))
-				meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', k.getString("name")));
-			
-			for(ItemFlag flag : ItemFlag.values())
-				meta.addItemFlags(flag);
-			
-			if(k.isSet("lore")) {
-				ArrayList<String> lore = new ArrayList<>();
-				k.getStringList("lore").forEach(l -> {
-					lore.add(ChatColor.translateAlternateColorCodes('&', l));
-				});
-				meta.setLore(lore);
-			}
-			if(k.isSet("owner")) {
-				if(meta instanceof SkullMeta) {
-					SkullMeta sm = (SkullMeta) meta;
-					sm.setOwner(k.getString("owner"));
-					item.setItemMeta(sm);
-				}
-			}
-		}else {
-			meta.setDisplayName("§cData not found");
-			meta.setLore(Arrays.asList("§4Directory:", "§4» " + file.getAbsolutePath().replace(MainClass.main.getDataFolder().getAbsolutePath(), "blackmarket")));
-		}
-		
-		item.setItemMeta(meta);
-		items.put(a, item);
-		return item.clone();
-	}
 	
 	public static String applyVariables(String s, Player player) {
 		if(s.contains("%")) {
@@ -135,8 +83,8 @@ public class Utils {
 					if(s.contains("%order_" + name + "%")) {
 						s = s.replace("%order_" + name + "%"
 								, orderFormat.replace("%active%"
-								, PlayerData.get(player.getUniqueId()).getOrder().equals(type) ? Config.getString("order.active") : "")
-								.replace("%value%",Config.getString("order.values." + name)));
+								, PlayerData.get(player.getUniqueId()).getOrder().equals(type) ? Config.getMessage("menus.market.items.order.active") : "")
+								.replace("%value%",Config.getMessage("menus.market.items.order.values." + name)));
 					break;
 				}
 			}
@@ -144,15 +92,38 @@ public class Utils {
 		return ChatColor.translateAlternateColorCodes('&', s);
 	}
 	
+	public static ItemStack applyMeta(ItemStack item, String metaKey) {
+		ItemStack i = item.clone();
+		ItemMeta meta = i.getItemMeta();
+		
+		if(Config.getLang().isSet(metaKey)) {
+			ConfigurationSection conf = Config.getLang().getConfigurationSection(metaKey);
+			
+			if(conf.isSet("name"))
+				meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', conf.getString("name")));
+			
+			if(conf.isSet("lore")) {
+				ArrayList<String> lore = new ArrayList<>();
+				conf.getStringList("lore").forEach(l -> lore.add(ChatColor.translateAlternateColorCodes('&', l)));
+				meta.setLore(lore);
+			}
+			
+			i.setItemMeta(meta);
+		}else
+			MainClass.main.getLogger().severe(String.format("» Item meta not found: " + metaKey, MainClass.main.getDescription().getName()));
+		return i;
+	}
+	
 	@SuppressWarnings("deprecation")
-	public static ItemStack getMaterial(String key, Boolean value) {
-		if(mats.containsKey(key) && value)
+	public static ItemStack getMaterial(String key) {
+		if(key == null)
+			return UMaterial.BARRIER.getItemStack();
+		if(mats.containsKey(key))
 			return mats.get(key);
 		
 		int data = 0;
 		
 		String[] s = key.split("/");
-		
 		UMaterial um = null;
 		
 		try {
@@ -178,13 +149,12 @@ public class Utils {
 		if(data != 0)
 			item.setDurability((short) data);
 		
-		if(value)
-			mats.put(key, item);
+		ItemMeta meta = item.getItemMeta();
+		for (ItemFlag flag : ItemFlag.values())
+			meta.addItemFlags(flag);
+		item.setItemMeta(meta);
+		mats.put(key, item);
 		return item;
-	}
-	
-	public static ItemStack getMaterial(String key) {
-		return getMaterial(key, true);
 	}
 	
 	public static boolean canAddItem(Player player, ItemStack item) {
@@ -210,19 +180,19 @@ public class Utils {
 		if(pTime >= 60*60*24) { // day : hour
 			String x = String.format("%02d:%02d", pTime / 60 /60 / 24, (pTime / 60 /60) % 24);
 			String[] split = x.split(":");
-			x = split[0] + "d " + split[1] + "h";
+			x = split[0] + Config.getMessage("time_data.day") + " " + split[1] + Config.getMessage("time_data.hour");
 			return x;
 		}
 		if(pTime >= 60*60) { // hour : minute
 			String x = String.format("%02d:%02d", pTime / 60 /60, (pTime / 60) % 60);
 			String[] split = x.split(":");
-			x = split[0] + "h " + split[1] + "m";
+			x = split[0] + Config.getMessage("time_data.hour") + " " + split[1] + Config.getMessage("time_data.minute");
 			return x;
 		}
 		// minute : second
 	    String x = String.format("%02d:%02d", pTime / 60, pTime % 60);
 	    String[] split = x.split(":");
-		x = split[0] + "m " + split[1] + "s";
+		x = split[0] + Config.getMessage("time_data.minute") + " " + split[1] + Config.getMessage("time_data.second");
 		return x;
 	}
 	

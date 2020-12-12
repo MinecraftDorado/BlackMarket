@@ -1,0 +1,151 @@
+no_permission: "&cVocê não tem permissão para usar este comando!"
+only_player: "&cEste comando só pode ser utilizado por jogadores"
+command:
+  sell:
+    message: "&eItem adicionado!"
+    error_limit: "&cVocê atingiu o limite de objetos publicados!"
+    error_item_not_found: "&cSua mão está vazia, você precisa de um item para vender!"
+    error_item_not_allow: "&cEste material não é válido no mercado!"
+    error_value: "&cValor inválido!"
+    error_minimum_price: "&cO preço mínimo é %price%!"
+    usage: "&cUse /%cmd% <valor>"
+  reload:
+    message: "&eConfiguração recarregada!"
+  setnpc:
+    message: "&eNPC colocado em sua posição!"
+  removenpc: 
+    message: "&eClique com o botão direito em um NPC para removê-lo!"
+    removed: "&eNPC removido!"
+    invalid: "&cNPC não detectado!"
+
+help:
+- "&aBlackMarket - Comandos:"
+- "&8 » &7/bm reload &8- &7(&fRecarrega as configurações&7)"
+- "&8 » &7/bm open &8- &7(&fAbre o BlackMarket&7)"
+- "&8 » &7/bm setnpc <skin_name> &8- &7(&fDefine um NPC&7)"
+- "&8 » &7/bm removenpc &8- &7(&fRemove um NPC&7)"
+- "&8 » &7/bm sell <value> &8- &7(&fPosta um item&7)"
+
+market:
+  buy: "&eObrigado por comprar!"
+  inventory_full: "&cInventário cheio!"
+  item_invalid: "&cEste item não está à venda!"
+  missing_money: "&cVocê não tem dinheiro para comprar isso!"
+  item_owner: "&cVocê não pode comprar seus itens!"
+  take_items: "&eItens retirados!"
+  notification: "&eItem &a%name% &evendido por &6%value%&e!"
+
+menus:
+  market:
+    title: "BlackMarket"
+    items:
+      item_onsale:
+      - "&8Proprietário: &b%owner%"
+      - "&8Valor: &6%value%$"
+      - "&8Expira em: &b%expired%"
+      - ""
+      - "&eClique para comprar!"
+      next:
+        name: "&ePróxima página (%actual_page%-%pages%)"
+      previous:
+        name: "&ePágina Anterior (%actual_page%-%pages%)"
+      close:
+        name: "&cSair"
+      order:
+        name: "&bOrdenar por"
+        lore:
+        - "&8- &7%order_id%"
+        - "&8- &7%order_type%"
+        - "&8- &7%order_amount%"
+        - "&8- &7%order_value%"
+        - ""
+        - "&eClique para mudar!"
+        format: "%active% %value%"
+        active: "&c»&4"
+        values:
+          id: "IDs"
+          type: "Material"
+          amount: "Quantidade"
+          value: "Valor"
+      info:
+        name: "&bInformações"
+        lore:
+        - "&7Comando para vender /bm sell <valor>"
+        - "&4(Tempo para expirar: 24 hours)"
+      storage:
+        name: "&bArmazém"
+        lore:
+        - "&7Seus items não vendidos ficam aqui"
+        - ""
+        - "&eClique para abrir!"
+      categories:
+        all:    # categories/all.yml
+          name: "&bTodos"
+          lore:
+          - "&7Exibir todos os items"
+        ores:
+          name: "&bMinérios"
+          lore:
+          - "&7Lista:"
+          - "&8 - &7Ferro"
+          - "&8 - &7Ouro"
+          - "&8 - &7Diamante"
+          - "&8 - &7Esmeralda"
+          - "&8 - &7..."
+        potions:
+          name: "&bPoções"
+          lore:
+          - "&7Lista:"
+          - "&8 - &7Poções"
+          - "&8 - &7Fungo do Nether"
+          - "&8 - &7Vara do Blaze"
+          - "&8 - &7Lágrima de Ghast"
+          - "&8 - &7..."
+        redstone:
+          name: "&bRedstone"
+          lore:
+          - "&7Lista:"
+          - "&8 - &7Redstone"
+          - "&8 - &7TNT"
+          - "&8 - &7Liberador"
+          - "&8 - &7Observador"
+          - "&8 - &7..."
+        tools:
+          name: "&bFerramentas"
+          lore:
+          - "&7Lista:"
+          - "&8 - &7Tesoura"
+          - "&8 - &7Machado"
+          - "&8 - &7Picareta"
+          - "&8 - &7Pá"
+          - "&8 - &7..."
+        wood:
+          name: "&bMadeira"
+          lore:
+          - "&7Lista:"
+          - "&8 - &7Tronco de carvalho/tábuas"
+          - "&8 - &7Tronco de pinheiro/tábuas"
+          - "&8 - &7Tronco de carvalho escuro/tábuas"
+          - "&8 - &7Tronco de acácia/tábuas"
+          - "&8 - &7..."
+  storage:
+    title: "BlackMarket - Armazém"
+    items:
+      back:
+        name: "&cVoltar"
+      take_items:
+        name: "&bRetornar Items"
+        lore:
+        - "&7Retorna todos os items não vendidos."
+        - ""
+        - "&eClique para retornar!"
+
+npc:
+  name: "BlackMarket"
+  click: "&eClique aqui!"
+
+time_data: # Example 16h 23m
+    day: "d"
+    hour: "h"
+    minute: "m"
+    second: "s"

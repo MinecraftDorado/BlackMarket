@@ -1,15 +1,4 @@
-name: "Wood"
 row: 4
-item:
-    type: IRON_AXE
-    name: "&b%category_name%"
-    lore: 
-    - "&7List:"
-    - "&8 - &7Oak log/planks"
-    - "&8 - &7Spruce log/planks"
-    - "&8 - &7Jungle log/planks"
-    - "&8 - &7Acacia log/planks"
-    - "&8 - &7..."
 materials:
 - ACACIA_PLANKS
 - ACACIA_SLAB

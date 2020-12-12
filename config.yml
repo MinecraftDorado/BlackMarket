@@ -1,22 +1,35 @@
+lang: en_US
 
-npc_list:
-
-order:
-  format: "%active% %value%"
-  active: "&c»&4"
-  values:
-    id: "IDs"
-    type: "Material"
-    amount: "Amount"
-    value: "Value"
+mysql:
+  enable: false
+  host: "localhost"
+  port: 3306
+  user: "root"
+  pass: ""
+  database: "server"
 
 menus:
   market:
     background: GRAY_STAINED_GLASS_PANE
     border: BLACK_STAINED_GLASS_PANE
+    next: PAPER
+    previous: PAPER
+    close: ARROW
+    order: BOOK
+    info: REDSTONE_TORCH_ON
+    storage: CHEST
+    categories:
+      all: NETHER_STAR
+      ores: IRON_PICKAXE
+      potions: POTION
+      redstone: REDSTONE
+      tools: FISHING_ROD
+      wood: IRON_AXE
   storage:
     background: GRAY_STAINED_GLASS_PANE
     border: BLACK_STAINED_GLASS_PANE
+    back: ARROW
+    take_items: NETHER_STAR
 
 minimum_price: 1.0
 taxes: 7 # percent
@@ -29,61 +42,4 @@ blacklist_enable: false
 sell_alias:
 - sell
 
-mysql:
-  enable: false
-  host: "localhost"
-  port: 3306
-  user: "root"
-  pass: ""
-  database: "server"
-
-item_onsale:
-- "&8Owner: &b%owner%"
-- "&8Value: &6%value%$"
-- "&8To expire: &b%expired%"
-- ""
-- "&eClick to buy!"
-
-items:
-  next:
-    type: PAPER
-    name: "&eNext page (%actual_page%-%pages%)"
-  previous:
-    type: PAPER
-    name: "&ePrevious page (%actual_page%-%pages%)"
-  close:
-    type: ARROW
-    name: "&cExit"
-  back:
-    type: ARROW
-    name: "&cReturn"
-  order_type:
-    type: BOOK
-    name: "&bOrder type"
-    lore:
-    - "&8- &7%order_id%"
-    - "&8- &7%order_type%"
-    - "&8- &7%order_amount%"
-    - "&8- &7%order_value%"
-    - ""
-    - "&eClick to change!"
-  info:
-    type: REDSTONE_TORCH_ON
-    name: "&bInformation"
-    lore:
-    - "&7Cmd to sold /sell <amount>"
-    - "&4(Time to expired 24 hours)"
-  storage:
-    type: CHEST
-    name: "&bStorage"
-    lore:
-    - "&7Your unsold items"
-    - ""
-    - "&eClick to open!"
-  take_items:
-    type: NETHER_STAR
-    name: "&bTake items"
-    lore:
-    - "&7Take all items"
-    - ""
-    - "&eClick to take!"
+npc_list: []

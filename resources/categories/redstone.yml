@@ -1,15 +1,4 @@
-name: "Redstone"
 row: 6
-item:
-    type: REDSTONE
-    name: "&b%category_name%"
-    lore: 
-    - "&7List:"
-    - "&8 - &7Redstone"
-    - "&8 - &7TNT"
-    - "&8 - &7Dispenser"
-    - "&8 - &7Observer"
-    - "&8 - &7..."
 materials:
 - REDSTONE
 - REDSTONE_BLOCK

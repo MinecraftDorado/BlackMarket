@@ -1,0 +1,151 @@
+no_permission: "&cYou don't have permission to use this command!"
+only_player: "&cThis command only can be used by Players!"
+command:
+  sell:
+    message: "&eItem added!"
+    error_limit: "&cYou have reached the limit of published objects!"
+    error_item_not_found: "&cYour hand is empty, you need an item to sell!"
+    error_item_not_allow: "&cThis material is not valid in the market!"
+    error_value: "&cValue invalid!"
+    error_minimum_price: "&cThe minimum price is %price%!"
+    usage: "&cUsage /%cmd% <value>"
+  reload:
+    message: "&eReloaded configuration!"
+  setnpc:
+    message: "&eNPC placed in your position!"
+  removenpc: 
+    message: "&eRight click to a NPC to remove it!"
+    removed: "&eNPC removed!"
+    invalid: "&cNPC not detected!"
+
+help:
+- "&aBlackMarket - Commands:"
+- "&8 » &7/bm reload &8- &7(&fReload config&7)"
+- "&8 » &7/bm open &8- &7(&fOpen the BlackMarket&7)"
+- "&8 » &7/bm setnpc <skin_name> &8- &7(&fSet a NPC&7)"
+- "&8 » &7/bm removenpc &8- &7(&fRemove a NPC&7)"
+- "&8 » &7/bm sell <value> &8- &7(&fPost an item&7)"
+
+market:
+  buy: "&eThanks for buy!"
+  inventory_full: "&cInventory full!"
+  item_invalid: "&cThis item is not for sale!"
+  missing_money: "&cYou haven't a money to buy this!"
+  item_owner: "&cYou can't buy your items!"
+  take_items: "&eItems taken!"
+  notification: "&eItem &a%name% &esold for &6%value%&e!"
+
+menus:
+  market:
+    title: "BlackMarket"
+    items:
+      item_onsale:
+      - "&8Owner: &b%owner%"
+      - "&8Value: &6%value%$"
+      - "&8To expire: &b%expired%"
+      - ""
+      - "&eClick to buy!"
+      next:
+        name: "&eNext page (%actual_page%-%pages%)"
+      previous:
+        name: "&ePrevious page (%actual_page%-%pages%)"
+      close:
+        name: "&cExit"
+      order:
+        name: "&bOrder type"
+        lore:
+        - "&8- &7%order_id%"
+        - "&8- &7%order_type%"
+        - "&8- &7%order_amount%"
+        - "&8- &7%order_value%"
+        - ""
+        - "&eClick to change!"
+        format: "%active% %value%"
+        active: "&c»&4"
+        values:
+          id: "IDs"
+          type: "Material"
+          amount: "Amount"
+          value: "Value"
+      info:
+        name: "&bInformation"
+        lore:
+        - "&7Cmd to sold /bm sell <amount>"
+        - "&4(Time to expired 24 hours)"
+      storage:
+        name: "&bStorage"
+        lore:
+        - "&7Your unsold items"
+        - ""
+        - "&eClick to open!"
+      categories:
+        all:    # categories/all.yml
+          name: "&bAll"
+          lore:
+          - "&7All items"
+        ores:
+          name: "&bOres"
+          lore:
+          - "&7List:"
+          - "&8 - &7Iron"
+          - "&8 - &7Gold"
+          - "&8 - &7Diamond"
+          - "&8 - &7Emerald"
+          - "&8 - &7..."
+        potions:
+          name: "&bPotions"
+          lore:
+          - "&7List:"
+          - "&8 - &7Potions"
+          - "&8 - &7Nether wart"
+          - "&8 - &7Blaze rod"
+          - "&8 - &7Ghast tear"
+          - "&8 - &7..."
+        redstone:
+          name: "&bRedstone"
+          lore:
+          - "&7List:"
+          - "&8 - &7Redstone"
+          - "&8 - &7TNT"
+          - "&8 - &7Dispenser"
+          - "&8 - &7Observer"
+          - "&8 - &7..."
+        tools:
+          name: "&bTools"
+          lore:
+          - "&7List:"
+          - "&8 - &7Shears"
+          - "&8 - &7Axe"
+          - "&8 - &7Pickaxe"
+          - "&8 - &7Shovel"
+          - "&8 - &7..."
+        wood:
+          name: "&bWood"
+          lore:
+          - "&7List:"
+          - "&8 - &7Oak log/planks"
+          - "&8 - &7Spruce log/planks"
+          - "&8 - &7Jungle log/planks"
+          - "&8 - &7Acacia log/planks"
+          - "&8 - &7..."
+  storage:
+    title: "BlackMarket - Storage"
+    items:
+      back:
+        name: "&cReturn"
+      take_items:
+        name: "&bTake items"
+        lore:
+        - "&7Take all items"
+        - ""
+        - "&eClick to take!"
+
+npc:
+  name: "BlackMarket"
+  click: "&eClick here!"
+
+time_data: # Example 16h 23m
+    day: "d"
+    hour: "h"
+    minute: "m"
+    second: "s"

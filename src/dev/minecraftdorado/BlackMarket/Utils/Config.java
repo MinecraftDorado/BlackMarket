@@ -10,7 +10,6 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -20,13 +19,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import dev.minecraftdorado.BlackMarket.MainClass.MainClass;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.NPC;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.Skins.SkinData;
+import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.UMaterial;
 
 public class Config {
 	
 	private static HashMap<String, ItemStack> items = new HashMap<>();
 	private static HashMap<String, String> msgs = new HashMap<>();
 	private static List<String> desc;
-	private static YamlConfiguration conf, msgFile;
+	private static YamlConfiguration conf, lang;
 	private static int expiredTime, defaultLimit, taxes;
 	private static double minimum_price;
 	private static ArrayList<NPC> npcs = new ArrayList<>();
@@ -38,6 +38,11 @@ public class Config {
 	public Config() {
 		load();
 	}
+	
+	/*
+	 * 
+	 * 		Agregar prefijos a los mensajes ?? [Error] [Info] etc?
+	 */
 	
 	public static void reload() {
 		MainClass.main.reloadConfig();
@@ -58,14 +63,6 @@ public class Config {
 		
 		conf = YamlConfiguration.loadConfiguration(file);
 		
-		conf.getConfigurationSection("items").getKeys(false).forEach(key -> {
-			items.put(key, Utils.getItemStack(file, "items." + key));
-		});
-		
-		Utils.orderFormat = (String) getValue(conf, "order.format", "%active% %value%");
-		
-		desc = conf.getStringList("item_onsale");
-		
 		expiredTime = (int) getValue(conf, "expired_time", 1440);
 		defaultLimit = (int) getValue(conf, "limit", 5);
 		taxes = (int) getValue(conf, "taxes", 7);
@@ -83,12 +80,23 @@ public class Config {
 		if(conf.isSet("sell_alias"))
 			conf.getStringList("sell_alias").forEach(cmd -> sellAlias.add(cmd));
 		
-		File msg = new File(MainClass.main.getDataFolder(), "messages.yml");
+		File langs = new File(MainClass.main.getDataFolder(), "languages");
+		if(!langs.exists() || langs.listFiles().length == 0)
+			for(String lang : new String[]{"en_US","es_ES","tr_TR","pt_BR"})
+				Utils.extract("resources/languages/" + lang + ".yml", "languages/" + lang + ".yml");
 		
-		if(!msg.exists())
-			Utils.extract("resources/messages.yml", "messages.yml");
+		File l = new File(MainClass.main.getDataFolder(), "languages/" + (conf.isSet("lang") ? conf.getString("lang"): "en_US") + ".yml");
 		
-		msgFile = YamlConfiguration.loadConfiguration(msg);
+		if(!l.exists()) {
+			MainClass.main.getLogger().severe(String.format("» Language not found: " + l.getName(), MainClass.main.getDescription().getName()));
+			l = langs.listFiles()[0];
+			MainClass.main.getLogger().info(String.format("Language loaded by default " + l.getName()));
+		}
+		
+		lang = YamlConfiguration.loadConfiguration(l);
+		
+		Utils.orderFormat = (String) getValue(lang, "menus.market.items.order.format", "%active% %value%");
+		desc = lang.getStringList("menus.market.items.item_onsale");
 		
 		if(conf.isSet("npc_list"))
 			for(String s : conf.getStringList("npc_list")) {
@@ -103,22 +111,27 @@ public class Config {
 			}
 	}
 	
-	public static YamlConfiguration getYml() {
-		return msgFile;
+	public static YamlConfiguration getLang() {
+		return lang;
 	}
 	
 	private static Object getValue(YamlConfiguration yml, String key, Object valueDefault) {
 		return yml.isSet(key) ? yml.get(key) : valueDefault;
 	}
 	
-	public static ItemStack getItemStack(String key) {
-		if(items.containsKey(key))
-			return items.get(key).clone();
-		return new ItemStack(Material.BARRIER);
+	public static ItemStack getItemStack(String typeKey, String metaKey) {
+		if(items.containsKey(typeKey))
+			return items.get(typeKey).clone();
+		if(conf.isSet("menus." + typeKey)) {
+			items.put(typeKey, Utils.applyMeta(Utils.getMaterial(conf.getString("menus." + typeKey)), metaKey));
+			return items.get(typeKey);
+		}
+		MainClass.main.getLogger().severe(String.format("» Item type not found: menus." + typeKey, MainClass.main.getDescription().getName()));
+		return UMaterial.BARRIER.getItemStack();
 	}
 	
-	public static ItemStack getItemStack(String key, Player player) {
-		ItemStack item = getItemStack(key).clone();
+	public static ItemStack getItemStack(String typeKey, String metaKey, Player player) {
+		ItemStack item = getItemStack(typeKey, metaKey).clone();
 		ItemMeta meta = item.getItemMeta();
 		if(meta.hasLore()) {
 			ArrayList<String> lore = new ArrayList<>();
@@ -135,8 +148,8 @@ public class Config {
 	
 	public static String getMessage(String key) {
 		if(!msgs.containsKey(key))
-			if(msgFile.isSet(key))
-				msgs.put(key, ChatColor.translateAlternateColorCodes('&', msgFile.getString(key)));
+			if(lang.isSet(key))
+				msgs.put(key, ChatColor.translateAlternateColorCodes('&', lang.getString(key)));
 			else {
 				MainClass.main.getLogger().severe(String.format("» Message not found: " + key, MainClass.main.getDescription().getName()));
 				return "";

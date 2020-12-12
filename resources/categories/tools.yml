@@ -1,15 +1,4 @@
-name: "Tools"
 row: 3
-item:
-    type: FISHING_ROD
-    name: "&b%category_name%"
-    lore: 
-    - "&7List:"
-    - "&8 - &7Shears"
-    - "&8 - &7Axe"
-    - "&8 - &7Pickaxe"
-    - "&8 - &7Shovel"
-    - "&8 - &7..."
 materials:
 - FISHING_ROD
 - SHEARS

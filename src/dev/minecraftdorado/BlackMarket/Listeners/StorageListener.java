@@ -21,14 +21,14 @@ public class StorageListener implements Listener {
 			Player p = e.getPlayer();
 			
 			// ItemStack "back"
-			if(e.getItemStack().equals(Config.getItemStack("back", p))) {
+			if(e.getItemStack().equals(Config.getItemStack("storage.back", "menus.storage.items.back", p))) {
 				PlayerData.get(e.getPlayer().getUniqueId()).setCategory(null);
 				Market.setPlayerPage(p.getUniqueId(), 0);
 				InventoryManager.openInventory(p, Market.getMarketInventory(p));
 				return;
 			}
 			// Take all items
-			if(e.getItemStack().equals(Config.getItemStack("take_items"))) {
+			if(e.getItemStack().equals(Config.getItemStack("storage.take_items", "menus.storage.items.take_items"))) {
 				boolean taked = false;
 				for(BlackItem bItem : e.getInv().getBlackList().values())
 					if(bItem.getStatus().equals(Status.TIME_OUT) && Utils.canAddItem(p, bItem.getOriginal())) {

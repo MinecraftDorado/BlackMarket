@@ -1,15 +1,4 @@
-name: "Ores"
 row: 2
-item:
-    type: IRON_PICKAXE
-    name: "&b%category_name%"
-    lore:
-    - "&7List:"
-    - "&8 - &7Iron"
-    - "&8 - &7Gold"
-    - "&8 - &7Diamond"
-    - "&8 - &7Emerald"
-    - "&8 - &7..."
 materials:
 - COAL_ORE
 - COAL

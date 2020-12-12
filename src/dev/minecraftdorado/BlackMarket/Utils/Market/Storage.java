@@ -9,7 +9,7 @@ import dev.minecraftdorado.BlackMarket.Utils.Inventory.InventoryManager.Inv;
 public class Storage {
 	
 	public static String getStorageTitle() {
-		return Config.getMessage("menus.storage");
+		return Config.getMessage("menus.storage.title");
 	}
 	
 	public static Inv getStorageInventory(Player player) {
@@ -35,8 +35,8 @@ public class Storage {
 			items++;
 		}
 		
-		inv.setItem(49, Config.getItemStack("back"));
-		inv.setItem(50, Config.getItemStack("take_items"));
+		inv.setItem(49, Config.getItemStack("storage.back", "menus.storage.items.back"));
+		inv.setItem(50, Config.getItemStack("storage.take_items", "menus.storage.items.take_items"));
 		return inv;
 	}
 }

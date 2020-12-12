@@ -1,15 +1,4 @@
-name: "Potions"
 row: 5
-item:
-    type: POTION
-    name: "&b%category_name%"
-    lore: 
-    - "&7List:"
-    - "&8 - &7Potions"
-    - "&8 - &7Nether wart"
-    - "&8 - &7Blaze rod"
-    - "&8 - &7Ghast tear"
-    - "&8 - &7..."
 materials:
 - BLAZE_POWDER
 - NETHER_WART

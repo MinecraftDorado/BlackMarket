@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 import dev.minecraftdorado.BlackMarket.Listeners.PlayerListener;
 import dev.minecraftdorado.BlackMarket.MainClass.MainClass;
 import dev.minecraftdorado.BlackMarket.Utils.Config;
-import dev.minecraftdorado.BlackMarket.Utils.Utils;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.NPC;
 import dev.minecraftdorado.BlackMarket.Utils.Entities.NPC.Skins.SkinData;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.InventoryManager;
@@ -36,7 +35,6 @@ public class bm implements CommandExecutor {
 						if(player.hasPermission("blackmarket.reload")) {
 							InventoryManager.closeInventory();
 							
-							Utils.items.clear();
 							Config.reload();
 							PlayerData.save();
 							BlackList.reload();
@@ -124,7 +122,6 @@ public class bm implements CommandExecutor {
 					if(args.length == 1) {
 						InventoryManager.closeInventory();
 						
-						Utils.items.clear();
 						Config.reload();
 						PlayerData.save();
 						BlackList.reload();
@@ -146,7 +143,7 @@ public class bm implements CommandExecutor {
 					Config.sendMessage("only_player", sender);
 					return false;
 				}
-		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.join("\n", Config.getYml().getStringList("help"))));
+		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.join("\n", Config.getLang().getStringList("help"))));
 		
 		return false;
 	}
