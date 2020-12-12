@@ -168,15 +168,15 @@ public class Market {
 			inv.addBlackItem(l.get(id), slot);
 			items++;
 		}
-		inv.setItem(49, Config.getItemStack("market.close", "menus.market.items.close"));
-		inv.setItem(50, Config.getItemStack("market.info", "menus.market.items.info"));
-		inv.setItem(51, Config.getItemStack("market.order", "menus.market.items.order", player));
-		inv.setItem(52, Config.getItemStack("market.storage", "menus.market.items.storage"));
+		inv.setItem(Config.getSlot("market.close"), Config.getItemStack("market.close", "menus.market.items.close"));
+		inv.setItem(Config.getSlot("market.info"), Config.getItemStack("market.info", "menus.market.items.info"));
+		inv.setItem(Config.getSlot("market.order"), Config.getItemStack("market.order", "menus.market.items.order", player));
+		inv.setItem(Config.getSlot("market.storage"), Config.getItemStack("market.storage", "menus.market.items.storage"));
 		
 		if(page != 0)
-			inv.setItem(46, Config.getItemStack("market.previous", "menus.market.items.previous", player));
+			inv.setItem(Config.getSlot("market.previous"), Config.getItemStack("market.previous", "menus.market.items.previous", player));
 		if(l.size() > ((page+1)*24))
-			inv.setItem(53, Config.getItemStack("market.next", "menus.market.items.next", player));
+			inv.setItem(Config.getSlot("market.next"), Config.getItemStack("market.next", "menus.market.items.next", player));
 		
 		return inv;
 	}

@@ -24,6 +24,7 @@ import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.UMaterial;
 public class Config {
 	
 	private static HashMap<String, ItemStack> items = new HashMap<>();
+	private static HashMap<String, Integer> slots = new HashMap<>();
 	private static HashMap<String, String> msgs = new HashMap<>();
 	private static List<String> desc;
 	private static YamlConfiguration conf, lang;
@@ -39,15 +40,11 @@ public class Config {
 		load();
 	}
 	
-	/*
-	 * 
-	 * 		Agregar prefijos a los mensajes ?? [Error] [Info] etc?
-	 */
-	
 	public static void reload() {
 		MainClass.main.reloadConfig();
 		items.clear();
 		msgs.clear();
+		slots.clear();
 		desc = null;
 		load();
 		
@@ -119,15 +116,44 @@ public class Config {
 		return yml.isSet(key) ? yml.get(key) : valueDefault;
 	}
 	
+	public static int getSlot(String typeKey) {
+		if(slots.containsKey(typeKey))
+			return slots.get(typeKey);
+		
+		YamlConfiguration yml = conf;
+		
+		if(!yml.isSet("menus." + typeKey + ".slot")) {
+			File f = Utils.getFileFromResource(MainClass.main.getResource("config.yml"));
+			if(f != null)
+				yml = YamlConfiguration.loadConfiguration(f);
+			MainClass.main.getLogger().severe(String.format("» Item slot not found: menus." + typeKey + ".slot", MainClass.main.getDescription().getName()));
+		}
+		
+		if(yml.isSet("menus." + typeKey + ".slot")) {
+			slots.put(typeKey, yml.getInt("menus." + typeKey + ".slot"));
+			return slots.get(typeKey);
+		}else
+			return 0;
+	}
+	
 	public static ItemStack getItemStack(String typeKey, String metaKey) {
 		if(items.containsKey(typeKey))
 			return items.get(typeKey).clone();
-		if(conf.isSet("menus." + typeKey)) {
-			items.put(typeKey, Utils.applyMeta(Utils.getMaterial(conf.getString("menus." + typeKey)), metaKey));
-			return items.get(typeKey);
+		
+		YamlConfiguration yml = conf;
+		
+		if(!yml.isSet("menus." + typeKey + ".type")) {
+			File f = Utils.getFileFromResource(MainClass.main.getResource("config.yml"));
+			if(f != null)
+				yml = YamlConfiguration.loadConfiguration(f);
+			MainClass.main.getLogger().severe(String.format("» Item type not found: menus." + typeKey + ".type", MainClass.main.getDescription().getName()));
 		}
-		MainClass.main.getLogger().severe(String.format("» Item type not found: menus." + typeKey, MainClass.main.getDescription().getName()));
-		return UMaterial.BARRIER.getItemStack();
+		
+		if(yml.isSet("menus." + typeKey + ".type")) {
+			items.put(typeKey, Utils.applyMeta(Utils.getMaterial(yml.getString("menus." + typeKey + ".type")), metaKey));
+			return items.get(typeKey);
+		}else
+			return UMaterial.BARRIER.getItemStack();
 	}
 	
 	public static ItemStack getItemStack(String typeKey, String metaKey, Player player) {

@@ -35,8 +35,8 @@ public class Storage {
 			items++;
 		}
 		
-		inv.setItem(49, Config.getItemStack("storage.back", "menus.storage.items.back"));
-		inv.setItem(50, Config.getItemStack("storage.take_items", "menus.storage.items.take_items"));
+		inv.setItem(Config.getSlot("storage.back"), Config.getItemStack("storage.back", "menus.storage.items.back"));
+		inv.setItem(Config.getSlot("storage.take_items"), Config.getItemStack("storage.take_items", "menus.storage.items.take_items"));
 		return inv;
 	}
 }

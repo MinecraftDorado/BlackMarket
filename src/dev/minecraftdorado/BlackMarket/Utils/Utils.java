@@ -1,6 +1,7 @@
 package dev.minecraftdorado.BlackMarket.Utils;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -14,6 +15,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.commons.io.IOUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -56,6 +58,19 @@ public class Utils {
             throw new RuntimeException("Error copying: " + from + " to: " + to, ex);
         }
         return destination;
+    }
+	
+	public static File getFileFromResource(InputStream in) {
+		try {
+			File tempFile = File.createTempFile(MainClass.main.getDataFolder().getAbsolutePath(), "temp");
+			tempFile.deleteOnExit();
+			FileOutputStream out = new FileOutputStream(tempFile);
+			IOUtils.copy(in, out);
+			return tempFile;
+		}catch (Exception ex) {
+			ex.printStackTrace();
+			return null;
+		}
     }
 	
 	private static Method sendPacket = null;
