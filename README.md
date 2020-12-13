@@ -3,7 +3,7 @@
 
 ![About](https://www.spigotmc.org/attachments/about-png.573352/)
 
-BlackMarket allows you to offer your items for a certain time, after it is, the item will be returned to you if no one bought it. It is fully customizable.​
+BlackMarket allows you to offer your items for a certain time, after it is, the item will be returned to you if no one bought it. It is fully customizable.
 
 ![Feautures](https://www.spigotmc.org/attachments/features-png.573354/)
 - Market with players objects
@@ -20,7 +20,7 @@ BlackMarket allows you to offer your items for a certain time, after it is, the 
 - Update checker
 
 ![Menus](https://www.spigotmc.org/attachments/menus-png.573355/)
-![Market](https://www.spigotmc.org/attachments/market-png.573362/)![Storage](https://www.spigotmc.org/attachments/storage-png.573361/)
+![Market](https://www.spigotmc.org/attachments/market-png.573362/)![Storage](https://www.spigotmc.org/attachments/storage-png.576638/)
 
 ![Commands](https://www.spigotmc.org/attachments/commands-png.573353/)
 
