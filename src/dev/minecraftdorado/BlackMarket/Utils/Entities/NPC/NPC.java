@@ -268,6 +268,9 @@ public class NPC {
 	            	case "v1_16_R2":
 	            		a_field = net.minecraft.server.v1_16_R2.DataWatcherRegistry.a;
 	            		break;
+	            	case "v1_16_R3":
+	            		a_field = net.minecraft.server.v1_16_R3.DataWatcherRegistry.a;
+	            		break;
 	            	default:
 	            		Bukkit.getConsoleSender().sendMessage("§cServer version: " + ServerVersion.getVersion());
 	            		break;
