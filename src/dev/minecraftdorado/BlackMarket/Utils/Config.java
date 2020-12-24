@@ -51,6 +51,8 @@ public class Config {
 		
 		for(NPC npc : MainClass.npcM.list.values())
 			npc.respawn();
+		
+		Utils.dataCopy.clear();
 	}
 	
 	public static void load() {
@@ -139,7 +141,7 @@ public class Config {
 			conf = YamlConfiguration.loadConfiguration(new File(MainClass.main.getDataFolder(), "config.yml"));
 		
 		if(conf.isSet(key))
-			return conf.getInt(key);
+			return conf.getInt(key) < 54 ? conf.getInt(key) : 53;
 		else
 			return 0;
 	}

@@ -1,7 +1,6 @@
 package dev.minecraftdorado.BlackMarket.Utils;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -10,12 +9,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.commons.io.IOUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -65,8 +64,7 @@ public class Utils {
 		try {
 			File tempFile = File.createTempFile(MainClass.main.getDataFolder().getAbsolutePath(), "temp");
 			tempFile.deleteOnExit();
-			FileOutputStream out = new FileOutputStream(tempFile);
-			IOUtils.copy(in, out);
+			Files.copy(in, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			return tempFile;
 		}catch (Exception ex) {
 			ex.printStackTrace();
@@ -74,14 +72,26 @@ public class Utils {
 		}
     }
 	
+	public static ArrayList<String> dataCopy = new ArrayList<>();
+	
+	@SuppressWarnings("deprecation")
 	public static boolean setDefaultData(String from, File to, String key) {
 		YamlConfiguration yml = YamlConfiguration.loadConfiguration(to);
 		YamlConfiguration toYml = yml;
 		
 		if(!yml.isSet(key)) {
 			File f = Utils.getFileFromResource(MainClass.main.getResource(from));
-			if(f != null)
+			if(f != null) {
 				yml = YamlConfiguration.loadConfiguration(f);
+				
+				if(!dataCopy.contains(to.getName()))
+					try {
+						Date date = new Date();
+						Files.copy(to.toPath(), new File(to.getAbsolutePath().replace(to.getName(), to.getName().replace(".yml", "") + "_copy_" + date.getHours() + "-" + date.getMinutes())).toPath(),  StandardCopyOption.REPLACE_EXISTING);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+			}
 			MainClass.main.getLogger().severe(String.format("» Data not found in " + to.getName() + ": " + key, MainClass.main.getDescription().getName()));
 		}
 		
