@@ -1,5 +1,6 @@
 package dev.minecraftdorado.BlackMarket.Listeners;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -22,6 +23,8 @@ import dev.minecraftdorado.BlackMarket.Utils.Market.sell.Sales;
 import dev.minecraftdorado.BlackMarket.Utils.Market.BlackItem.Status;
 
 public class MarketListener implements Listener {
+	
+	private ArrayList<UUID> list = new ArrayList<>();
 	
 	@EventHandler
 	private void invClick(InventoryClickEvent e) {
@@ -65,31 +68,39 @@ public class MarketListener implements Listener {
 			});
 			// Select order
 			if(e.getItemStack().equals(Config.getItemStack("market.order", "menus.market.items.order", p))) {
-				OrderType order = PlayerData.get(uuid).getOrder();
+				OrderType order = null;
 				boolean a = false;
 				
-				if(e.getItemStack().getItemMeta().hasLore()) {
-					for (int i = 0; i < e.getItemStack().getItemMeta().getLore().size(); i++) {
-						String l = e.getItemStack().getItemMeta().getLore().get(i);
-						if(l.contains(Config.getMessage("menus.market.items.order.active"))) {
-							a = true;
-							continue;
+				if(e.getItemStack().getItemMeta().hasLore())
+					if(!list.contains(uuid)) {
+						list.add(uuid);
+						
+						for (int i = 0; i < e.getItemStack().getItemMeta().getLore().size(); i++) {
+							String l = e.getItemStack().getItemMeta().getLore().get(i);
+							
+							if(l.contains(Config.getMessage("menus.market.items.order.active"))) {
+								a = true;
+								continue;
+							}
+							if(a || order == null) {
+								for(OrderType type : OrderType.values())
+									if(l.contains(Config.getMessage("menus.market.items.order.values." + type.getName()))) {
+										order = type;
+										break;
+									}
+								if(a && order != null) break;
+							}
 						}
-						if(a || i == 0) {
-							for(OrderType type : OrderType.values())
-								if(l.contains(Config.getMessage("menus.market.items.order.values." + type.getName()))) {
-									order = type;
-									break;
-								}
-							if(a)
-								break;
+						
+						if(order != null) {
+							PlayerData.get(uuid).setOrder(order);
+							Market.setPlayerPage(uuid, 0);
+							InventoryManager.openInventory(p, Market.getInventory(p));
 						}
+						
+						Bukkit.getScheduler().runTaskLater(MainClass.main, () -> list.remove(uuid), 5L);
+						return;
 					}
-					PlayerData.get(uuid).setOrder(order);
-					Market.setPlayerPage(uuid, 0);
-					InventoryManager.openInventory(p, Market.getInventory(p));
-					return;
-				}
 			}
 			// Item on sale
 			if(!e.getInv().getBlackList().isEmpty() && e.getInv().getBlackList().keySet().contains(e.getSlot())) {
