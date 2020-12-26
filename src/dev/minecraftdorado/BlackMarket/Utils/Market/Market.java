@@ -34,7 +34,7 @@ public class Market {
 				for(Player p : Bukkit.getOnlinePlayers()) {
 					if(p.getOpenInventory() != null && InventoryManager.hasHistory(p)){
 						Inv inv = InventoryManager.getLastInv(p);
-						if(inv.getTitle().equals(getMarketTitle())) {
+						if(inv.getTitle().equals(getTitle())) {
 							boolean update = true;
 							
 							for(int slot : inv.getBlackList().keySet()) {
@@ -42,7 +42,7 @@ public class Market {
 								
 								if(!l.containsKey(bItem.getId()))
 									if(!bItem.getStatus().equals(Status.ON_SALE)) {
-										Bukkit.getScheduler().runTask(MainClass.main, () -> InventoryManager.updateInventory(p, getMarketInventory(p)));
+										Bukkit.getScheduler().runTask(MainClass.main, () -> InventoryManager.updateInventory(p, getInventory(p)));
 										update = false;
 										break;
 									}else
@@ -81,7 +81,7 @@ public class Market {
 		return null;
 	}
 	
-	public static String getMarketTitle() {
+	public static String getTitle() {
 		return Config.getMessage("menus.market.title");
 	}
 	
@@ -98,9 +98,9 @@ public class Market {
 		playerPage.put(uuid, value);
 	}
 	
-	public static Inv getMarketInventory(Player player) {
+	public static Inv getInventory(Player player) {
 		int page = getPlayerPage(player);
-		Inv inv = new Inv(getMarketTitle(), 6);
+		Inv inv = new Inv(getTitle(), 6);
 		inv.setBackgroud(Config.getMarketBackground(), false);
 		inv.setBackgroud(Config.getMarketBorder(), true);
 		
@@ -168,6 +168,7 @@ public class Market {
 			inv.addBlackItem(l.get(id), slot);
 			items++;
 		}
+		inv.setItem(Config.getSlot("market.sales"), Config.getItemStack("market.sales", "menus.market.items.sales"));
 		inv.setItem(Config.getSlot("market.close"), Config.getItemStack("market.close", "menus.market.items.close"));
 		inv.setItem(Config.getSlot("market.info"), Config.getItemStack("market.info", "menus.market.items.info"));
 		inv.setItem(Config.getSlot("market.order"), Config.getItemStack("market.order", "menus.market.items.order", player));

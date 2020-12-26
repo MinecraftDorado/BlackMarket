@@ -12,6 +12,9 @@ menus:
   market:
     background: GRAY_STAINED_GLASS_PANE
     border: BLACK_STAINED_GLASS_PANE
+    sales:
+      type: NETHER_STAR
+      slot: 47
     next:
       type: PAPER
       slot: 53
@@ -52,6 +55,21 @@ menus:
     take_items:
       type: NETHER_STAR
       slot: 50
+  sales:
+    background: GRAY_STAINED_GLASS_PANE
+    border: BLACK_STAINED_GLASS_PANE
+    back:
+      type: ARROW
+      slot: 49
+    item:
+      type: DIAMOND_SWORD
+      slot: 20
+    value:
+      type: SUNFLOWER
+      slot: 24
+    post:
+      type: EMERALD
+      slot: 22
 
 minimum_price: 1.0
 taxes: 7 # percent

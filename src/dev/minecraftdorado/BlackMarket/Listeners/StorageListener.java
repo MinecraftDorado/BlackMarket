@@ -17,14 +17,14 @@ public class StorageListener implements Listener {
 	
 	@EventHandler
 	private void invClick(InventoryClickEvent e) {
-		if(e.getInv().getTitle().equals(Storage.getStorageTitle())) {
+		if(e.getInv().getTitle().equals(Storage.getTitle())) {
 			Player p = e.getPlayer();
 			
 			// ItemStack "back"
-			if(e.getItemStack().equals(Config.getItemStack("storage.back", "menus.storage.items.back", p))) {
+			if(e.getItemStack().equals(Config.getItemStack("storage.back", "menus.storage.items.back"))) {
 				PlayerData.get(e.getPlayer().getUniqueId()).setCategory(null);
 				Market.setPlayerPage(p.getUniqueId(), 0);
-				InventoryManager.openInventory(p, Market.getMarketInventory(p));
+				InventoryManager.openInventory(p, Market.getInventory(p));
 				return;
 			}
 			// Take all items

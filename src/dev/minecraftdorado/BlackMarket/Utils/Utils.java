@@ -32,6 +32,7 @@ import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.OrderUtils.OrderTyp
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.UMaterial;
 import dev.minecraftdorado.BlackMarket.Utils.Market.Market;
 import dev.minecraftdorado.BlackMarket.Utils.Market.PlayerData;
+import dev.minecraftdorado.BlackMarket.Utils.Market.sell.Sales;
 import dev.minecraftdorado.BlackMarket.Utils.Packets.Reflections;
 import dev.minecraftdorado.BlackMarket.Utils.Packets.ServerVersion;
 import net.md_5.bungee.api.chat.TranslatableComponent;
@@ -141,6 +142,7 @@ public class Utils {
 					break;
 				}
 			}
+			if(s.contains("%sale_value%")) s = s.replace("%sale_value%", "" + Sales.getPrice(player.getUniqueId()));
 		}
 		return ChatColor.translateAlternateColorCodes('&', s);
 	}

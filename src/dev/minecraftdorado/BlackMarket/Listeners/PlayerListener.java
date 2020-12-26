@@ -109,6 +109,6 @@ public class PlayerListener implements Listener {
 		// Set default values
 		PlayerData.get(e.getPlayer().getUniqueId()).setCategory(null);
 		Market.setPlayerPage(e.getPlayer().getUniqueId(), 0);
-		InventoryManager.openInventory(e.getPlayer(), Market.getMarketInventory(e.getPlayer()));
+		InventoryManager.openInventory(e.getPlayer(), Market.getInventory(e.getPlayer()));
 	}
 }

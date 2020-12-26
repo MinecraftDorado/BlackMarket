@@ -8,12 +8,12 @@ import dev.minecraftdorado.BlackMarket.Utils.Inventory.InventoryManager.Inv;
 
 public class Storage {
 	
-	public static String getStorageTitle() {
+	public static String getTitle() {
 		return Config.getMessage("menus.storage.title");
 	}
 	
-	public static Inv getStorageInventory(Player player) {
-		Inv inv = new Inv(getStorageTitle(), 6);
+	public static Inv getInventory(Player player) {
+		Inv inv = new Inv(getTitle(), 6);
 		
 		inv.setBackgroud(Config.getStorageBackground(), false);
 		inv.setBackgroud(Config.getStorageBorder(), true);

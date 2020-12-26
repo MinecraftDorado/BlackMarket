@@ -35,10 +35,21 @@ market:
   take_items: "&e¡Items tomados!"
   notification: "&e¡El item &a%name% &eha sido vendido por &6%value%&e!"
 
+sales:
+  item_not_found: "&c¡Escoge un artículo para vender desde tu inventario!"
+  value: "&e¡Escribe el valor de venta del artículo!"
+
 menus:
   market:
     title: "BlackMarket"
     items:
+      sales:
+        name: "&bMenú de ventas"
+        lore:
+        - "&7Menú para publicar"
+        - "&7artículos en el mercado."
+        - ""
+        - "&e¡Clic para abrir!"
       item_onsale:
       - "&8Dueño: &b%owner%"
       - "&8Precio: &6%value%$"
@@ -139,6 +150,37 @@ menus:
         - "&7Recupera los items"
         - ""
         - "&e¡Clic para tomar!"
+  sales:
+    title: "BlackMarket - Ventas"
+    items:
+      back:
+        name: "&cCancelar"
+        lore:
+        - "&e¡Clic para cancelar venta!"
+      post:
+        name: "&bPublicar"
+        lore:
+        - "&7¿Estas seguro?"
+        - ""
+        - "&e¡Clic para publicar!"
+      value:
+        name: "&bValor"
+        lore:
+        - "&7Actual: &6$%sale_value%"
+        - ""
+        - "&e¡Clic para cambiar precio!"
+      item:
+        name: "&bArtículo"
+        lore:
+        - "&7Cambia este item para"
+        - "&7poder publicar."
+        - ""
+        - "&e¡Clic en un item de tu"
+        - "&einventario para cambiar!"
+      item_changed:
+      - ""
+      - "&e¡Clic en un item de tu"
+      - "&einventario para cambiar!"
 
 npc:
   name: "BlackMarket"

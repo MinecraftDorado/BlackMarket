@@ -1,5 +1,7 @@
 package dev.minecraftdorado.BlackMarket.Listeners;
 
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,45 +18,54 @@ import dev.minecraftdorado.BlackMarket.Utils.Market.BlackItem;
 import dev.minecraftdorado.BlackMarket.Utils.Market.Market;
 import dev.minecraftdorado.BlackMarket.Utils.Market.PlayerData;
 import dev.minecraftdorado.BlackMarket.Utils.Market.Storage;
+import dev.minecraftdorado.BlackMarket.Utils.Market.sell.Sales;
 import dev.minecraftdorado.BlackMarket.Utils.Market.BlackItem.Status;
 
 public class MarketListener implements Listener {
 	
 	@EventHandler
 	private void invClick(InventoryClickEvent e) {
-		if(e.getInv().getTitle().equals(Market.getMarketTitle())) {
+		if(e.getInv().getTitle().equals(Market.getTitle())) {
 			Player p = e.getPlayer();
+			UUID uuid = p.getUniqueId();
 			
 			// ItemStack "previous"
 			if(e.getItemStack().equals(Config.getItemStack("market.previous", "menus.market.items.previous", p))) {
-				Market.setPlayerPage(p.getUniqueId(), Market.getPlayerPage(p)-1);
-				InventoryManager.openInventory(p, Market.getMarketInventory(p));
+				Market.setPlayerPage(uuid, Market.getPlayerPage(p)-1);
+				InventoryManager.openInventory(p, Market.getInventory(p));
 				return;
 			}
 			// ItemStack "next"
 			if(e.getItemStack().equals(Config.getItemStack("market.next", "menus.market.items.next", p))) {
-				Market.setPlayerPage(p.getUniqueId(), Market.getPlayerPage(p)+1);
-				InventoryManager.openInventory(p, Market.getMarketInventory(p));
+				Market.setPlayerPage(uuid, Market.getPlayerPage(p)+1);
+				InventoryManager.openInventory(p, Market.getInventory(p));
+				return;
+			}
+			// ItemStack "sell"
+			if(e.getItemStack().equals(Config.getItemStack("market.sales", "menus.market.items.sales"))) {
+				Sales.setItemStack(uuid, null);
+				Sales.setPrice(uuid, 0);
+				InventoryManager.openInventory(p, Sales.getInventory(p));
 				return;
 			}
 			// ItemStack "storage"
-			if(e.getItemStack().equals(Config.getItemStack("market.storage", "menus.market.items.storage", p))) {
-				InventoryManager.openInventory(p, Storage.getStorageInventory(p));
+			if(e.getItemStack().equals(Config.getItemStack("market.storage", "menus.market.items.storage"))) {
+				InventoryManager.openInventory(p, Storage.getInventory(p));
 				return;
 			}
 			// Select category
-			Category cat = PlayerData.get(p.getUniqueId()).getCategory();
+			Category cat = PlayerData.get(uuid).getCategory();
 			CategoryUtils.getCategories().forEach(category -> {
 				if(e.getItemStack().equals(category.getItemStack(category.equals(cat)))) {
-					PlayerData.get(p.getUniqueId()).setCategory(category);
-					Market.setPlayerPage(p.getUniqueId(), 0);
-					InventoryManager.updateInventory(p, Market.getMarketInventory(p));
+					PlayerData.get(uuid).setCategory(category);
+					Market.setPlayerPage(uuid, 0);
+					InventoryManager.updateInventory(p, Market.getInventory(p));
 					return;
 				}
 			});
 			// Select order
 			if(e.getItemStack().equals(Config.getItemStack("market.order", "menus.market.items.order", p))) {
-				OrderType order = PlayerData.get(p.getUniqueId()).getOrder();
+				OrderType order = PlayerData.get(uuid).getOrder();
 				boolean a = false;
 				
 				if(e.getItemStack().getItemMeta().hasLore()) {
@@ -74,16 +85,16 @@ public class MarketListener implements Listener {
 								break;
 						}
 					}
-					PlayerData.get(p.getUniqueId()).setOrder(order);
-					Market.setPlayerPage(p.getUniqueId(), 0);
-					InventoryManager.openInventory(p, Market.getMarketInventory(p));
+					PlayerData.get(uuid).setOrder(order);
+					Market.setPlayerPage(uuid, 0);
+					InventoryManager.openInventory(p, Market.getInventory(p));
 					return;
 				}
 			}
 			// Item on sale
 			if(!e.getInv().getBlackList().isEmpty() && e.getInv().getBlackList().keySet().contains(e.getSlot())) {
 				BlackItem bItem = e.getInv().getBlackList().get(e.getSlot());
-				if(!bItem.getOwner().equals(p.getUniqueId()))
+				if(!bItem.getOwner().equals(uuid))
 					if(MainClass.econ.has(p, bItem.getValue()))
 						if(bItem.getStatus().equals(Status.ON_SALE)) {
 							if(Utils.canAddItem(p, bItem.getOriginal())) {

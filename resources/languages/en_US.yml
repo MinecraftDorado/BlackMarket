@@ -35,10 +35,21 @@ market:
   take_items: "&eItems taken!"
   notification: "&eItem &a%name% &esold for &6%value%&e!"
 
+sales:
+  item_not_found: "&cChoose an item to sell from your inventory!"
+  value: "&eWrite the sale value of the item!"
+
 menus:
   market:
     title: "BlackMarket"
     items:
+      sales:
+        name: "&bSales menu"
+        lore:
+        - "&7Menu to publish articles"
+        - "&7in the market."
+        - ""
+        - "&eClick to open!"
       item_onsale:
       - "&8Owner: &b%owner%"
       - "&8Value: &6%value%$"
@@ -139,7 +150,38 @@ menus:
         - "&7Take all items"
         - ""
         - "&eClick to take!"
-
+  sales:
+    title: "BlackMarket - Sales"
+    items:
+      back:
+        name: "&cCancel"
+        lore:
+        - "&eClick to cancel sell!"
+      post:
+        name: "&bPost"
+        lore:
+        - "&7Are you sure?"
+        - ""
+        - "&eClick to post!"
+      value:
+        name: "&bValue"
+        lore:
+        - "&7Actual: &6$%sale_value%"
+        - ""
+        - "&eClick to change price!"
+      item:
+        name: "&bItem"
+        lore:
+        - "&7Change this item so"
+        - "&7you can post."
+        - ""
+        - "&eClick to item in your"
+        - "&einventory to change!"
+      item_changed:
+      - ""
+      - "&eClick to item in your"
+      - "&einventory to change!"
+      
 npc:
   name: "BlackMarket"
   click: "&eClick here!"

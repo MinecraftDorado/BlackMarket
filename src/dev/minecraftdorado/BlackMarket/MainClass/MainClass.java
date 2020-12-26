@@ -11,6 +11,7 @@ import dev.minecraftdorado.BlackMarket.Commands.bmTab;
 import dev.minecraftdorado.BlackMarket.Commands.sell;
 import dev.minecraftdorado.BlackMarket.Listeners.MarketListener;
 import dev.minecraftdorado.BlackMarket.Listeners.PlayerListener;
+import dev.minecraftdorado.BlackMarket.Listeners.SalesListener;
 import dev.minecraftdorado.BlackMarket.Listeners.StorageListener;
 import dev.minecraftdorado.BlackMarket.Utils.Packets.PacketReader;
 import dev.minecraftdorado.BlackMarket.Utils.Packets.Reflections;
@@ -87,6 +88,7 @@ public class MainClass extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 		Bukkit.getPluginManager().registerEvents(new MarketListener(), this);
 		Bukkit.getPluginManager().registerEvents(new StorageListener(), this);
+		Bukkit.getPluginManager().registerEvents(new SalesListener(), this);
 		Bukkit.getPluginManager().registerEvents(new InventoryManager(), this);
 		Bukkit.getOnlinePlayers().forEach(player -> PacketReader.get(player).inject());
 	}

@@ -80,7 +80,7 @@ public class bm implements CommandExecutor {
 						if(player.hasPermission("blackmarket.open")) {
 							PlayerData.get(player.getUniqueId()).setCategory(null);
 							Market.setPlayerPage(player.getUniqueId(), 0);
-							InventoryManager.openInventory(player, Market.getMarketInventory(player));
+							InventoryManager.openInventory(player, Market.getInventory(player));
 						}else
 							Config.sendMessage("no_permission", player);
 						return false;
