@@ -1,11 +1,11 @@
-![Title](https://proxy.spigotmc.org/157bdc6792fe1320f37011622025f735dfea6294?url=https%3A%2F%2Fi.ibb.co%2F9gwpgmH%2Ftitle.png)
-<p align="center"><a href="https://www.spigotmc.org/resources/authors/minecraftdorado.70124/"><img src="https://proxy.spigotmc.org/9feb776901f305f94b33e44ed729d43fdd163a71?url=https%3A%2F%2Fi.ibb.co%2FLRThC2w%2Fother.png"></a><a href="https://discord.gg/gBd9SYUHba"><img src="https://proxy.spigotmc.org/6746f6c7a54374f9734870bd97b31e3d32853a80?url=https%3A%2F%2Fi.ibb.co%2F2FppCFB%2Fdiscord.png"></a><a href="https://paypal.me/minecraftdorado?locale.x=es_XC"><img src="https://proxy.spigotmc.org/28c20e0a1c535890163249f0616eed04cb6cf236?url=https%3A%2F%2Fi.ibb.co%2FbNVGrXk%2Fdonate.png"></a></p>
+![Title](https://i.ibb.co/KDp1Nz9/title.png)
+<p align="center"><a href="https://www.spigotmc.org/resources/authors/minecraftdorado.70124/"><img src="https://i.ibb.co/mCh2wcF/other.png"></a><a href="https://discord.gg/gBd9SYUHba"><img src="https://i.ibb.co/ygccR2z/discord.png"></a><a href="https://paypal.me/minecraftdorado?locale.x=es_XC"><img src="https://i.ibb.co/hYWgRrY/donate.png"></a></p>
 
-![About](https://www.spigotmc.org/attachments/about-png.573352/)
+![About](https://i.ibb.co/HXp4kq7/about.png)
 
 BlackMarket allows you to offer your items for a certain time, after it is, the item will be returned to you if no one bought it. It is fully customizable.
 
-![Feautures](https://www.spigotmc.org/attachments/features-png.573354/)
+![Feautures](https://i.ibb.co/pPPwGH7/features.png)
 - Market with players objects
 - Categories
 - List view
@@ -19,10 +19,10 @@ BlackMarket allows you to offer your items for a certain time, after it is, the 
 - MySQL or file data
 - Update checker
 
-![Menus](https://www.spigotmc.org/attachments/menus-png.573355/)
-![Market](https://www.spigotmc.org/attachments/market-png.573362/)![Storage](https://www.spigotmc.org/attachments/storage-png.576638/)
+![Menus](https://i.ibb.co/5vtcxDZ/menus.png)
+![Market](https://i.ibb.co/BKR9Bd4/market.png)![Storage](https://i.ibb.co/2sNc04P/storage.png)
 
-![Commands](https://www.spigotmc.org/attachments/commands-png.573353/)
+![Commands](https://i.ibb.co/ZfwgXHy/commands.png)
 
 Permission: <code>blackmarket.admin</code>
 > Commands:
@@ -45,7 +45,7 @@ All permissions:
 <br/><code>blackmarket.limit</code>: *Unlimited items in sell*
 <br/><code>blackmarket.limit.[number]</code>: *Limited items in sell*
 
-![Requeriments](https://www.spigotmc.org/attachments/requeriments-png.573356/)
+![Requeriments](https://i.ibb.co/WzxwdRp/requeriments.png)
 - Java 8
 - Bukkit, Spigot or Paper for Minecraft 1.8 or newer
 - [Vault](https://www.spigotmc.org/resources/vault.34315/) for economy support
