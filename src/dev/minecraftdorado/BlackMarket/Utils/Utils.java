@@ -178,10 +178,11 @@ public class Utils {
 		if(mats.containsKey(key))
 			return mats.get(key);
 		
-		int data = 0;
-		
-		String[] s = key.split("/");
 		UMaterial um = null;
+		String[] cm = key.split("#");
+		
+		int data = 0;
+		String[] s = cm[0].split("/");
 		
 		try {
 			um = UMaterial.valueOf(s[0]);
@@ -207,6 +208,10 @@ public class Utils {
 			item.setDurability((short) data);
 		
 		ItemMeta meta = item.getItemMeta();
+		
+		if(cm.length > 1)
+			meta.setCustomModelData(Integer.valueOf(cm[1]));
+		
 		for (ItemFlag flag : ItemFlag.values())
 			meta.addItemFlags(flag);
 		item.setItemMeta(meta);

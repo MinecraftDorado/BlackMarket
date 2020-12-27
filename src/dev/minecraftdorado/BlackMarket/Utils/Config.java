@@ -28,7 +28,7 @@ public class Config {
 	private static HashMap<String, String> msgs = new HashMap<>();
 	private static List<String> desc;
 	private static YamlConfiguration conf, lang;
-	private static File langFile;
+	private static File confFile, langFile;
 	private static int expiredTime, defaultLimit, taxes;
 	private static double minimum_price;
 	private static ArrayList<NPC> npcs = new ArrayList<>();
@@ -56,28 +56,28 @@ public class Config {
 	}
 	
 	public static void load() {
-		File file = new File(MainClass.main.getDataFolder(), "config.yml");
+		confFile = new File(MainClass.main.getDataFolder(), "config.yml");
 		
-		if(!file.exists())
+		if(!confFile.exists())
 			Utils.extract("config.yml", "config.yml");
 		
-		conf = YamlConfiguration.loadConfiguration(file);
+		conf = YamlConfiguration.loadConfiguration(confFile);
 		
-		expiredTime = (int) getValue(conf, "expired_time", 1440);
-		defaultLimit = (int) getValue(conf, "limit", 5);
-		taxes = (int) getValue(conf, "taxes", 7);
-		minimum_price = (double) getValue(conf, "minimum_price", 1.0);
+		expiredTime = (int) getValue("expired_time");
+		defaultLimit = (int) getValue("limit");
+		taxes = (int) getValue("taxes");
+		minimum_price = (double) getValue("minimum_price");
 		
-		market_background = Utils.getMaterial((String) getValue(conf, "menus.market.background", "GRAY_STAINED_GLASS_PANE"));
-		market_border = Utils.getMaterial((String) getValue(conf, "menus.market.border", "BLACK_STAINED_GLASS_PANE"));
-		storage_background = Utils.getMaterial((String) getValue(conf, "menus.storage.background", "GRAY_STAINED_GLASS_PANE"));
-		storage_border= Utils.getMaterial((String) getValue(conf, "menus.storage.border", "BLACK_STAINED_GLASS_PANE"));
-		sellmenu_background = Utils.getMaterial((String) getValue(conf, "menus.storage.background", "GRAY_STAINED_GLASS_PANE"));
-		sellmenu_border= Utils.getMaterial((String) getValue(conf, "menus.storage.border", "BLACK_STAINED_GLASS_PANE"));
+		market_background = Utils.getMaterial((String) getValue("menus.market.background"));
+		market_border = Utils.getMaterial((String) getValue("menus.market.border"));
+		storage_background = Utils.getMaterial((String) getValue("menus.storage.background"));
+		storage_border= Utils.getMaterial((String) getValue("menus.storage.border"));
+		sellmenu_background = Utils.getMaterial((String) getValue("menus.storage.background"));
+		sellmenu_border= Utils.getMaterial((String) getValue("menus.storage.border"));
 		
-		storageType = (boolean) getValue(conf, "mysql.enable", false) ? StorageType.MySQL : StorageType.File;
+		storageType = (boolean) getValue("mysql.enable") ? StorageType.MySQL : StorageType.File;
 		
-		blacklist_enable = (boolean) getValue(conf, "blacklist_enable", false);
+		blacklist_enable = (boolean) getValue("blacklist_enable");
 		
 		if(conf.isSet("sell_alias"))
 			conf.getStringList("sell_alias").forEach(cmd -> sellAlias.add(cmd));
@@ -97,7 +97,13 @@ public class Config {
 		
 		lang = YamlConfiguration.loadConfiguration(langFile);
 		
-		Utils.orderFormat = (String) getValue(lang, "menus.market.items.order.format", "%active% %value%");
+		
+		if(Utils.setDefaultData("resources/languages/en_US.yml", langFile, "menus.market.items.order.format"))
+			reloadLang();
+		Utils.orderFormat = lang.getString("menus.market.items.order.format");
+		
+		if(Utils.setDefaultData("resources/languages/en_US.yml", langFile, "menus.market.items.item_onsale"))
+			reloadLang();
 		desc = lang.getStringList("menus.market.items.item_onsale");
 		
 		File npcsFile = new File(MainClass.main.getDataFolder(), "npcs.yml");
@@ -129,8 +135,11 @@ public class Config {
 		lang = YamlConfiguration.loadConfiguration(langFile);
 	}
 	
-	private static Object getValue(YamlConfiguration yml, String key, Object valueDefault) {
-		return yml.isSet(key) ? yml.get(key) : valueDefault;
+	private static Object getValue(String key) {
+		if(Utils.setDefaultData("config.yml", confFile, key))
+			conf = YamlConfiguration.loadConfiguration(confFile);
+		
+		return conf.get(key);
 	}
 	
 	public static int getSlot(String typeKey) {
@@ -140,7 +149,7 @@ public class Config {
 		String key = "menus." + typeKey + ".slot";
 		
 		if(Utils.setDefaultData("config.yml", new File(MainClass.main.getDataFolder(), "config.yml"), key))
-			conf = YamlConfiguration.loadConfiguration(new File(MainClass.main.getDataFolder(), "config.yml"));
+			conf = YamlConfiguration.loadConfiguration(confFile);
 		
 		if(conf.isSet(key))
 			return conf.getInt(key) < 54 ? conf.getInt(key) : 53;
@@ -154,7 +163,7 @@ public class Config {
 		
 		String key = "menus." + typeKey + ".type";
 		if(Utils.setDefaultData("config.yml", new File(MainClass.main.getDataFolder(), "config.yml"), key))
-			conf = YamlConfiguration.loadConfiguration(new File(MainClass.main.getDataFolder(), "config.yml"));
+			conf = YamlConfiguration.loadConfiguration(confFile);
 		
 		if(conf.isSet(key)) {
 			items.put(typeKey, Utils.applyMeta(Utils.getMaterial(conf.getString(key)), metaKey));
