@@ -13,8 +13,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import dev.minecraftdorado.BlackMarket.Utils.Config;
 import dev.minecraftdorado.BlackMarket.Utils.Utils;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.InventoryManager.Inv;
-import dev.minecraftdorado.BlackMarket.Utils.Market.BlackItem;
-import dev.minecraftdorado.BlackMarket.Utils.Market.PlayerData;
 
 public class Sales {
 	
@@ -27,23 +25,6 @@ public class Sales {
 		
 		inv.setBackgroud(Config.getSellMenuBackground(), false);
 		inv.setBackgroud(Config.getSellMenuBorder(), true);
-		
-		ArrayList<BlackItem> l = PlayerData.get(player.getUniqueId()).getStorage();
-		
-		int slot = 9;
-		int items = 0;
-		
-		for (int i = 0; i < 28; i++) {
-			if(l.size() <= i)
-				break;
-			if(items%7 == 0 && items != 0)
-				slot = slot + 3;
-			else
-				slot++;
-			inv.setItem(slot, l.get(i).getOriginal());
-			inv.addBlackItem(l.get(i), slot);
-			items++;
-		}
 		
 		inv.setItem(Config.getSlot("sales.back"), Config.getItemStack("sales.back", "menus.sales.items.back"));
 		inv.setItem(Config.getSlot("sales.item"), getItemStack(player.getUniqueId()) != null ? getItem(player.getUniqueId()) : Config.getItemStack("sales.item", "menus.sales.items.item", player));
