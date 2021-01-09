@@ -84,7 +84,7 @@ public class Config {
 		
 		File langs = new File(MainClass.main.getDataFolder(), "languages");
 		if(!langs.exists() || langs.listFiles().length == 0)
-			for(String lang : new String[]{"en_US","es_ES","tr_TR","pt_BR"})
+			for(String lang : new String[]{"en_US","es_ES","tr_TR","pt_BR", "ru_RU"})
 				Utils.extract("resources/languages/" + lang + ".yml", "languages/" + lang + ".yml");
 		
 		langFile = new File(MainClass.main.getDataFolder(), "languages/" + (conf.isSet("lang") ? conf.getString("lang"): "en_US") + ".yml");
