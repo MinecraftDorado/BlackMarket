@@ -7,6 +7,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryAction;
+
 import dev.minecraftdorado.BlackMarket.MainClass.MainClass;
 import dev.minecraftdorado.BlackMarket.Utils.Config;
 import dev.minecraftdorado.BlackMarket.Utils.Utils;
@@ -68,39 +70,53 @@ public class MarketListener implements Listener {
 			});
 			// Select order
 			if(e.getItemStack().equals(Config.getItemStack("market.order", "menus.market.items.order", p))) {
-				OrderType order = null;
-				boolean a = false;
-				
-				if(e.getItemStack().getItemMeta().hasLore())
+				p.sendMessage(e.getAction().name());
+				if(e.getAction().equals(InventoryAction.PICKUP_ALL)) {
+					OrderType order = null;
+					boolean a = false;
+					
+					if(e.getItemStack().getItemMeta().hasLore())
+						if(!list.contains(uuid)) {
+							list.add(uuid);
+							
+							for (int i = 0; i < e.getItemStack().getItemMeta().getLore().size(); i++) {
+								String l = e.getItemStack().getItemMeta().getLore().get(i);
+								
+								if(l.contains(Config.getMessage("menus.market.items.order.active"))) {
+									a = true;
+									continue;
+								}
+								if(a || order == null) {
+									for(OrderType type : OrderType.values())
+										if(l.contains(Config.getMessage("menus.market.items.order.values." + type.getName()))) {
+											order = type;
+											break;
+										}
+									if(a && order != null) break;
+								}
+							}
+							
+							if(order != null) {
+								PlayerData.get(uuid).setOrder(order);
+								Market.setPlayerPage(uuid, 0);
+								InventoryManager.openInventory(p, Market.getInventory(p));
+							}
+							
+							Bukkit.getScheduler().runTaskLater(MainClass.main, () -> list.remove(uuid), 5L);
+							return;
+						}
+				}
+				if(e.getAction().equals(InventoryAction.PICKUP_HALF)) {
 					if(!list.contains(uuid)) {
 						list.add(uuid);
 						
-						for (int i = 0; i < e.getItemStack().getItemMeta().getLore().size(); i++) {
-							String l = e.getItemStack().getItemMeta().getLore().get(i);
-							
-							if(l.contains(Config.getMessage("menus.market.items.order.active"))) {
-								a = true;
-								continue;
-							}
-							if(a || order == null) {
-								for(OrderType type : OrderType.values())
-									if(l.contains(Config.getMessage("menus.market.items.order.values." + type.getName()))) {
-										order = type;
-										break;
-									}
-								if(a && order != null) break;
-							}
-						}
-						
-						if(order != null) {
-							PlayerData.get(uuid).setOrder(order);
-							Market.setPlayerPage(uuid, 0);
-							InventoryManager.openInventory(p, Market.getInventory(p));
-						}
+						PlayerData.get(uuid).setReverse(!PlayerData.get(uuid).isReverse());
+						Market.setPlayerPage(uuid, 0);
+						InventoryManager.openInventory(p, Market.getInventory(p));
 						
 						Bukkit.getScheduler().runTaskLater(MainClass.main, () -> list.remove(uuid), 5L);
-						return;
 					}
+				}
 			}
 			// Item on sale
 			if(!e.getInv().getBlackList().isEmpty() && e.getInv().getBlackList().keySet().contains(e.getSlot())) {

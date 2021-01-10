@@ -1,6 +1,7 @@
 package dev.minecraftdorado.BlackMarket.Utils.Market;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -17,6 +18,7 @@ import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils.Category;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.OrderUtils;
 import dev.minecraftdorado.BlackMarket.Utils.Market.BlackItem.Status;
+import dev.minecraftdorado.BlackMarket.Utils.Market.PlayerData.Data;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.UMaterial;
 
 public class Market {
@@ -99,6 +101,8 @@ public class Market {
 	}
 	
 	public static Inv getInventory(Player player) {
+		Data data = PlayerData.get(player.getUniqueId());
+		
 		int page = getPlayerPage(player);
 		Inv inv = new Inv(getTitle(), 6);
 		inv.setBackgroud(Config.getMarketBackground(), false);
@@ -114,7 +118,7 @@ public class Market {
 		inv.setItem(28, item);
 		inv.setItem(37, item);
 		
-		Category cat = PlayerData.get(player.getUniqueId()).getCategory();
+		Category cat = data.getCategory();
 		
 		CategoryUtils.getCategories().forEach(category -> {
 			inv.setItem((category.getRow()-1) * 9, category.getItemStack(category.equals(cat)));
@@ -122,7 +126,7 @@ public class Market {
 		
 		ArrayList<BlackItem> l = new ArrayList<>();
 		
-		Category category = PlayerData.get(player.getUniqueId()).getCategory();
+		Category category = data.getCategory();
 		
 		ArrayList<Integer> toRemove = new ArrayList<>();
 		
@@ -134,8 +138,8 @@ public class Market {
 				toRemove.add(bItem.getId());
 		}
 		
-		
-		switch(PlayerData.get(player.getUniqueId()).getOrder()) {
+
+		switch(data.getOrder()) {
 		case AMOUNT:
 			l = OrderUtils.sortByAmount(l);
 			break;
@@ -148,6 +152,9 @@ public class Market {
 		default:
 			break;
 		}
+		
+		if(data.isReverse())
+			Collections.reverse(l);
 		
 		if(!toRemove.isEmpty())
 			toRemove.forEach(id -> list.remove(id));

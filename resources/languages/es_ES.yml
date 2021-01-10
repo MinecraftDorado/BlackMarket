@@ -70,7 +70,8 @@ menus:
         - "&8- &7%order_amount%"
         - "&8- &7%order_value%"
         - ""
-        - "&e¡Clic para cambiar!"
+        - "&e¡Clic izquierdo para cambiar!"
+        - "&e¡Clic derecho para invertir!"
         format: "%active% %value%"
         active: "&c»&4"
         values:

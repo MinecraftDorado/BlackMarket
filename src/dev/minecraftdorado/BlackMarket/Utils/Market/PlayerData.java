@@ -49,6 +49,7 @@ public class PlayerData {
 		private UUID uuid;
 		private ArrayList<BlackItem> items = new ArrayList<>();
 		private OrderType order = OrderType.ID;
+		private boolean reverse = false;
 		
 		private Category category = null;
 		
@@ -110,6 +111,14 @@ public class PlayerData {
 		
 		public OrderType getOrder() {
 			return order;
+		}
+		
+		public void setReverse(boolean value) {
+			this.reverse = value;
+		}
+		
+		public boolean isReverse() {
+			return this.reverse;
 		}
 	}
 }
