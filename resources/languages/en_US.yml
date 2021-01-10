@@ -71,7 +71,7 @@ menus:
         - "&8- &7%order_value%"
         - ""
         - "&eLeft click to change!"
-        - "&eRigth click to reverse!"
+        - "&eRight click to reverse!"
         format: "%active% %value%"
         active: "&c»&4"
         values:

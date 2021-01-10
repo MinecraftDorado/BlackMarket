@@ -70,7 +70,6 @@ public class MarketListener implements Listener {
 			});
 			// Select order
 			if(e.getItemStack().equals(Config.getItemStack("market.order", "menus.market.items.order", p))) {
-				p.sendMessage(e.getAction().name());
 				if(e.getAction().equals(InventoryAction.PICKUP_ALL)) {
 					OrderType order = null;
 					boolean a = false;
