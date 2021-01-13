@@ -216,10 +216,12 @@ public class InventoryManager implements Listener {
 		}
 		
 		public void setBackgroud(ItemStack item, boolean onlyBorder) {
-			ItemMeta meta = item.getItemMeta();
-			if(!meta.hasDisplayName())
-				meta.setDisplayName(" ");
-			item.setItemMeta(meta);
+			if(!item.getType().equals(Material.AIR)) {
+				ItemMeta meta = item.getItemMeta();
+				if(!meta.hasDisplayName())
+					meta.setDisplayName(" ");
+				item.setItemMeta(meta);
+			}
 			if(!onlyBorder)
 				for (int i = 0; i < inv.getSize(); i++)
 					setItem(i, item);

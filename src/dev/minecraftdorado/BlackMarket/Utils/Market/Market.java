@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -109,9 +110,11 @@ public class Market {
 		inv.setBackgroud(Config.getMarketBorder(), true);
 		
 		ItemStack item = Config.getMarketBorder();
-		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(" ");
-		item.setItemMeta(meta);
+		if(!item.getType().equals(Material.AIR)) {
+			ItemMeta meta = item.getItemMeta();
+			meta.setDisplayName(" ");
+			item.setItemMeta(meta);
+		}
 		
 		inv.setItem(10, item);
 		inv.setItem(19, item);

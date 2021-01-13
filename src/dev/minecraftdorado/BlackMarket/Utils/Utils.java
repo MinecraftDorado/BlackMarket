@@ -212,8 +212,9 @@ public class Utils {
 		if(cm.length > 1)
 			meta.setCustomModelData(Integer.valueOf(cm[1]));
 		
-		for (ItemFlag flag : ItemFlag.values())
-			meta.addItemFlags(flag);
+		if(!um.equals(UMaterial.AIR))
+			for (ItemFlag flag : ItemFlag.values())
+				meta.addItemFlags(flag);
 		item.setItemMeta(meta);
 		mats.put(key, item);
 		return item;
