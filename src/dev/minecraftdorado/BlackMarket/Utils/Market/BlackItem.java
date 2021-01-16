@@ -10,9 +10,11 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import dev.minecraftdorado.BlackMarket.MainClass.MainClass;
 import dev.minecraftdorado.BlackMarket.Utils.Config;
 import dev.minecraftdorado.BlackMarket.Utils.Utils;
 import dev.minecraftdorado.BlackMarket.Utils.DataBase.MySQL.dbMySQL;
@@ -76,17 +78,25 @@ public class BlackItem {
 		ItemStack black = item.clone();
 		ItemMeta meta = black.getItemMeta();
 		
-		List<String> lore = meta.hasLore() ? meta.getLore() : new ArrayList<>();
+		List<String> lore = new ArrayList<>();
+		try {
+			if(meta.hasLore())
+				lore = meta.getLore();
+		}catch(Exception ex) {
+			MainClass.main.getLogger().info(String.format("» Item fixed: " + id + " - " + item.getType().name(), MainClass.main.getDescription().getName()));
+			this.status = Status.TAKED;
+			return new ItemStack(Material.STONE);
+		}
 		
 		Duration d = Duration.between(new Date().toInstant(), date.toInstant());
 		
-		Config.getDesc().forEach(s -> {
+		for(String s : Config.getDesc()) {
 			if(s.contains("%owner%")) s = s.replace("%owner%", Bukkit.getOfflinePlayer(owner).getName());
 			if(s.contains("%value%")) s = s.replace("%value%", value + "");
 			if(s.contains("%expired%")) s = s.replace("%expired%", (d.getSeconds() > 0 ? Utils.getTime(d.getSeconds()) : 0)  + "");
 			
 			lore.add(ChatColor.translateAlternateColorCodes('&', s));
-		});
+		}
 		
 		meta.setLore(lore);
 		black.setItemMeta(meta);
