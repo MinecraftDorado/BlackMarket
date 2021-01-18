@@ -72,8 +72,8 @@ public class Config {
 		market_border = Utils.getMaterial((String) getValue("menus.market.border"));
 		storage_background = Utils.getMaterial((String) getValue("menus.storage.background"));
 		storage_border= Utils.getMaterial((String) getValue("menus.storage.border"));
-		sellmenu_background = Utils.getMaterial((String) getValue("menus.storage.background"));
-		sellmenu_border= Utils.getMaterial((String) getValue("menus.storage.border"));
+		sellmenu_background = Utils.getMaterial((String) getValue("menus.sales.background"));
+		sellmenu_border= Utils.getMaterial((String) getValue("menus.sales.border"));
 		
 		storageType = (boolean) getValue("mysql.enable") ? StorageType.MySQL : StorageType.File;
 		
