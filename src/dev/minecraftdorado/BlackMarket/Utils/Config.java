@@ -26,7 +26,7 @@ public class Config {
 	private static HashMap<String, ItemStack> items = new HashMap<>();
 	private static HashMap<String, Integer> slots = new HashMap<>();
 	private static HashMap<String, String> msgs = new HashMap<>();
-	private static List<String> desc;
+	private static List<String> desc, remove_desc;
 	private static YamlConfiguration conf, lang;
 	private static File confFile, langFile;
 	private static int expiredTime, defaultLimit, taxes;
@@ -105,6 +105,10 @@ public class Config {
 		if(Utils.setDefaultData("resources/languages/en_US.yml", langFile, "menus.market.items.item_onsale"))
 			reloadLang();
 		desc = lang.getStringList("menus.market.items.item_onsale");
+		
+		if(Utils.setDefaultData("resources/languages/en_US.yml", langFile, "menus.market.items.item_onsale_remove"))
+			reloadLang();
+		remove_desc = lang.getStringList("menus.market.items.item_onsale_remove");
 		
 		File npcsFile = new File(MainClass.main.getDataFolder(), "npcs.yml");
 		if(npcsFile.exists()) {
@@ -212,6 +216,10 @@ public class Config {
 	
 	public static List<String> getDesc() {
 		return desc;
+	}
+	
+	public static List<String> getRemoveDesc() {
+		return remove_desc;
 	}
 
 	public static int getExpiredTime() {

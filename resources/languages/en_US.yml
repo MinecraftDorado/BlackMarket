@@ -33,6 +33,7 @@ market:
   missing_money: "&cYou haven't a money to buy this!"
   item_owner: "&cYou can't buy your items!"
   take_items: "&eItems taken!"
+  cancel_post: "&ePost cancelled!"
   notification: "&eItem &a%name% &esold for &6%value%&e!"
 
 sales:
@@ -56,6 +57,8 @@ menus:
       - "&8To expire: &b%expired%"
       - ""
       - "&eClick to buy!"
+      item_onsale_remove:
+      - "&cRigth click to remove!"
       next:
         name: "&eNext page (%actual_page%-%pages%)"
       previous:

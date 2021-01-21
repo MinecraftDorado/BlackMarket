@@ -120,6 +120,20 @@ public class MarketListener implements Listener {
 			// Item on sale
 			if(!e.getInv().getBlackList().isEmpty() && e.getInv().getBlackList().keySet().contains(e.getSlot())) {
 				BlackItem bItem = e.getInv().getBlackList().get(e.getSlot());
+				
+				
+				if(bItem.getOwner().equals(uuid) || p.hasPermission("blackmarket.remove_item"))
+					if(e.getAction().equals(InventoryAction.PICKUP_HALF) && bItem.getStatus().equals(Status.ON_SALE)) {
+						bItem.setStatus(Status.TIME_OUT);
+						
+						Config.sendMessage("market.cancel_post", p);
+						
+						Market.setPlayerPage(uuid, 0);
+						InventoryManager.openInventory(p, Market.getInventory(p));
+						
+						return;
+					}
+				
 				if(!bItem.getOwner().equals(uuid))
 					if(MainClass.econ.has(p, bItem.getValue()))
 						if(bItem.getStatus().equals(Status.ON_SALE)) {
