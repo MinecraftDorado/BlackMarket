@@ -39,11 +39,12 @@ Command:
 
 All permissions:
 ><code>blackmarket.reload</code>: *Allow use reload command*
-<br/><code>blackmarket.npc</code>: *Allow use setnpc and removenpc commands*
-<br/><code>blackmarket.setnpc</code>: *Allow use setnpc command*
-<br/><code>blackmarket.removenpc</code>: *Allow use removenpc command*
+<br/><code>blackmarket.npc.*</code>: *Allow use setnpc and removenpc commands*
+<br/><code>blackmarket.npc.set</code>: *Allow use setnpc command*
+<br/><code>blackmarket.npc.remove</code>: *Allow use removenpc command*
 <br/><code>blackmarket.limit</code>: *Unlimited items in sell*
 <br/><code>blackmarket.limit.[number]</code>: *Limited items in sell*
+<br/><code>blackmarket.remove_item</code>: *Allow cancel any post*
 
 ![Requeriments](https://i.ibb.co/WzxwdRp/requeriments.png)
 - Java 8
