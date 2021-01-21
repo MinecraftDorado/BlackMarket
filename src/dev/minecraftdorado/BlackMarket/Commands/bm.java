@@ -47,7 +47,7 @@ public class bm implements CommandExecutor {
 					break;
 				case "setnpc":
 					if(args.length <= 2) {
-						if(player.hasPermission("blackmarket.setnpc")) {
+						if(player.hasPermission("blackmarket.npc.set")) {
 							
 							NPC npc = new NPC(player.getLocation());
 							
@@ -65,7 +65,7 @@ public class bm implements CommandExecutor {
 					return false;
 				case "removenpc":
 					if(args.length == 1) {
-						if(player.hasPermission("blackmarket.removenpc")) {
+						if(player.hasPermission("blackmarket.npc.remove")) {
 							if(!PlayerListener.npcRemove.contains(player.getUniqueId()))
 								PlayerListener.npcRemove.add(player.getUniqueId());
 							Config.sendMessage("command.removenpc.message", player);

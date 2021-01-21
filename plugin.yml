@@ -16,18 +16,18 @@ permissions:
     children:
       blackmarket.limit.*: true
       blackmarket.reload: true
-      blackmarket.npc: true
+      blackmarket.npc.*: true
       blackmarket.open: true
       blackmarket.remove_item: true
-  blackmarket.npc:
+  blackmarket.npc.*:
     description: Allows the use of commands for NPCs
     default: op
     children:
-      blackmarket.setnpc: true
-      blackmarket.removenpc: true
-  blackmarket.setnpc:
+      blackmarket.npc.set: true
+      blackmarket.npc.remove: true
+  blackmarket.npc.set:
     description: Allows usage of the /bm setnpc command
-  blackmarket.removenpc:
+  blackmarket.npc.remove:
     description: Allows usage of the /bm removenpc command
   blackmarket.limit:
     description: Limit of published articles
@@ -36,4 +36,4 @@ permissions:
   blackmarket.open:
     description: Allows usage of the /bm open command
   blackmarket.remove_item:
-    description: Allows usage of the /bm open command
+    description: Allow cancel any post
