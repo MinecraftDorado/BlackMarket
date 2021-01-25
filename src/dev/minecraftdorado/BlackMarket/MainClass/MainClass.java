@@ -28,6 +28,8 @@ import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.BlackList;
 import dev.minecraftdorado.BlackMarket.Utils.Inventory.Utils.CategoryUtils;
 import dev.minecraftdorado.BlackMarket.Utils.Market.Market;
 import dev.minecraftdorado.BlackMarket.Utils.Market.PlayerData;
+import dev.minecraftdorado.BlackMarket.Utils.Metrics.Metrics;
+import dev.minecraftdorado.BlackMarket.Utils.Metrics.Custom.CustomMetrics;
 
 public class MainClass extends JavaPlugin {
 	
@@ -69,6 +71,10 @@ public class MainClass extends JavaPlugin {
 		new CategoryUtils();
 		new Market();
 		new BlackList();
+		
+		Metrics metrics = new Metrics(this, 10119);
+		new CustomMetrics(metrics);
+		Bukkit.getConsoleSender().sendMessage("§c" + isEnabled());
 		
 		if(Config.blackListIsEnable())
 			BlackList.load();
