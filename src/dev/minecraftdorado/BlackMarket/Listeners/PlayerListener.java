@@ -35,20 +35,23 @@ public class PlayerListener implements Listener {
 	private void join(PlayerJoinEvent e) {
 		PacketReader.get(e.getPlayer()).inject();
 		
-		if(e.getPlayer().hasPermission("blackmarket.admin"))
+		if(e.getPlayer().hasPermission("blackmarket.admin")) {
 			UpdateChecker.init(MainClass.main, 79819).requestUpdateCheck().whenComplete((result, ee) -> {
 				if (result.requiresUpdate()) {
-			        e.getPlayer().sendMessage("§6[BlackMarket] §7» " + String.format("An update is available! BlackMarket %s may be downloaded on SpigotMC", result.getNewestVersion()));
-			        return;
-			    }
+					e.getPlayer().sendMessage("§6[BlackMarket] §7» " + String.format("An update is available! BlackMarket %s may be downloaded on SpigotMC", result.getNewestVersion()));
+					return;
+				}
 				
 				UpdateReason reason = result.getReason();
 				if (reason == UpdateReason.UNRELEASED_VERSION)
 					e.getPlayer().sendMessage("§6[BlackMarket] §7» " + String.format("Your version of BlackMarket (%s) is more recent than the one publicly available. Are you on a development build?", result.getNewestVersion()));
 				else if (reason != UpdateReason.UP_TO_DATE)
 					e.getPlayer().sendMessage("§6[BlackMarket] §7» " + "Could not check for a new version of BlackMarket. Reason: " + reason);
-				}
-			);
+			});
+			
+			if(Config.isCustomLang())
+				e.getPlayer().sendMessage("§6[BlackMarket] §7» " + " §bCustom language detected §3(§a" + Config.getLangFile().getName().replace(".yml", "") + "§3)§b. If you want to contribute to the plugin send the language file to §3Demon@4531§b.");
+		}
 		
 		Bukkit.getScheduler().runTask(MainClass.main, () -> {
 			// Sold notifications

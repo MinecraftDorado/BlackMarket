@@ -74,7 +74,6 @@ public class MainClass extends JavaPlugin {
 		
 		Metrics metrics = new Metrics(this, 10119);
 		new CustomMetrics(metrics);
-		Bukkit.getConsoleSender().sendMessage("§c" + isEnabled());
 		
 		if(Config.blackListIsEnable())
 			BlackList.load();

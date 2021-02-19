@@ -84,7 +84,7 @@ public class Config {
 		
 		File langs = new File(MainClass.main.getDataFolder(), "languages");
 		if(!langs.exists() || langs.listFiles().length == 0)
-			for(String lang : new String[]{"en_US","es_ES","tr_TR","pt_BR", "ru_RU"})
+			for(String lang : getLangList())
 				Utils.extract("resources/languages/" + lang + ".yml", "languages/" + lang + ".yml");
 		
 		langFile = new File(MainClass.main.getDataFolder(), "languages/" + (conf.isSet("lang") ? conf.getString("lang"): "en_US") + ".yml");
@@ -97,6 +97,13 @@ public class Config {
 		
 		lang = YamlConfiguration.loadConfiguration(langFile);
 		
+		if(isCustomLang()) {
+			MainClass.main.getLogger().info(String.format("Custom language detected (" + langFile.getName().replace(".yml", "") + "). If you want to contribute to the plugin send the language file to Demon@4531."));
+			Bukkit.getOnlinePlayers().forEach(p -> {
+				if(p.hasPermission("blackmarket.admin"))
+					p.sendMessage("§6[BlackMarket] §7» " + " §bCustom language detected §3(§a" + Config.getLangFile().getName().replace(".yml", "") + "§3)§b. If you want to contribute to the plugin send the language file to §3Demon@4531§b.");
+			});
+		}
 		
 		if(Utils.setDefaultData("resources/languages/en_US.yml", langFile, "menus.market.items.order.format"))
 			reloadLang();
@@ -137,6 +144,20 @@ public class Config {
 	
 	public static void reloadLang() {
 		lang = YamlConfiguration.loadConfiguration(langFile);
+	}
+	
+	public static boolean isCustomLang() {
+		boolean customLang = true;
+		for(String l : getLangList())
+			if(l.equals(langFile.getName().replace(".yml", ""))) {
+				customLang = false;
+				break;
+			}
+		return customLang;
+	}
+	
+	private static String[] getLangList(){
+		return new String[]{"en_US","es_ES","tr_TR","pt_BR", "ru_RU"};
 	}
 	
 	private static Object getValue(String key) {
