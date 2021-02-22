@@ -50,3 +50,6 @@ All permissions:
 - Java 8
 - Bukkit, Spigot or Paper for Minecraft 1.8 or newer
 - [Vault](https://www.spigotmc.org/resources/vault.34315/) for economy support
+
+## Plugin statistics
+![bStats.org](https://bstats.org/signatures/bukkit/BlackMarket.svg)
