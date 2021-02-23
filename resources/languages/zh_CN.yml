@@ -1,0 +1,198 @@
+no_permission: '&e[&4!&e] &7无权限执行该命令'
+only_player: '&e[&4!&e] &7该命令仅玩家可用'
+command:
+  sell:
+    message: '&e[&4!&e] &7已成功上架!'
+    error_limit: '&e[&4!&e] &7你已达上架限额'
+    error_item_not_found: '&e[&4!&e] &7你的手上没有拿任何东西,请拿着它'
+    error_item_not_allow: '&e[&4!&e] &7该物品暂时无法上架'
+    error_value: '&e[&4!&e] &7价格错误,请检查是否为数字,或 过大.'
+    error_minimum_price: '&e[&4!&e] &7最低价格为 &3%price%'
+    usage: '&e[&4!&e] &7正确用法&2 /%cmd% <value>'
+  reload:
+    message: '&e[&4!&e] &7已重载'
+  setnpc:
+    message: '&e[&4!&e] &7NPC已设置'
+  removenpc:
+    message: '&e[&4!&e] &7点击NPC以删除'
+    removed: '&e[&4!&e] &7NPC已删除'
+    invalid: '&e[&4!&e] &7NPC删除失败'
+help:
+- '&aBlackMarket - 命令:'
+- '&8 » &7/bm reload &8- &7(&f重载&7)'
+- '&8 » &7/bm open &8- &7(&f打开商店&7)'
+- '&8 » &7/bm setnpc <skin_name> &8- &7(&f设置NPC&7)'
+- '&8 » &7/bm removenpc &8- &7(&f删除NPC&7)'
+- '&8 » &7/bm sell <value> &8- &7(&f上架物品&7)'
+market:
+  buy: '&e[&4!&e] &7购买成功'
+  inventory_full: '&e[&4!&e] &7背包已满'
+  item_invalid: '&e[&4!&e] &7该物品未在出售,购买失败'
+  missing_money: '&e[&4!&e] &7金币不足'
+  item_owner: '&e[&4!&e] &7无法购买自己的物品'
+  take_items: '&e[&4!&e] &7已成功取走物品'
+  notification: '&e[&4!&e] &7商品 &2%name% &7已出售,获得金币 &3%value%'
+  cancel_post: '&e[&4!&e] &7商品已下架'
+menus:
+  market:
+    title: '&9&l[&0环球市场&9&l]'
+    items:
+      item_onsale:
+      - '&3◆  &7店主: &9&l[&3%owner%&9&l]'
+      - '&3◆  &7价格: &9&l[&3%value%&9&l]'
+      - '&3◆  &7余期: &9&l[&3%expired%&9&l]'
+      - ''
+      - '&2✔ &7左击购买'
+      next:
+        name: '&e下一页 (%actual_page%-%pages%)'
+      previous:
+        name: '&e上一页 (%actual_page%-%pages%)'
+      close:
+        name: '&9&l✧ &f退出 &9&l✧'
+      order:
+        name: '&9&l[&f排序方式&9&l]'
+        lore:
+        - '&8- &7%order_id%'
+        - '&8- &7%order_type%'
+        - '&8- &7%order_amount%'
+        - '&8- &7%order_value%'
+        - ''
+        - '&2✔ &7点击修改'
+        format: '%active% %value%'
+        active: '&c»&4'
+        values:
+          id: ID
+          type: 材料
+          amount: 数量
+          value: 价格
+      info:
+        name: '&9&l[&f相关介绍&9&l]'
+        lore:
+        - '&3◆  &7快速寄售'
+        - '&3◆  &f&l[ &3/bm sell [价] &f&l]'
+        - ''
+        - '&3◆  &7面向所有玩家的公共市场'
+      storage:
+        name: '&9&l[&f保管处&9&l]'
+        lore:
+        - ''
+        - '&3◆  &7保管处'
+        - '&3◆  &7寄售到期的物品'
+        - ''
+        - '&2✔ &7点击打开'
+      categories:
+        all:
+          name: '&9&l[&f所有&9&l]'
+          lore:
+          - '&3▪ &7所有'
+        ores:
+          name: '&9&l[&f矿物&9&l]'
+          lore:
+          - '&9&l[&2&l例子&9&l]'
+          - '&3▪ &7铁矿'
+          - '&3▪ &7金矿'
+          - '&3▪ &7钻石'
+          - '&3▪ &7绿宝石'
+          - '&3▪ &7...'
+        potions:
+          name: '&9&l[&f炼材&9&l]'
+          lore:
+          - '&9&l[&2&l例子&9&l]'
+          - '&3▪ &7药水'
+          - '&3▪ &7地狱疣'
+          - '&3▪ &7烈焰棒'
+          - '&3▪ &7恶魂泪'
+          - '&3▪ &7...'
+        redstone:
+          name: '&9&l[&f红石系&9&l]'
+          lore:
+          - '&9&l[&2&l例子&9&l]'
+          - '&3▪ &7红石'
+          - '&3▪ &7TNT'
+          - '&3▪ &7发射器'
+          - '&3▪ &7观察器'
+          - '&3▪ &77...'
+        tools:
+          name: '&9&l[&f工具&9&l]'
+          lore:
+          - '&9&l[&2&l例子&9&l]'
+          - '&3▪ &7剪刀'
+          - '&3▪ &7斧子'
+          - '&3▪ &7镐子'
+          - '&3▪ &7铲子'
+          - '&3▪ &7...'
+        wood:
+          name: '&9&l[&f木材&9&l]'
+          lore:
+          - '&9&l[&2&l例子&9&l]'
+          - '&3▪ &7橡木'
+          - '&3▪ &7云杉'
+          - '&3▪ &7丛林'
+          - '&3▪ &7白桦'
+          - '&3▪ &7...'
+      sales:
+        name: '&9&l[&f商品上架&9&l]'
+        lore:
+        - ''
+        - '&3◆  &7上架商品'
+        - '&3◆  &7将物品上架到市场寄售'
+        - ''
+        - '&2✔ &7点击打开'
+      item_onsale_remove:
+      - ''
+      - '&2✔ &7右击删除'
+  storage:
+    title: '&9&l[&0保管处&9&l]'
+    items:
+      back:
+        name: '&9&l✧ &f返回 &9&l✧'
+      take_items:
+        name: '&9&l[&f取走物品&9&l]'
+        lore:
+        - ''
+        - '&3◆  &7取走物品'
+        - '&3◆  &7将保管处的所有物品取走'
+        - ''
+        - '&2✔ &7点击取走'
+  sales:
+    title: '&9&l[&0商品上架&9&l]'
+    items:
+      back:
+        name: '&9&l✧ &f取消 &9&l✧'
+        lore:
+        - '&2✔ &7点击返回'
+      item:
+        name: '&9&l[&f物品&9&l]'
+        lore:
+        - ''
+        - '&3◆  &7选择你要上架的物品'
+        - ''
+        - '&2✔ &7点击背包中的物品'
+      value:
+        name: '&9&l[&f价格&9&l]'
+        lore:
+        - ''
+        - '&3◆  &7当前价格 &9&l[&3%sale_value%&9&l]'
+        - ''
+        - '&2✔ &7点击修改'
+      post:
+        name: '&9&l[&f确认&9&l]'
+        lore:
+        - ''
+        - '&3◆  &7二次确认,以免造成损失'
+        - ''
+        - '&2✔ &7点击上架'
+      item_changed:
+      - ''
+      - '&3▪ &7再次点击背包内的物品'
+      - '&3▪ &7可修改上架物品'
+npc:
+  name: BlackMarket
+  click: '&e点击打开'
+time_data:
+  day: 天
+  hour: 时
+  minute: 分
+  second: 秒
+sales:
+  value: '&e[&4!&e] &7请输入要设置的商品 &3价格'
