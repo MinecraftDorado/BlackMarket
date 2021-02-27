@@ -8,10 +8,12 @@ CREATE TABLE IF NOT EXISTS `blackitems` (
   `status` VARCHAR(255) NOT NULL,
   `item` VARCHAR(255) NOT NULL,
   `notified` BOOLEAN NOT NULL default false,
+  `content` LONGTEXT,
   PRIMARY KEY (`id`),
   KEY (`owner`)
 )
   ENGINE =InnoDB
   DEFAULT CHARSET =latin1;
 
-ALTER TABLE `blackitems` ADD `notified` BOOLEAN NOT NULL default false ;
+ALTER TABLE `blackitems` ADD COLUMN IF NOT EXISTS `notified` BOOLEAN NOT NULL default false ;
+ALTER TABLE `blackitems` ADD COLUMN IF NOT EXISTS `content` LONGTEXT;

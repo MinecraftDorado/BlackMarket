@@ -59,6 +59,8 @@ menus:
       - "&e¡Clic para comprar!"
       item_onsale_remove:
       - "&c¡Clic derecho para quitar!"
+      item_onsale_content:
+      - "&3¡Clic central para inspeccionar!"
       next:
         name: "&eSiguiente página (%actual_page%-%pages%)"
       previous:
@@ -185,6 +187,11 @@ menus:
       - ""
       - "&e¡Clic en un item de tu"
       - "&einventario para cambiar!"
+  content:
+    title: "BlackMarket - Contenido"
+    items:
+      back:
+        name: "&cVolver"
 
 npc:
   name: "BlackMarket"
