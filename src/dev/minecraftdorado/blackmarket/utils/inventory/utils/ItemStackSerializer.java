@@ -30,7 +30,7 @@ public class ItemStackSerializer {
         try {
         	builder.append(UMaterial.match(item).name());
         }catch(Exception ex) {
-        	Bukkit.getConsoleSender().sendMessage("§cMaterial: " + item.getType().name());
+        	builder.append(item.getType().name());
         }
         if(item.getDurability() != 0) builder.append(":" + item.getDurability());
         builder.append(" " + item.getAmount());
@@ -52,6 +52,7 @@ public class ItemStackSerializer {
         if(potions != null) builder.append(" potion:" + potions);
         return builder.toString();
     }
+	
     public static ItemStack deserialize(String serializedItem){
         String[] strings = serializedItem.split(" ");
         String[] args;
@@ -60,10 +61,16 @@ public class ItemStackSerializer {
         // Material
         for (String str: strings) {
             args = str.split(":");
-            if(UMaterial.match(args[0]) != null && item.getType() == Material.AIR){
-                item = UMaterial.match(args[0]).getItemStack();
-                if(args.length == 2) item.setDurability(Short.parseShort(args[1]));
-                break;
+            if(item.getType() == Material.AIR) {
+            	if(UMaterial.match(args[0]) != null){
+            		item = UMaterial.match(args[0]).getItemStack();
+            		if(args.length == 2) item.setDurability(Short.parseShort(args[1]));
+            		break;
+            	}else if(Material.matchMaterial(args[0]) != null) {
+            		item.setType(Material.valueOf(args[0]));
+            		if(args.length == 2) item.setDurability(Short.parseShort(args[1]));
+            		break;
+            	}
             }
         }
         if (item.getType() == Material.AIR) {

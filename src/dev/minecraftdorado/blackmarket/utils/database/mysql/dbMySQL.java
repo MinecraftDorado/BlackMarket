@@ -79,26 +79,28 @@ public class dbMySQL {
             		
             		ItemStack item = ItemStackSerializer.deserialize(resultSet.getString("item"));
             		
-            		if(resultSet.getString("content") != null && item.getType().name().contains("SHULKER_BOX") && item.getItemMeta() instanceof BlockStateMeta) {
-            			BlockStateMeta meta = (BlockStateMeta) item.getItemMeta();
-            			if(meta.getBlockState() instanceof ShulkerBox) {
-            				ShulkerBox shulker = (ShulkerBox) meta.getBlockState();
-            				
-            				try {
-								shulker.getInventory().setContents(SerializeInventory.itemStackArrayFromBase64(resultSet.getString("content")));
-							} catch (Exception ex) {
-								ex.printStackTrace();
-							}
-            				
-            				meta.setBlockState(shulker);
-            				item.setItemMeta(meta);
+            		if(item != null) {
+            			if(resultSet.getString("content") != null && item.getType().name().contains("SHULKER_BOX") && item.getItemMeta() instanceof BlockStateMeta) {
+            				BlockStateMeta meta = (BlockStateMeta) item.getItemMeta();
+            				if(meta.getBlockState() instanceof ShulkerBox) {
+            					ShulkerBox shulker = (ShulkerBox) meta.getBlockState();
+            					
+            					try {
+            						shulker.getInventory().setContents(SerializeInventory.itemStackArrayFromBase64(resultSet.getString("content")));
+            					} catch (Exception ex) {
+            						ex.printStackTrace();
+            					}
+            					
+            					meta.setBlockState(shulker);
+            					item.setItemMeta(meta);
+            				}
             			}
-    				}
-            		
-            		
-					BlackItem bItem = new BlackItem(item, resultSet.getDouble("value"), uuid, status, new Date(resultSet.getLong("date")), resultSet.getInt("id"), resultSet.getBoolean("notified"));
-            		
-            		PlayerData.get(uuid).addItem(bItem);
+            			
+            			
+            			BlackItem bItem = new BlackItem(item, resultSet.getDouble("value"), uuid, status, new Date(resultSet.getLong("date")), resultSet.getInt("id"), resultSet.getBoolean("notified"));
+            			
+            			PlayerData.get(uuid).addItem(bItem);
+            		}
             	}
             }
             
