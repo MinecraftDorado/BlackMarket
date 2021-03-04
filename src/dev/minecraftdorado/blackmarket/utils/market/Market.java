@@ -49,7 +49,7 @@ public class Market {
 										update = false;
 										break;
 									}else
-										l.put(bItem.getId(), bItem.getItemStack(p));
+										l.put(bItem.getId(), bItem.getItemStack(p, true));
 								
 								inv.setItem(slot, l.get(bItem.getId()));
 							}
@@ -135,7 +135,7 @@ public class Market {
 		
 		for(BlackItem bItem : list.values()) {
 			if(bItem.getStatus().equals(Status.ON_SALE)) {
-				if(category == null || category.getMaterials().isEmpty() || category.contain(UMaterial.match(bItem.getItemStack(player))))
+				if(category == null || category.getMaterials().isEmpty() || category.contain(UMaterial.match(bItem.getItemStack(player, true))))
 					l.add(bItem);
 			}else
 				toRemove.add(bItem.getId());
@@ -174,7 +174,7 @@ public class Market {
 			else
 				slot++;
 			int id = (page*24) + i;
-			inv.setItem(slot, l.get(id).getItemStack(player));
+			inv.setItem(slot, l.get(id).getItemStack(player, true));
 			inv.addBlackItem(l.get(id), slot);
 			items++;
 		}

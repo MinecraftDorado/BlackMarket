@@ -122,11 +122,13 @@ public class MarketListener implements Listener {
 			if(!e.getInv().getBlackList().isEmpty() && e.getInv().getBlackList().keySet().contains(e.getSlot())) {
 				BlackItem bItem = e.getInv().getBlackList().get(e.getSlot());
 				
+				// inspect
 				if(e.getAction().equals(InventoryAction.CLONE_STACK) && bItem.getOriginal().getType().name().contains("SHULKER_BOX")) {
 					InventoryManager.openInventory(p, Content.getInventory(p, bItem));
 					return;
 				}
 				
+				// remove
 				if(bItem.getOwner().equals(uuid) || p.hasPermission("blackmarket.remove_item"))
 					if(e.getAction().equals(InventoryAction.PICKUP_HALF) && bItem.getStatus().equals(Status.ON_SALE)) {
 						bItem.setStatus(Status.TIME_OUT);
@@ -139,6 +141,7 @@ public class MarketListener implements Listener {
 						return;
 					}
 				
+				// buy
 				if(!bItem.getOwner().equals(uuid))
 					if(MainClass.econ.has(p, bItem.getValue()))
 						if(bItem.getStatus().equals(Status.ON_SALE)) {

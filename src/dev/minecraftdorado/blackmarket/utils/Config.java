@@ -32,7 +32,7 @@ public class Config {
 	private static int expiredTime, defaultLimit, taxes;
 	private static double minimum_price;
 	private static ArrayList<NPC> npcs = new ArrayList<>();
-	private static ItemStack market_background, market_border, storage_background, storage_border, sellmenu_background, sellmenu_border, content_background, content_border;
+	private static ItemStack market_background, market_border, storage_background, storage_border, sellmenu_background, sellmenu_border, content_border;
 	private static StorageType storageType;
 	private static boolean blacklist_enable;
 	private static ArrayList<String> sellAlias = new ArrayList<>();
@@ -76,7 +76,6 @@ public class Config {
 		storage_border = Utils.getMaterial((String) getValue("menus.storage.border"));
 		sellmenu_background = Utils.getMaterial((String) getValue("menus.sales.background"));
 		sellmenu_border = Utils.getMaterial((String) getValue("menus.sales.border"));
-		content_background = Utils.getMaterial((String) getValue("menus.content.background"));
 		content_border = Utils.getMaterial((String) getValue("menus.content.border"));
 		
 		storageType = (boolean) getValue("mysql.enable") ? StorageType.MySQL : StorageType.File;
@@ -313,10 +312,6 @@ public class Config {
 	
 	public static ItemStack getSellMenuBorder() {
 		return sellmenu_border;
-	}
-	
-	public static ItemStack getContentMenuBackground() {
-		return content_background;
 	}
 	
 	public static ItemStack getContentMenuBorder() {

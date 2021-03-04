@@ -75,7 +75,7 @@ public class BlackItem {
 		return item;
 	}
 	
-	public ItemStack getItemStack(Player p) {
+	public ItemStack getItemStack(Player p, boolean inspect) {
 		ItemStack black = item.clone();
 		ItemMeta meta = black.getItemMeta();
 		
@@ -98,7 +98,8 @@ public class BlackItem {
 			
 			lore.add(ChatColor.translateAlternateColorCodes('&', s));
 		}
-		if(item.getType().name().contains("SHULKER_BOX"))
+		
+		if(inspect && item.getType().name().contains("SHULKER_BOX"))
 			for(String s : Config.getContentDesc())
 				lore.add(ChatColor.translateAlternateColorCodes('&', s));
 		

@@ -17,7 +17,6 @@ public class Content {
 	public static Inv getInventory(Player player, BlackItem bItem) {
 		Inv inv = new Inv(getTitle(), 6);
 		
-		inv.setBackgroud(Config.getContentMenuBackground(), false);
 		inv.setBackgroud(Config.getContentMenuBorder(), true);
 		
 		if(bItem.getOriginal().getType().name().contains("SHULKER_BOX"))
@@ -44,7 +43,8 @@ public class Content {
 				}
 			}
 		
-		inv.setItem(48, bItem.getOriginal());
+		inv.addBlackItem(bItem, 48);
+		inv.setItem(48, bItem.getItemStack(player, false));
 		inv.setItem(Config.getSlot("content.back"), Config.getItemStack("content.back", "menus.content.items.back"));
 		return inv;
 	}

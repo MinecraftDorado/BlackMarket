@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -195,7 +194,6 @@ public class dbMySQL {
 					if(meta.getBlockState() instanceof ShulkerBox) {
 						ShulkerBox shulker = (ShulkerBox) meta.getBlockState();
 						content = SerializeInventory.itemStackArrayToBase64(shulker.getInventory().getContents());
-						Bukkit.getConsoleSender().sendMessage("§4" + content);
 					}
 				}
 			preparedStatement.setObject(6, content != null ? content : null);
