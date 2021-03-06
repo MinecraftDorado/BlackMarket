@@ -1,5 +1,6 @@
 no_permission: "&c¡No tienes permisos usar este comando!"
 only_player: "&c¡Esté comando solo puede ser usado por Jugadores!"
+offline_player: "&c¡(&4%player%&c) se encuntra desconectado!"
 command:
   sell:
     message: "&e¡Artículo publicado!"
@@ -21,7 +22,7 @@ command:
 help:
 - "&aBlackMarket - Comandos:"
 - "&8 » &7/bm reload &8- &7(&fRecarga la configuración&7)"
-- "&8 » &7/bm open &8- &7(&fAbre el BlackMarket&7)"
+- "&8 » &7/bm open <jugador> &8- &7(&fAbre el BlackMarket&7)"
 - "&8 » &7/bm setnpc <nombre_skin> &8- &7(&fEstablece un NPC&7)"
 - "&8 » &7/bm removenpc &8- &7(&fElimina un NPC&7)"
 - "&8 » &7/bm sell <precio> &8- &7(&fPublica un artículo7)"

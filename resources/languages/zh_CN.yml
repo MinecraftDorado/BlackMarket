@@ -20,7 +20,7 @@ command:
 help:
 - '&aBlackMarket - 命令:'
 - '&8 » &7/bm reload &8- &7(&f重载&7)'
-- '&8 » &7/bm open &8- &7(&f打开商店&7)'
+- '&8 » &7/bm open <player> &8- &7(&f打开商店&7)'
 - '&8 » &7/bm setnpc <skin_name> &8- &7(&f设置NPC&7)'
 - '&8 » &7/bm removenpc &8- &7(&f删除NPC&7)'
 - '&8 » &7/bm sell <value> &8- &7(&f上架物品&7)'

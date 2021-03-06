@@ -21,7 +21,7 @@ command:
 help:
 - "&aBlackMarket - Komutler:"
 - "&8 » &7/bm reload &8- &7(&fYapılandırmayı yeniden yükle&7)"
-- "&8 » &7/bm open &8- &7(&fBlackMarket'i aç&7)"
+- "&8 » &7/bm open <player> &8- &7(&fBlackMarket'i aç&7)"
 - "&8 » &7/bm setnpc <skin_ismi> &8- &7(&fNpc oluştur&7)"
 - "&8 » &7/bm removenpc &8- &7(&fNpc sil&7)"
 - "&8 » &7/bm sell <value> &8- &7(&fBir öğeyi satışa sunun&7)"
@@ -71,7 +71,7 @@ menus:
         name: "&bInformation"
         lore:
         - "&7Satmak için komut /bm sell <miktar>"
-    - '&4(Satılması için sadece &4&l24 &4saat zamanın var!)'
+        - '&4(Satılması için sadece &4&l24 &4saat zamanın var!)'
       storage:
         name: "&bDepor"
         lore:

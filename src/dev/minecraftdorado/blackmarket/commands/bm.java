@@ -1,5 +1,6 @@
 package dev.minecraftdorado.blackmarket.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -76,8 +77,17 @@ public class bm implements CommandExecutor {
 					Config.sendMessage("command.setnpc.usage", player);
 					return false;
 				case "open":
-					if(args.length == 1) {
+					if(args.length <= 2) {
 						if(player.hasPermission("blackmarket.open")) {
+							
+							if(args.length == 2)
+								if(Bukkit.getOfflinePlayer(args[1]) != null && Bukkit.getOfflinePlayer(args[1]).isOnline())
+									player = Bukkit.getPlayer(args[1]);
+								else {
+									player.sendMessage(Config.getMessage("offline_player").replace("%player%", args[1]));
+									return false;
+								}
+							
 							PlayerData.get(player.getUniqueId()).setCategory(null);
 							Market.setPlayerPage(player.getUniqueId(), 0);
 							InventoryManager.openInventory(player, Market.getInventory(player));
@@ -131,6 +141,16 @@ public class bm implements CommandExecutor {
 					}
 					break;
 				case "open":
+					if(args.length == 2)
+						if(Bukkit.getOfflinePlayer(args[1]) != null && Bukkit.getOfflinePlayer(args[1]).isOnline()) {
+							Player player = Bukkit.getPlayer(args[1]);
+							PlayerData.get(player.getUniqueId()).setCategory(null);
+							Market.setPlayerPage(player.getUniqueId(), 0);
+							InventoryManager.openInventory(player, Market.getInventory(player));
+						}else {
+							sender.sendMessage(Config.getMessage("offline_player").replace("%player%", args[1]));
+							return false;
+						}
 					Config.sendMessage("only_player", sender);
 					return false;
 				case "setnpc":

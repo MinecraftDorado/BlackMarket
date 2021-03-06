@@ -21,7 +21,7 @@ command:
 help:
 - "&aBlackMarket - Comandos:"
 - "&8 » &7/bm reload &8- &7(&fRecarrega as configurações&7)"
-- "&8 » &7/bm open &8- &7(&fAbre o BlackMarket&7)"
+- "&8 » &7/bm open <player> &8- &7(&fAbre o BlackMarket&7)"
 - "&8 » &7/bm setnpc <skin_name> &8- &7(&fDefine um NPC&7)"
 - "&8 » &7/bm removenpc &8- &7(&fRemove um NPC&7)"
 - "&8 » &7/bm sell <value> &8- &7(&fPosta um item&7)"

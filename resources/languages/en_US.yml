@@ -1,5 +1,6 @@
 no_permission: "&cYou don't have permission to use this command!"
 only_player: "&cThis command only can be used by Players!"
+offline_player: "&c(&4%player%&c) is offline!"
 command:
   sell:
     message: "&eItem added!"
@@ -21,7 +22,7 @@ command:
 help:
 - "&aBlackMarket - Commands:"
 - "&8 » &7/bm reload &8- &7(&fReload config&7)"
-- "&8 » &7/bm open &8- &7(&fOpen the BlackMarket&7)"
+- "&8 » &7/bm open <player> &8- &7(&fOpen the BlackMarket&7)"
 - "&8 » &7/bm setnpc <skin_name> &8- &7(&fSet a NPC&7)"
 - "&8 » &7/bm removenpc &8- &7(&fRemove a NPC&7)"
 - "&8 » &7/bm sell <value> &8- &7(&fPost an item&7)"
