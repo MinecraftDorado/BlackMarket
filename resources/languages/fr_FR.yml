@@ -1,0 +1,204 @@
+no_permission: "&cVous n'êtes pas autorisé à utiliser cette commande!"
+only_player: "&cCette commande ne peut être utilisée que par les joueurs!"
+command:
+  sell:
+    message: "&eObjet ajouté!"
+    error_limit: "&cVous avez atteint la limite des objets à vendre!"
+    error_item_not_found: "&cVotre main est vide, vous avez besoin d'un objet à vendre!"
+    error_item_not_allow: "&cCe matériel n'est pas valable sur le marché!"
+    error_value: "&cValeur invalide!"
+    error_minimum_price: "&cLe prix minimum est %price%!"
+    usage: "&cUsage /%cmd% <value>"
+  reload:
+    message: "&eConfiguration rechargée!"
+  setnpc:
+    message: "&eNPC placé à votre place !"
+  removenpc: 
+    message: "&eFaites un clic droit sur un PNJ pour le supprimer !"
+    removed: "&eNPC supprimé !"
+    invalid: "&cNPC non détecté !"
+
+help:
+- "&aBlackMarket - Commands:"
+- "&8 » &7/bm reload &8- &7(&fRecharger la configuration&7)"
+- "&8 » &7/bm open &8- &7(&fOuvrir le BlackMarket&7)"
+- "&8 » &7/bm setnpc <nom_du_skin> &8- &7(&fDéfinir une NPC&7)"
+- "&8 » &7/bm removenpc &8- &7(&fSupprimer un NPC&7)"
+- "&8 » &7/bm sell <valeur> &8- &7(&fMettre en vente un objet&7)"
+
+market:
+  buy: "&eMerci pour l'achat!"
+  inventory_full: "&cInventaire plein!"
+  item_invalid: "&cCet objet n'est pas à vendre!"
+  missing_money: "&cVous n'avez pas d'argent pour acheter ceci !"
+  item_owner: "&cVous ne pouvez pas acheter vos objets !"
+  take_items: "&eObjet pris !"
+  cancel_post: "&ePoste annulé!"
+  notification: "&eObjet &a%name% &evendu pour &6%value%&e!"
+
+sales:
+  item_not_found: "&cChoisissez un objet à vendre dans votre inventaire!"
+  value: "&eInscrivez la valeur de vente de l'objet !"
+
+menus:
+  market:
+    title: "BlackMarket"
+    items:
+      sales:
+        name: "&bMenu des ventes"
+        lore:
+        - "&7Menu pour mettre des objets"
+        - "&7sur le marché."
+        - ""
+        - "&eCliquez pour ouvrir!"
+      item_onsale:
+      - "&8Propriétaire: &b%owner%"
+      - "&8Valeur: &6%value%$"
+      - "&8Expiration dans: &b%expired%"
+      - ""
+      - "&eCliquez pour acheter !"
+      item_onsale_remove:
+      - "&cClic droit pour supprimer!"
+      item_onsale_content:
+      - "&3Cliquez au milieu pour inspecter !"
+      next:
+        name: "&ePage suivante (%actual_page%-%pages%)"
+      previous:
+        name: "&ePage précédente (%actual_page%-%pages%)"
+      close:
+        name: "&cSortir"
+      order:
+        name: "&bType de commande"
+        lore:
+        - "&8- &7%order_id%"
+        - "&8- &7%order_type%"
+        - "&8- &7%order_amount%"
+        - "&8- &7%order_value%"
+        - ""
+        - "&eCliquez à gauche pour changer !"
+        - "&eCliquez sur le bouton droit pour revenir en arrière !"
+        format: "%active% %value%"
+        active: "&c»&4"
+        values:
+          id: "IDs"
+          type: "Matériel"
+          amount: "Nombre"
+          value: "Valeur"
+      info:
+        name: "&bInformation"
+        lore:
+        - "&7Commande pour vendre /bm sell <nombre>"
+        - "&4(Délai d'expiration 24 heures)"
+      storage:
+        name: "&bStockage"
+        lore:
+        - "&7Vos invendus"
+        - ""
+        - "&eCliquez pour ouvrir !"
+      categories:
+        all:    # categories/all.yml
+          name: "&bTout"
+          lore:
+          - "&7Tous les objets"
+        ores:
+          name: "&bMinerai"
+          lore:
+          - "&7Liste:"
+          - "&8 - &7Fer"
+          - "&8 - &7Or"
+          - "&8 - &7Diamant"
+          - "&8 - &7Emeraude"
+          - "&8 - &7..."
+        potions:
+          name: "&bPotions"
+          lore:
+          - "&7Liste:"
+          - "&8 - &7Potions"
+          - "&8 - &7Verrue du nether"
+          - "&8 - &7Baton de Blaze"
+          - "&8 - &7Larme de Ghast"
+          - "&8 - &7..."
+        redstone:
+          name: "&bRedstone"
+          lore:
+          - "&7Liste:"
+          - "&8 - &7Redstone"
+          - "&8 - &7TNT"
+          - "&8 - &7Distributeur"
+          - "&8 - &7Observateur"
+          - "&8 - &7..."
+        tools:
+          name: "&bOutils"
+          lore:
+          - "&7Liste:"
+          - "&8 - &7Cisailles"
+          - "&8 - &7Hache"
+          - "&8 - &7Pioche"
+          - "&8 - &7Pelle"
+          - "&8 - &7..."
+        wood:
+          name: "&bBois"
+          lore:
+          - "&7Liste:"
+          - "&8 - &7Chêne Bûche/Planches"
+          - "&8 - &7Sapin Bûche/Planches"
+          - "&8 - &7Jungle Bûche/Planches"
+          - "&8 - &7Acacia Bûche/Planches"
+          - "&8 - &7..."
+  storage:
+    title: "BlackMarket - Stockage"
+    items:
+      back:
+        name: "&cRetour"
+      take_items:
+        name: "&bPrendre des objets"
+        lore:
+        - "&7Prendre tous les objets"
+        - ""
+        - "&eCliquez pour prendre !"
+  sales:
+    title: "BlackMarket - Ventes"
+    items:
+      back:
+        name: "&cAnnuler"
+        lore:
+        - "&eCliquez pour annuler la vente !"
+      post:
+        name: "&bMise en vente"
+        lore:
+        - "&7Êtes-vous sûr ?"
+        - ""
+        - "&eCliquez pour mettre en vente !"
+      value:
+        name: "&bValeur"
+        lore:
+        - "&eValeur : &6$%sale_value%"
+        - ""
+        - "&eCliquez pour modifier le prix !"
+      item:
+        name: "&bObjets"
+        lore:
+        - "&7Modifier cet objet"
+        - "&7pour pouvoir mettre en vente."
+        - ""
+        - "&eCliquez sur un objet de votre "
+        - "&einventaire pour le modifier !"
+      item_changed:
+      - ""
+      - "&eCliquez sur l'élément dans votre"
+      - "&einventaire pour modifier !"
+  content:
+    title: "BlackMarket - Contenu"
+    items:
+      back:
+        name: "&cRetour"
+      
+npc:
+  name: "BlackMarket"
+  click: "&eCliquez ici !"
+
+time_data: # Example 16h 23m
+    day: "d"
+    hour: "h"
+    minute: "m"
+    second: "s"

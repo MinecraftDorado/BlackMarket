@@ -164,7 +164,7 @@ public class Config {
 	}
 	
 	private static String[] getLangList(){
-		return new String[]{"en_US","es_ES","tr_TR","pt_BR", "ru_RU", "zh_CN"};
+		return new String[]{"en_US","es_ES","tr_TR","pt_BR", "ru_RU", "zh_CN", "fr_FR"};
 	}
 	
 	private static Object getValue(String key) {
