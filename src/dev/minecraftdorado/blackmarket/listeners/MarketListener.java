@@ -123,7 +123,7 @@ public class MarketListener implements Listener {
 				BlackItem bItem = e.getInv().getBlackList().get(e.getSlot());
 				
 				// inspect
-				if(e.getAction().equals(InventoryAction.CLONE_STACK) && bItem.getOriginal().getType().name().contains("SHULKER_BOX")) {
+				if((e.getAction().equals(InventoryAction.CLONE_STACK) || e.getAction().equals(InventoryAction.NOTHING)) && bItem.getOriginal().getType().name().contains("SHULKER_BOX")) {
 					InventoryManager.openInventory(p, Content.getInventory(p, bItem));
 					return;
 				}
