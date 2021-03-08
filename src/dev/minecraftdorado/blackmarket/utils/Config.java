@@ -34,7 +34,7 @@ public class Config {
 	private static ArrayList<NPC> npcs = new ArrayList<>();
 	private static ItemStack market_background, market_border, storage_background, storage_border, sellmenu_background, sellmenu_border, content_border, confirm_background, confirm_border;
 	private static StorageType storageType;
-	private static boolean blacklist_enable, confirm_enable;
+	private static boolean blacklist_enable, blacklistlore_enable, confirm_enable;
 	private static ArrayList<String> sellAlias = new ArrayList<>();
 	
 	public Config() {
@@ -83,6 +83,7 @@ public class Config {
 		storageType = (boolean) getValue("mysql.enable") ? StorageType.MySQL : StorageType.File;
 		
 		blacklist_enable = (boolean) getValue("blacklist_enable");
+		blacklistlore_enable = (boolean) getValue("blacklistlore_enable");
 		confirm_enable = (boolean) getValue("confirm_menu_enable");
 		
 		if(conf.isSet("sell_alias"))
@@ -347,6 +348,10 @@ public class Config {
 	
 	public static boolean blackListIsEnable() {
 		return blacklist_enable;
+	}
+	
+	public static boolean blackListLoreIsEnable() {
+		return blacklistlore_enable;
 	}
 	
 	public static String getString(String str) {

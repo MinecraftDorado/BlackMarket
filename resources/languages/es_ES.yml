@@ -7,6 +7,7 @@ command:
     error_limit: "&c¡Has alcanzado el límite de artículos publicados!"
     error_item_not_found: "&c¡Tu mano esta vacía, necesitas un artículo para vender!"
     error_item_not_allow: "&c¡Esté material no es aceptado en el mercado!"
+    error_lore_not_allow: "&c¡Está descripción no es aceptada en el mercado!"
     error_value: "&c¡Precio inválido!"
     error_minimum_price: "&c¡El precio mínimo es %price%!"
     usage: "&cUso /%cmd% <precio>"

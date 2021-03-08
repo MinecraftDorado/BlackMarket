@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import dev.minecraftdorado.blackmarket.listeners.PlayerListener;
 import dev.minecraftdorado.blackmarket.mainclass.MainClass;
@@ -15,6 +16,7 @@ import dev.minecraftdorado.blackmarket.utils.entities.npc.NPC;
 import dev.minecraftdorado.blackmarket.utils.entities.npc.skins.SkinData;
 import dev.minecraftdorado.blackmarket.utils.inventory.InventoryManager;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.BlackList;
+import dev.minecraftdorado.blackmarket.utils.inventory.utils.BlackListLore;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.UMaterial;
 import dev.minecraftdorado.blackmarket.utils.market.BlackItem;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
@@ -39,6 +41,7 @@ public class bm implements CommandExecutor {
 							Config.reload();
 							PlayerData.save();
 							BlackList.reload();
+							BlackListLore.reload();
 							
 							Config.sendMessage("command.reload.message", player);
 						}else
@@ -101,22 +104,27 @@ public class bm implements CommandExecutor {
 						try {
 							double value = Double.parseDouble(args[1]);
 							
-							if(value >= Config.getMinimumPrice())
-								if(player.getInventory().getItemInHand() != null && !player.getInventory().getItemInHand().getType().equals(Material.AIR))
-									if(!Config.blackListIsEnable() || BlackList.isAllow(UMaterial.match(player.getInventory().getItemInHand()))) {
-										BlackItem bItem = new BlackItem(player.getInventory().getItemInHand(), value, player.getUniqueId());
-										
-										if(PlayerData.get(player.getUniqueId()).addItem(bItem)) {
-											Config.sendMessage("command.sell.message", player);
-											player.getInventory().getItemInHand().setType(Material.AIR);
-											player.getInventory().setItemInHand(null);
+							if(value >= Config.getMinimumPrice()) {
+								ItemStack item = player.getInventory().getItemInHand();
+								
+								if(item != null && !item.getType().equals(Material.AIR))
+									if(!Config.blackListIsEnable() || BlackList.isAllow(UMaterial.match(item))) {
+										if(!Config.blackListLoreIsEnable() || !item.hasItemMeta() || !item.getItemMeta().hasLore() || BlackListLore.isAllow(item.getItemMeta().getLore())) {
+											BlackItem bItem = new BlackItem(item, value, player.getUniqueId());
+											
+											if(PlayerData.get(player.getUniqueId()).addItem(bItem)) {
+												Config.sendMessage("command.sell.message", player);
+												player.getInventory().getItemInHand().setType(Material.AIR);
+												player.getInventory().setItemInHand(null);
+											}else
+												Config.sendMessage("command.sell.error_limit", player);
 										}else
-											Config.sendMessage("command.sell.error_limit", player);
+											Config.sendMessage("command.sell.error_lore_not_allow", player);
 									}else
-										Config.sendMessage("command.sell.error_item_not_allow", player);	
+										Config.sendMessage("command.sell.error_item_not_allow", player);
 								else
 									Config.sendMessage("command.sell.error_item_not_found", player);
-							else
+							}else
 								player.sendMessage(Config.getMessage("command.sell.error_minimum_price").replace("%price%", Config.getMinimumPrice() + ""));
 						}catch(Exception ex) {
 							Config.sendMessage("command.sell.error_value", player);
@@ -135,6 +143,7 @@ public class bm implements CommandExecutor {
 						Config.reload();
 						PlayerData.save();
 						BlackList.reload();
+						BlackListLore.reload();
 						
 						Config.sendMessage("command.reload.message", sender);
 						return false;

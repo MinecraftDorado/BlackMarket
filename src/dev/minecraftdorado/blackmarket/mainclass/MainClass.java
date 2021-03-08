@@ -24,6 +24,7 @@ import dev.minecraftdorado.blackmarket.utils.entities.npc.skins.SkinData;
 import dev.minecraftdorado.blackmarket.utils.hook.VaultHook;
 import dev.minecraftdorado.blackmarket.utils.inventory.InventoryManager;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.BlackList;
+import dev.minecraftdorado.blackmarket.utils.inventory.utils.BlackListLore;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.CategoryUtils;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
 import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
@@ -73,12 +74,10 @@ public class MainClass extends JavaPlugin {
 		new CategoryUtils();
 		new Market();
 		new BlackList();
+		new BlackListLore();
 		
 		Metrics metrics = new Metrics(this, 10119);
 		new CustomMetrics(metrics);
-		
-		if(Config.blackListIsEnable())
-			BlackList.load();
 		
 		if(!Config.getSellAlias().isEmpty())
 			try {

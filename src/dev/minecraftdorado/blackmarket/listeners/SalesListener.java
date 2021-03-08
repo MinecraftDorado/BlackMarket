@@ -14,6 +14,7 @@ import dev.minecraftdorado.blackmarket.utils.Config;
 import dev.minecraftdorado.blackmarket.utils.inventory.InventoryManager;
 import dev.minecraftdorado.blackmarket.utils.inventory.events.InventoryClickEvent;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.BlackList;
+import dev.minecraftdorado.blackmarket.utils.inventory.utils.BlackListLore;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.UMaterial;
 import dev.minecraftdorado.blackmarket.utils.market.BlackItem;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
@@ -67,8 +68,11 @@ public class SalesListener implements Listener {
 			// ItemStack "Item"
 			if(!e.usingCustomInv())
 				if(!Config.blackListIsEnable() || BlackList.isAllow(UMaterial.match(e.getItemStack()))) {
-					Sales.setItemStack(p.getUniqueId(), e.getItemStack());
-					InventoryManager.updateInventory(p, Sales.getInventory(p));
+					if(!Config.blackListLoreIsEnable() || !e.getItemStack().hasItemMeta() || !e.getItemStack().getItemMeta().hasLore() || BlackListLore.isAllow(e.getItemStack().getItemMeta().getLore())) {
+						Sales.setItemStack(p.getUniqueId(), e.getItemStack());
+						InventoryManager.updateInventory(p, Sales.getInventory(p));
+					}else
+						Config.sendMessage("command.sell.error_lore_not_allow", p);
 				}else
 					Config.sendMessage("command.sell.error_item_not_allow", p);
 		}

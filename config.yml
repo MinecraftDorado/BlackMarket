@@ -97,6 +97,7 @@ limit: 5 # items by user
 expired_time: 1440 # 1440 minutes = 24 hours
 
 blacklist_enable: false
+blacklistlore_enable: false
 
 confirm_menu_enable: false
 

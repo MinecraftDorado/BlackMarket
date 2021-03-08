@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import dev.minecraftdorado.blackmarket.mainclass.MainClass;
+import dev.minecraftdorado.blackmarket.utils.Config;
 import dev.minecraftdorado.blackmarket.utils.Utils;
 
 public class BlackList {
@@ -16,6 +17,7 @@ public class BlackList {
 	public BlackList() {
 		if(!file.exists())
 			Utils.extract("resources/blacklist.yml", "blacklist.yml");
+		load();
 	}
 	
 	public static boolean isAllow(UMaterial umat) {
@@ -23,6 +25,8 @@ public class BlackList {
 	}
 	
 	public static void load() {
+		if(!Config.blackListIsEnable()) return;
+		
 		YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
 		
 		if(yml.isSet("list"))
