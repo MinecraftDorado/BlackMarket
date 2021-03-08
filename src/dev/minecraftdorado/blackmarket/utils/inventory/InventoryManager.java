@@ -188,7 +188,7 @@ public class InventoryManager implements Listener {
 		}
 		
 		public void setItem(int slot, ItemStack item) {
-			if(item != null && slot < row*9 && slot > 0)
+			if(item != null && slot < row*9 && slot >= 0)
 				inv.setItem(slot, item);
 		}
 		
