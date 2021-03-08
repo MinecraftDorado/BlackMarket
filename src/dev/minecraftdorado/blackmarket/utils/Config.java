@@ -32,9 +32,9 @@ public class Config {
 	private static int expiredTime, defaultLimit, taxes;
 	private static double minimum_price;
 	private static ArrayList<NPC> npcs = new ArrayList<>();
-	private static ItemStack market_background, market_border, storage_background, storage_border, sellmenu_background, sellmenu_border, content_border;
+	private static ItemStack market_background, market_border, storage_background, storage_border, sellmenu_background, sellmenu_border, content_border, confirm_background, confirm_border;
 	private static StorageType storageType;
-	private static boolean blacklist_enable;
+	private static boolean blacklist_enable, confirm_enable;
 	private static ArrayList<String> sellAlias = new ArrayList<>();
 	
 	public Config() {
@@ -77,10 +77,13 @@ public class Config {
 		sellmenu_background = Utils.getMaterial((String) getValue("menus.sales.background"));
 		sellmenu_border = Utils.getMaterial((String) getValue("menus.sales.border"));
 		content_border = Utils.getMaterial((String) getValue("menus.content.border"));
+		confirm_background = Utils.getMaterial((String) getValue("menus.confirm.background"));
+		confirm_border = Utils.getMaterial((String) getValue("menus.confirm.border"));
 		
 		storageType = (boolean) getValue("mysql.enable") ? StorageType.MySQL : StorageType.File;
 		
 		blacklist_enable = (boolean) getValue("blacklist_enable");
+		confirm_enable = (boolean) getValue("confirm_menu_enable");
 		
 		if(conf.isSet("sell_alias"))
 			conf.getStringList("sell_alias").forEach(cmd -> sellAlias.add(cmd));
@@ -316,6 +319,18 @@ public class Config {
 	
 	public static ItemStack getContentMenuBorder() {
 		return content_border;
+	}
+	
+	public static boolean confirmMenuIsEnable() {
+		return confirm_enable;
+	}
+	
+	public static ItemStack getConfirmMenuBackground() {
+		return confirm_background;
+	}
+	
+	public static ItemStack getConfirmMenuBorder() {
+		return confirm_border;
 	}
 	
 	public static double getMinimumPrice() {

@@ -166,4 +166,25 @@ public class BlackItem {
 	public double getFinalValue() {
 		return Double.parseDouble(new DecimalFormat("0.00").format(value - (value * Config.getTaxes() / 100)).replace(",", "."));
 	}
+	
+	public boolean buy(Player player) {
+		if(MainClass.econ.has(player, getValue()))
+			if(getStatus().equals(Status.ON_SALE)) {
+				if(Utils.canAddItem(player, getOriginal())) {
+					setStatus(Status.SOLD);
+					player.getInventory().addItem(getOriginal());
+					player.closeInventory();
+					Config.sendMessage("market.buy", player);
+					
+					MainClass.econ.withdrawPlayer(player, getValue());
+					MainClass.econ.depositPlayer(Bukkit.getOfflinePlayer(getOwner()), getFinalValue());
+					return true;
+				}
+				Config.sendMessage("market.inventory_full", player);
+			}else
+				Config.sendMessage("market.item_invalid", player);
+		else
+			Config.sendMessage("market.missing_money", player);
+		return false;
+	}
 }

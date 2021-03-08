@@ -11,7 +11,6 @@ import org.bukkit.event.inventory.InventoryAction;
 
 import dev.minecraftdorado.blackmarket.mainclass.MainClass;
 import dev.minecraftdorado.blackmarket.utils.Config;
-import dev.minecraftdorado.blackmarket.utils.Utils;
 import dev.minecraftdorado.blackmarket.utils.inventory.InventoryManager;
 import dev.minecraftdorado.blackmarket.utils.inventory.events.InventoryClickEvent;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.CategoryUtils;
@@ -21,6 +20,7 @@ import dev.minecraftdorado.blackmarket.utils.market.BlackItem;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
 import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
 import dev.minecraftdorado.blackmarket.utils.market.Storage;
+import dev.minecraftdorado.blackmarket.utils.market.confirm.Confirm;
 import dev.minecraftdorado.blackmarket.utils.market.content.Content;
 import dev.minecraftdorado.blackmarket.utils.market.BlackItem.Status;
 import dev.minecraftdorado.blackmarket.utils.market.sell.Sales;
@@ -143,23 +143,11 @@ public class MarketListener implements Listener {
 				
 				// buy
 				if(!bItem.getOwner().equals(uuid))
-					if(MainClass.econ.has(p, bItem.getValue()))
-						if(bItem.getStatus().equals(Status.ON_SALE)) {
-							if(Utils.canAddItem(p, bItem.getOriginal())) {
-								bItem.setStatus(Status.SOLD);
-								p.getInventory().addItem(bItem.getOriginal());
-								p.closeInventory();
-								Config.sendMessage("market.buy", p);
-								
-								MainClass.econ.withdrawPlayer(p, bItem.getValue());
-								MainClass.econ.depositPlayer(Bukkit.getOfflinePlayer(bItem.getOwner()), bItem.getFinalValue());
-								return;
-							}
-							Config.sendMessage("market.inventory_full", p);
-						}else
-							Config.sendMessage("market.item_invalid", p);
-					else
-						Config.sendMessage("market.missing_money", p);
+					if(Config.confirmMenuIsEnable()) {
+						InventoryManager.openInventory(p, Confirm.getInventory(p, bItem));
+						return;
+					}else
+						bItem.buy(p);
 				else
 					Config.sendMessage("market.item_owner", p);
 			}

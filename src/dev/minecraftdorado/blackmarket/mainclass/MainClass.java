@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import dev.minecraftdorado.blackmarket.commands.bm;
 import dev.minecraftdorado.blackmarket.commands.bmTab;
 import dev.minecraftdorado.blackmarket.commands.sell;
+import dev.minecraftdorado.blackmarket.listeners.ConfirmListener;
 import dev.minecraftdorado.blackmarket.listeners.ContentListener;
 import dev.minecraftdorado.blackmarket.listeners.MarketListener;
 import dev.minecraftdorado.blackmarket.listeners.PlayerListener;
@@ -96,6 +97,7 @@ public class MainClass extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new StorageListener(), this);
 		Bukkit.getPluginManager().registerEvents(new SalesListener(), this);
 		Bukkit.getPluginManager().registerEvents(new ContentListener(), this);
+		Bukkit.getPluginManager().registerEvents(new ConfirmListener(), this);
 		Bukkit.getPluginManager().registerEvents(new InventoryManager(), this);
 		Bukkit.getOnlinePlayers().forEach(player -> PacketReader.get(player).inject());
 	}

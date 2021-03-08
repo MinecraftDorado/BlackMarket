@@ -193,6 +193,25 @@ menus:
     items:
       back:
         name: "&cReturn"
+  confirm:
+    title: "BlackMarket - Confirm"
+    items:
+      back:
+        name: "&cReturn"
+      buy:
+        name: "&aBuy"
+        lore:
+        - "&8Owner: &b%owner%"
+        - "&8Value: &6%value%$"
+        - ""
+        - "&eClick to buy!"
+      cancel:
+        name: "&cCancel"
+        lore:
+        - "§8Cancel the purchase"
+        - "&8of this item"
+        - ""
+        - "&eClick to cancel!"
       
 npc:
   name: "BlackMarket"
