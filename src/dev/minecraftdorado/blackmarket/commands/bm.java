@@ -104,27 +104,30 @@ public class bm implements CommandExecutor {
 						try {
 							double value = Double.parseDouble(args[1]);
 							
-							if(value >= Config.getMinimumPrice()) {
-								ItemStack item = player.getInventory().getItemInHand();
-								
-								if(item != null && !item.getType().equals(Material.AIR))
-									if(!Config.blackListIsEnable() || BlackList.isAllow(UMaterial.match(item))) {
-										if(!Config.blackListLoreIsEnable() || !item.hasItemMeta() || !item.getItemMeta().hasLore() || BlackListLore.isAllow(item.getItemMeta().getLore())) {
-											BlackItem bItem = new BlackItem(item, value, player.getUniqueId());
-											
-											if(PlayerData.get(player.getUniqueId()).addItem(bItem)) {
-												Config.sendMessage("command.sell.message", player);
-												player.getInventory().getItemInHand().setType(Material.AIR);
-												player.getInventory().setItemInHand(null);
+							if(value >= Config.getMinimumPrice())
+								if(value <= Config.getMaximumPrice()) {
+									ItemStack item = player.getInventory().getItemInHand();
+									
+									if(item != null && !item.getType().equals(Material.AIR))
+										if(!Config.blackListIsEnable() || BlackList.isAllow(UMaterial.match(item))) {
+											if(!Config.blackListLoreIsEnable() || !item.hasItemMeta() || !item.getItemMeta().hasLore() || BlackListLore.isAllow(item.getItemMeta().getLore())) {
+												BlackItem bItem = new BlackItem(item, value, player.getUniqueId());
+												
+												if(PlayerData.get(player.getUniqueId()).addItem(bItem)) {
+													Config.sendMessage("command.sell.message", player);
+													player.getInventory().getItemInHand().setType(Material.AIR);
+													player.getInventory().setItemInHand(null);
+												}else
+													Config.sendMessage("command.sell.error_limit", player);
 											}else
-												Config.sendMessage("command.sell.error_limit", player);
+												Config.sendMessage("command.sell.error_lore_not_allow", player);
 										}else
-											Config.sendMessage("command.sell.error_lore_not_allow", player);
-									}else
-										Config.sendMessage("command.sell.error_item_not_allow", player);
-								else
-									Config.sendMessage("command.sell.error_item_not_found", player);
-							}else
+											Config.sendMessage("command.sell.error_item_not_allow", player);
+									else
+										Config.sendMessage("command.sell.error_item_not_found", player);
+								}else
+									player.sendMessage(Config.getMessage("command.sell.error_maximum_price").replace("%price%", Config.getMaximumPrice() + ""));
+							else
 								player.sendMessage(Config.getMessage("command.sell.error_minimum_price").replace("%price%", Config.getMinimumPrice() + ""));
 						}catch(Exception ex) {
 							Config.sendMessage("command.sell.error_value", player);

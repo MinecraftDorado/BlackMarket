@@ -30,7 +30,7 @@ public class Config {
 	private static YamlConfiguration conf, lang;
 	private static File confFile, langFile;
 	private static int expiredTime, defaultLimit, taxes;
-	private static double minimum_price;
+	private static double minimum_price, maximum_price;
 	private static ArrayList<NPC> npcs = new ArrayList<>();
 	private static ItemStack market_background, market_border, storage_background, storage_border, sellmenu_background, sellmenu_border, content_border, confirm_background, confirm_border;
 	private static StorageType storageType;
@@ -69,6 +69,7 @@ public class Config {
 		defaultLimit = (int) getValue("limit");
 		taxes = (int) getValue("taxes");
 		minimum_price = (double) getValue("minimum_price");
+		maximum_price = (double) getValue("maximum_price");
 		
 		market_background = Utils.getMaterial((String) getValue("menus.market.background"));
 		market_border = Utils.getMaterial((String) getValue("menus.market.border"));
@@ -336,6 +337,10 @@ public class Config {
 	
 	public static double getMinimumPrice() {
 		return minimum_price;
+	}
+	
+	public static double getMaximumPrice() {
+		return maximum_price;
 	}
 	
 	public static StorageType getStorageType() {

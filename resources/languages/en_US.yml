@@ -10,6 +10,7 @@ command:
     error_lore_not_allow: "&cThis lore is not valid in the market!"
     error_value: "&cValue invalid!"
     error_minimum_price: "&cThe minimum price is %price%!"
+    error_maximum_price: "&cThe maximum price is %price%!"
     usage: "&cUsage /%cmd% <value>"
   reload:
     message: "&eReloaded configuration!"

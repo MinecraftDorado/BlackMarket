@@ -48,19 +48,22 @@ public class SalesListener implements Listener {
 			
 			// ItemStack "Post"
 			if(e.getItemStack().equals(Config.getItemStack("sales.post", "menus.sales.items.post", p))) {
-				if(Sales.getPrice(uuid) >= Config.getMinimumPrice()) {
-					if(Sales.getItemStack(uuid) != null) {
-						BlackItem bItem = new BlackItem(Sales.getItemStack(uuid), Sales.getPrice(uuid), uuid);
-						
-						if(PlayerData.get(uuid).addItem(bItem)) {
-							Config.sendMessage("command.sell.message", p);
-							p.getInventory().removeItem(Sales.getItemStack(uuid));
-							p.closeInventory();
+				if(Sales.getPrice(uuid) >= Config.getMinimumPrice())
+					if(Sales.getPrice(uuid) <= Config.getMaximumPrice()) {
+						if(Sales.getItemStack(uuid) != null) {
+							BlackItem bItem = new BlackItem(Sales.getItemStack(uuid), Sales.getPrice(uuid), uuid);
+							
+							if(PlayerData.get(uuid).addItem(bItem)) {
+								Config.sendMessage("command.sell.message", p);
+								p.getInventory().removeItem(Sales.getItemStack(uuid));
+								p.closeInventory();
+							}else
+								Config.sendMessage("command.sell.error_limit", p);
 						}else
-							Config.sendMessage("command.sell.error_limit", p);
+							Config.sendMessage("sales.item_not_found", p);
 					}else
-						Config.sendMessage("sales.item_not_found", p);
-				}else
+						p.sendMessage(Config.getMessage("command.sell.error_maximum_price").replace("%price%", Config.getMaximumPrice() + ""));
+				else
 					p.sendMessage(Config.getMessage("command.sell.error_minimum_price").replace("%price%", Config.getMinimumPrice() + ""));
 				return;
 			}

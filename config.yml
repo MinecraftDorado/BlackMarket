@@ -91,6 +91,7 @@ menus:
       slot: 22
 
 minimum_price: 1.0
+minimum_price: 99999.0
 taxes: 7 # percent
 
 limit: 5 # items by user

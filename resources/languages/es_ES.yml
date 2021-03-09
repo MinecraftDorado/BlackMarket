@@ -10,6 +10,7 @@ command:
     error_lore_not_allow: "&c¡Está descripción no es aceptada en el mercado!"
     error_value: "&c¡Precio inválido!"
     error_minimum_price: "&c¡El precio mínimo es %price%!"
+    error_maximum_price: "&c¡El precio máximo es %price%!"
     usage: "&cUso /%cmd% <precio>"
   reload:
     message: "&e¡Configuración recargada!"
