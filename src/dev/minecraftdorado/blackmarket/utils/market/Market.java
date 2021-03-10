@@ -1,7 +1,6 @@
 package dev.minecraftdorado.blackmarket.utils.market;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.UUID;
@@ -25,7 +24,6 @@ import dev.minecraftdorado.blackmarket.utils.market.PlayerData.Data;
 
 public class Market {
 	
-	private static HashMap<Integer, BlackItem> list = new HashMap<>();
 	private static HashMap<Category, ArrayList<BlackItem>> catList = new HashMap<>();
 	private static int id = 0;
 	
@@ -84,26 +82,16 @@ public class Market {
 	}
 	
 	public static void addItem(BlackItem bItem) {
-		list.put(bItem.getId(), bItem);
 		id = id < bItem.getId() ? bItem.getId() : id;
 		
 		for(Category c : CategoryUtils.getCategories()) {
 			if(c.getMaterials().isEmpty() || c.contain(UMaterial.match(bItem.getOriginal()))) {
 				if(!catList.containsKey(c))
 					catList.put(c, new ArrayList<>());
-				catList.get(c).add(bItem);
+				if(!catList.get(c).contains(bItem))
+					catList.get(c).add(bItem);
 			}
 		};
-	}
-	
-	public static BlackItem getBlackItemById(int id) {
-		if(list.containsKey(id))
-			return list.get(id);
-		return null;
-	}
-	
-	public static Collection<BlackItem> getBlackItems(){
-		return list.values();
 	}
 	
 	public static String getTitle() {
@@ -162,10 +150,7 @@ public class Market {
 			}
 		
 		if(!toRemove.isEmpty())
-			toRemove.forEach(bItem -> {
-				list.remove(bItem.getId());
-				catList.get(category).remove(bItem);
-			});
+			toRemove.forEach(bItem -> catList.get(category).remove(bItem));
 		
 		switch(data.getOrder()) {
 		case AMOUNT:
@@ -213,7 +198,7 @@ public class Market {
 		return inv;
 	}
 	
-	public static int getPages() {
-		return list.values().size()/24 + 1;
+	public static int getPages(Category cat) {
+		return catList.containsKey(cat) ? catList.get(cat).size()/24 + 1 : 0;
 	}
 }

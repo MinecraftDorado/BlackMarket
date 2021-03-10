@@ -194,12 +194,9 @@ public class dbMySQL {
             resultSet = preparedStatement.executeQuery();
             
             while (resultSet != null && resultSet.next()) {
-            	BlackItem bItem = Market.getBlackItemById(resultSet.getInt("id"));
-            	if(bItem == null) {
-            		addItem(resultSet, uuid);
-            		bItem = Market.getBlackItemById(resultSet.getInt("id"));
-            	}
-            	bItem.sendNotification();
+            	BlackItem bItem = addItem(resultSet, uuid);
+            	if(bItem != null)
+            		bItem.sendNotification();
             }
             
             resultSet.close();
@@ -272,7 +269,8 @@ public class dbMySQL {
         return sold;
 	}
 	
-	private static void addItem(ResultSet resultSet, UUID uuid) {
+	private static BlackItem addItem(ResultSet resultSet, UUID uuid) {
+		BlackItem bItem = null;
 		try {
 			ItemStack item = ItemStackSerializer.deserialize(resultSet.getString("item"));
 			
@@ -293,12 +291,13 @@ public class dbMySQL {
 					}
 				}
 				
-				BlackItem bItem = new BlackItem(item, resultSet.getDouble("value"), uuid, Status.valueOf(resultSet.getString("status")), new Date(resultSet.getLong("date")), resultSet.getInt("id"), resultSet.getBoolean("notified"));
+				bItem = new BlackItem(item, resultSet.getDouble("value"), uuid, Status.valueOf(resultSet.getString("status")), new Date(resultSet.getLong("date")), resultSet.getInt("id"), resultSet.getBoolean("notified"));
 				
 				PlayerData.get(uuid).setItem(bItem);
 			}
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
+		return bItem;
 	}
 }

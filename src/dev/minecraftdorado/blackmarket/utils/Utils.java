@@ -130,7 +130,7 @@ public class Utils {
 	public static String applyVariables(String s, Player player) {
 		if(s.contains("%")) {
 			if(s.contains("%actual_page%")) s = s.replace("%actual_page%", "" + (Market.getPlayerPage(player)+1));
-			if(s.contains("%pages%")) s = s.replace("%pages%", "" + Market.getPages());
+			if(s.contains("%pages%")) s = s.replace("%pages%", "" + Market.getPages(PlayerData.get(player.getUniqueId()).getCategory()));
 			if(s.contains("%order_"))
 				for(OrderType type : OrderType.values()) {
 					String name = type.getName();
