@@ -142,6 +142,9 @@ public class Market {
 				toRemove.add(bItem.getId());
 		}
 		
+		if(!toRemove.isEmpty())
+			toRemove.forEach(id -> list.remove(id));
+		
 
 		switch(data.getOrder()) {
 		case AMOUNT:
@@ -159,9 +162,6 @@ public class Market {
 		
 		if(data.isReverse())
 			Collections.reverse(l);
-		
-		if(!toRemove.isEmpty())
-			toRemove.forEach(id -> list.remove(id));
 		
 		
 		int slot = 10;

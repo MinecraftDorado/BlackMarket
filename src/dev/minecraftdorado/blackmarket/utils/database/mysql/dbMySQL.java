@@ -66,16 +66,13 @@ public class dbMySQL {
         
         try {
             StringBuilder queryBuilder = new StringBuilder();
-            queryBuilder.append("SELECT * FROM `blackitems` WHERE notified = false AND id > " + Market.getId());
+            queryBuilder.append("SELECT * FROM `blackitems` WHERE notified = false AND status != 'TAKED' AND id > " + Market.getId());
             
             preparedStatement = con.prepareStatement(queryBuilder.toString());
             resultSet = preparedStatement.executeQuery();
             
-            while (resultSet != null && resultSet.next()) {
-            	Status status = Status.valueOf(resultSet.getString("status"));
-            	if(status.equals(Status.ON_SALE) || status.equals(Status.TIME_OUT) || status.equals(Status.SOLD))
-            		addItem(resultSet, UUID.fromString(resultSet.getString("owner")));
-            }
+            while (resultSet != null && resultSet.next())
+            	addItem(resultSet, UUID.fromString(resultSet.getString("owner")));
             
             resultSet.close();
             preparedStatement.close();
@@ -95,7 +92,7 @@ public class dbMySQL {
 			queryBuilder.append("UPDATE `blackitems` SET status = ? WHERE id = ?");
 			
 			preparedStatement = con.prepareStatement(queryBuilder.toString());
-			preparedStatement.setString(1, bItem.getStatus().name());
+			preparedStatement.setString(1, bItem.status.name());
 			preparedStatement.setInt(2, bItem.getId());
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
@@ -246,6 +243,35 @@ public class dbMySQL {
         }
 	}
 	
+	public static boolean isSold(int id) {
+		try {
+			if(con == null || con.isClosed()) con = sql.getConnection();
+		} catch(Exception e) {e.printStackTrace();}
+		
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        
+        boolean sold = false;
+        try {
+            StringBuilder queryBuilder = new StringBuilder();
+            queryBuilder.append("SELECT * FROM `blackitems` WHERE status = 'SOLD' AND id = " + id);
+            
+            preparedStatement = con.prepareStatement(queryBuilder.toString());
+            resultSet = preparedStatement.executeQuery();
+            
+            
+            if (resultSet != null && resultSet.next())
+            	sold = true;
+            
+            resultSet.close();
+            preparedStatement.close();
+        } catch (final SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+        
+        return sold;
+	}
+	
 	private static void addItem(ResultSet resultSet, UUID uuid) {
 		try {
 			ItemStack item = ItemStackSerializer.deserialize(resultSet.getString("item"));
@@ -269,7 +295,7 @@ public class dbMySQL {
 				
 				BlackItem bItem = new BlackItem(item, resultSet.getDouble("value"), uuid, Status.valueOf(resultSet.getString("status")), new Date(resultSet.getLong("date")), resultSet.getInt("id"), resultSet.getBoolean("notified"));
 				
-				PlayerData.get(uuid).addItem(bItem);
+				PlayerData.get(uuid).setItem(bItem);
 			}
 		}catch(Exception ex) {
 			ex.printStackTrace();

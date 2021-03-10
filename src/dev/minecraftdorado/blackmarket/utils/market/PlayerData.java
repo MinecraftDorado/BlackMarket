@@ -82,6 +82,11 @@ public class PlayerData {
 			return false;
 		}
 		
+		public void setItem(BlackItem bItem) {
+			items.add(bItem);
+			Market.addItem(bItem);
+		}
+		
 		public int getLimit() {
 			return Utils.getLimit(uuid);
 		}
