@@ -34,7 +34,7 @@ public class Config {
 	private static ArrayList<NPC> npcs = new ArrayList<>();
 	private static ItemStack market_background, market_border, storage_background, storage_border, sellmenu_background, sellmenu_border, content_border, confirm_background, confirm_border;
 	private static StorageType storageType;
-	private static boolean blacklist_enable, blacklistlore_enable, confirm_enable;
+	private static boolean blacklist_enable, blacklistlore_enable, confirm_enable, multi_server;
 	private static ArrayList<String> sellAlias = new ArrayList<>();
 	
 	public Config() {
@@ -86,6 +86,7 @@ public class Config {
 		blacklist_enable = (boolean) getValue("blacklist_enable");
 		blacklistlore_enable = (boolean) getValue("blacklistlore_enable");
 		confirm_enable = (boolean) getValue("confirm_menu_enable");
+		multi_server = (boolean) getValue("multi_server");
 		
 		if(conf.isSet("sell_alias"))
 			conf.getStringList("sell_alias").forEach(cmd -> sellAlias.add(cmd));
@@ -357,6 +358,10 @@ public class Config {
 	
 	public static boolean blackListLoreIsEnable() {
 		return blacklistlore_enable;
+	}
+	
+	public static boolean multiServerIsEnable() {
+		return multi_server;
 	}
 	
 	public static String getString(String str) {

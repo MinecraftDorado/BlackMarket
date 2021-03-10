@@ -8,6 +8,8 @@ mysql:
   pass: ""
   database: "server"
 
+# BETA (MySQL need be enabled)
+multi_server: false
 menus:
   market: # You can use custom models like this -> material#custom_model_id - GRAY_STAINED_GLASS_PANE#2200002
     background: GRAY_STAINED_GLASS_PANE

@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -21,6 +22,7 @@ import dev.minecraftdorado.blackmarket.utils.inventory.utils.SerializeInventory;
 import dev.minecraftdorado.blackmarket.utils.market.BlackItem;
 import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
 import dev.minecraftdorado.blackmarket.utils.market.BlackItem.Status;
+import dev.minecraftdorado.blackmarket.utils.market.Market;
 import dev.minecraftdorado.blackmarket.utils.market.PlayerData.Data;
 
 public class dbMySQL {
@@ -42,11 +44,7 @@ public class dbMySQL {
 		}
 		sql.createTables(Resources.getResource(MainClass.class, "/resources/sql/blackmarket.sql"));
 		con = sql.getConnection();
-		try {
-			loadBlackItems();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		loadBlackItems();
 	}
 	
 	public static void save() {
@@ -57,8 +55,10 @@ public class dbMySQL {
 			}
 	}
 	
-	private static void loadBlackItems() throws SQLException {
-		if(con == null || con.isClosed()) con = sql.getConnection();
+	private static void loadBlackItems() {
+		try {
+			if(con == null || con.isClosed()) con = sql.getConnection();
+		} catch(Exception e) {e.printStackTrace();}
 		
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -67,40 +67,14 @@ public class dbMySQL {
             StringBuilder queryBuilder = new StringBuilder();
             queryBuilder.append("SELECT *");
             queryBuilder.append("FROM `blackitems` WHERE notified = false");
-
+            
             preparedStatement = con.prepareStatement(queryBuilder.toString());
             resultSet = preparedStatement.executeQuery();
             
             while (resultSet != null && resultSet.next()) {
             	Status status = Status.valueOf(resultSet.getString("status"));
-            	if(status.equals(Status.ON_SALE) || status.equals(Status.TIME_OUT) || status.equals(Status.SOLD)) {
-            		UUID uuid = UUID.fromString(resultSet.getString("owner"));
-            		
-            		ItemStack item = ItemStackSerializer.deserialize(resultSet.getString("item"));
-            		
-            		if(item != null) {
-            			if(resultSet.getString("content") != null && item.getType().name().contains("SHULKER_BOX") && item.getItemMeta() instanceof BlockStateMeta) {
-            				BlockStateMeta meta = (BlockStateMeta) item.getItemMeta();
-            				if(meta.getBlockState() instanceof ShulkerBox) {
-            					ShulkerBox shulker = (ShulkerBox) meta.getBlockState();
-            					
-            					try {
-            						shulker.getInventory().setContents(SerializeInventory.itemStackArrayFromBase64(resultSet.getString("content")));
-            					} catch (Exception ex) {
-            						ex.printStackTrace();
-            					}
-            					
-            					meta.setBlockState(shulker);
-            					item.setItemMeta(meta);
-            				}
-            			}
-            			
-            			
-            			BlackItem bItem = new BlackItem(item, resultSet.getDouble("value"), uuid, status, new Date(resultSet.getLong("date")), resultSet.getInt("id"), resultSet.getBoolean("notified"));
-            			
-            			PlayerData.get(uuid).addItem(bItem);
-            		}
-            	}
+            	if(status.equals(Status.ON_SALE) || status.equals(Status.TIME_OUT) || status.equals(Status.SOLD))
+            		addItem(resultSet, UUID.fromString(resultSet.getString("owner")));
             }
             
             resultSet.close();
@@ -201,6 +175,71 @@ public class dbMySQL {
 			preparedStatement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public static void checkUnnotified(UUID uuid) {
+		if(!Bukkit.getOfflinePlayer(uuid).isOnline())
+			return;
+		
+		try {
+			if(con == null || con.isClosed()) con = sql.getConnection();
+		} catch(Exception e) {e.printStackTrace();}
+		
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        
+        try {
+            StringBuilder queryBuilder = new StringBuilder();
+            queryBuilder.append("SELECT * FROM `blackitems` WHERE notified = false AND status = 'SOLD'");
+            
+            preparedStatement = con.prepareStatement(queryBuilder.toString());
+            resultSet = preparedStatement.executeQuery();
+            
+            while (resultSet != null && resultSet.next()) {
+            	BlackItem bItem = Market.getBlackItemById(resultSet.getInt("id"));
+            	if(bItem == null) {
+            		addItem(resultSet, uuid);
+            		bItem = Market.getBlackItemById(resultSet.getInt("id"));
+            	}
+            	bItem.sendNotification();
+            }
+            
+            resultSet.close();
+            preparedStatement.close();
+        } catch (final SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+	}
+	
+	private static void addItem(ResultSet resultSet, UUID uuid) {
+		try {
+			ItemStack item = ItemStackSerializer.deserialize(resultSet.getString("item"));
+			
+			if(item != null) {
+				if(resultSet.getString("content") != null && item.getType().name().contains("SHULKER_BOX") && item.getItemMeta() instanceof BlockStateMeta) {
+					BlockStateMeta meta = (BlockStateMeta) item.getItemMeta();
+					if(meta.getBlockState() instanceof ShulkerBox) {
+						ShulkerBox shulker = (ShulkerBox) meta.getBlockState();
+						
+						try {
+							shulker.getInventory().setContents(SerializeInventory.itemStackArrayFromBase64(resultSet.getString("content")));
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+						
+						meta.setBlockState(shulker);
+						item.setItemMeta(meta);
+					}
+				}
+				
+				
+				BlackItem bItem = new BlackItem(item, resultSet.getDouble("value"), uuid, Status.valueOf(resultSet.getString("status")), new Date(resultSet.getLong("date")), resultSet.getInt("id"), resultSet.getBoolean("notified"));
+				
+				PlayerData.get(uuid).addItem(bItem);
+			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
 		}
 	}
 }

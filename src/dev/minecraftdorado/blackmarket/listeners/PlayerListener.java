@@ -15,7 +15,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import dev.minecraftdorado.blackmarket.mainclass.MainClass;
 import dev.minecraftdorado.blackmarket.utils.Config;
 import dev.minecraftdorado.blackmarket.utils.UpdateChecker;
+import dev.minecraftdorado.blackmarket.utils.Config.StorageType;
 import dev.minecraftdorado.blackmarket.utils.UpdateChecker.UpdateReason;
+import dev.minecraftdorado.blackmarket.utils.database.mysql.dbMySQL;
 import dev.minecraftdorado.blackmarket.utils.entities.npc.events.NPCInteractEvent;
 import dev.minecraftdorado.blackmarket.utils.inventory.InventoryManager;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
@@ -53,13 +55,17 @@ public class PlayerListener implements Listener {
 				e.getPlayer().sendMessage("§6[BlackMarket] §7» " + " §bCustom language detected §3(§a" + Config.getLangFile().getName().replace(".yml", "") + "§3)§b. If you want to contribute to the plugin send the language file to §3Demon@4531§b.");
 		}
 		
-		Bukkit.getScheduler().runTask(MainClass.main, () -> {
+		Bukkit.getScheduler().runTaskLater(MainClass.main, () -> {
 			// Sold notifications
-			PlayerData.get(e.getPlayer().getUniqueId()).getItems().forEach(bItem -> {
-				if(bItem.getStatus().equals(Status.SOLD) && !bItem.isNotified())
-					bItem.sendNotification();
-			});
-		});
+			if(Config.getStorageType().equals(StorageType.MySQL) && Config.multiServerIsEnable())
+				dbMySQL.checkUnnotified(e.getPlayer().getUniqueId());
+			else {
+				PlayerData.get(e.getPlayer().getUniqueId()).getItems().forEach(bItem -> {
+					if(bItem.getStatus().equals(Status.SOLD) && !bItem.isNotified())
+						bItem.sendNotification();
+				});
+			}
+		}, 20);
 	}
 	
 	/*
