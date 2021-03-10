@@ -22,6 +22,7 @@ import dev.minecraftdorado.blackmarket.utils.database.mysql.dbMySQL;
 import dev.minecraftdorado.blackmarket.utils.entities.npc.NPC;
 import dev.minecraftdorado.blackmarket.utils.entities.npc.skins.SkinData;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.UMaterial;
+import dev.minecraftdorado.blackmarket.utils.market.Market;
 
 public class Config {
 	
@@ -53,7 +54,10 @@ public class Config {
 		if(multi_server_task != null)
 			multi_server_task.cancel();
 		
+		StorageType stype = storageType;
 		load();
+		if(!stype.equals(storageType))
+			Market.setId(0);
 		
 		ArrayList<NPC> npcs = new ArrayList<>();
 		npcs.addAll(MainClass.npcM.list.values());

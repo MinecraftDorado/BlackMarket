@@ -8,6 +8,7 @@ import dev.minecraftdorado.blackmarket.utils.Config;
 import dev.minecraftdorado.blackmarket.utils.Utils;
 import dev.minecraftdorado.blackmarket.utils.database.folder.dbFolder;
 import dev.minecraftdorado.blackmarket.utils.database.mysql.dbMySQL;
+import dev.minecraftdorado.blackmarket.utils.inventory.utils.CategoryUtils;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.CategoryUtils.Category;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.OrderUtils.OrderType;
 import dev.minecraftdorado.blackmarket.utils.market.BlackItem.Status;
@@ -51,7 +52,7 @@ public class PlayerData {
 		private OrderType order = OrderType.ID;
 		private boolean reverse = false;
 		
-		private Category category = null;
+		private Category category = CategoryUtils.getFirstCategory();
 		
 		public Data(UUID uuid) {
 			this.uuid = uuid;
@@ -92,7 +93,7 @@ public class PlayerData {
 		}
 		
 		public void setCategory(Category category) {
-			this.category = category;
+			this.category = category == null ? CategoryUtils.getFirstCategory() : category;
 		}
 		
 		public Category getCategory() {

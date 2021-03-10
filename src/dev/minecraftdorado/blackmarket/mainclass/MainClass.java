@@ -68,10 +68,10 @@ public class MainClass extends JavaPlugin {
 		getServer().getPluginCommand("bm").setExecutor(new bm());
 		getServer().getPluginCommand("bm").setTabCompleter(new bmTab());
 		
+		new CategoryUtils();
 		new SkinData();
 		new Config();
 		new PlayerData();
-		new CategoryUtils();
 		new Market();
 		new BlackList();
 		new BlackListLore();

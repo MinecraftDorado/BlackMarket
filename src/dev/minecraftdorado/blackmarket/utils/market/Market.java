@@ -1,6 +1,7 @@
 package dev.minecraftdorado.blackmarket.utils.market;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.UUID;
@@ -25,6 +26,7 @@ import dev.minecraftdorado.blackmarket.utils.market.PlayerData.Data;
 public class Market {
 	
 	private static HashMap<Integer, BlackItem> list = new HashMap<>();
+	private static HashMap<Category, ArrayList<BlackItem>> catList = new HashMap<>();
 	private static int id = 0;
 	
 	public Market() {
@@ -39,6 +41,13 @@ public class Market {
 						Inv inv = InventoryManager.getLastInv(p);
 						if(inv.getTitle().equals(getTitle())) {
 							boolean update = true;
+							
+							Category cat = PlayerData.get(p.getUniqueId()).getCategory();
+							
+							if(catList.containsKey(cat) && inv.getBlackList().size() < 28 && catList.get(cat).size() > inv.getBlackList().size()) {
+								Bukkit.getScheduler().runTask(MainClass.main, () -> InventoryManager.openInventory(p, getInventory(p)));
+								continue;
+							}
 							
 							for(int slot : inv.getBlackList().keySet()) {
 								BlackItem bItem = inv.getBlackList().get(slot);
@@ -77,12 +86,24 @@ public class Market {
 	public static void addItem(BlackItem bItem) {
 		list.put(bItem.getId(), bItem);
 		id = id < bItem.getId() ? bItem.getId() : id;
+		
+		for(Category c : CategoryUtils.getCategories()) {
+			if(c.getMaterials().isEmpty() || c.contain(UMaterial.match(bItem.getOriginal()))) {
+				if(!catList.containsKey(c))
+					catList.put(c, new ArrayList<>());
+				catList.get(c).add(bItem);
+			}
+		};
 	}
 	
 	public static BlackItem getBlackItemById(int id) {
 		if(list.containsKey(id))
 			return list.get(id);
 		return null;
+	}
+	
+	public static Collection<BlackItem> getBlackItems(){
+		return list.values();
 	}
 	
 	public static String getTitle() {
@@ -122,30 +143,30 @@ public class Market {
 		inv.setItem(28, item);
 		inv.setItem(37, item);
 		
-		Category cat = data.getCategory();
+		Category category = data.getCategory();
 		
-		CategoryUtils.getCategories().forEach(category -> {
-			inv.setItem((category.getRow()-1) * 9, category.getItemStack(category.equals(cat)));
+		CategoryUtils.getCategories().forEach(c -> {
+			inv.setItem((c.getRow()-1) * 9, c.getItemStack(c.equals(category)));
 		});
 		
 		ArrayList<BlackItem> l = new ArrayList<>();
 		
-		Category category = data.getCategory();
+		ArrayList<BlackItem> toRemove = new ArrayList<>();
 		
-		ArrayList<Integer> toRemove = new ArrayList<>();
-		
-		for(BlackItem bItem : list.values()) {
-			if(bItem.getStatus().equals(Status.ON_SALE)) {
-				if(category == null || category.getMaterials().isEmpty() || category.contain(UMaterial.match(bItem.getItemStack(player, true))))
+		if(catList.containsKey(category))
+			for(BlackItem bItem : catList.get(category)) {
+				if(bItem.getStatus().equals(Status.ON_SALE)) {
 					l.add(bItem);
-			}else
-				toRemove.add(bItem.getId());
-		}
+				}else
+					toRemove.add(bItem);
+			}
 		
 		if(!toRemove.isEmpty())
-			toRemove.forEach(id -> list.remove(id));
+			toRemove.forEach(bItem -> {
+				list.remove(bItem.getId());
+				catList.get(category).remove(bItem);
+			});
 		
-
 		switch(data.getOrder()) {
 		case AMOUNT:
 			l = OrderUtils.sortByAmount(l);
@@ -162,7 +183,6 @@ public class Market {
 		
 		if(data.isReverse())
 			Collections.reverse(l);
-		
 		
 		int slot = 10;
 		int items = 0;

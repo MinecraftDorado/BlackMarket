@@ -18,6 +18,7 @@ public class CategoryUtils {
 	
 	private static HashMap<String, Category> list = new HashMap<>();
 	private File f = new File(MainClass.main.getDataFolder() + "/categories");
+	private static Category first_category;
 	
 	public CategoryUtils() {
 		if(!f.exists() || f.listFiles().length == 0)
@@ -31,6 +32,9 @@ public class CategoryUtils {
 			
 			if(yml.isSet("row"))
 				filter.setRow(yml.getInt("row"));
+			
+			if(first_category == null || first_category.getRow() > filter.getRow())
+				first_category = filter;
 			
 			if(yml.isSet("materials"))
 				yml.getStringList("materials").forEach(mat -> filter.addMaterial(UMaterial.match(mat)));
@@ -52,6 +56,10 @@ public class CategoryUtils {
 	
 	public static Collection<Category> getCategories(){
 		return list.values();
+	}
+	
+	public static Category getFirstCategory() {
+		return first_category;
 	}
 	
 	public class Category {
