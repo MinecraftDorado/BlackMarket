@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
@@ -191,7 +192,7 @@ public class dbMySQL {
         
         try {
             StringBuilder queryBuilder = new StringBuilder();
-            queryBuilder.append("SELECT * FROM `blackitems` WHERE notified = false AND status = 'SOLD'");
+            queryBuilder.append("SELECT * FROM `blackitems` WHERE notified = false AND status = 'SOLD' AND owner = '" + uuid.toString() + "'");
             
             preparedStatement = con.prepareStatement(queryBuilder.toString());
             resultSet = preparedStatement.executeQuery();
@@ -203,6 +204,40 @@ public class dbMySQL {
             		bItem = Market.getBlackItemById(resultSet.getInt("id"));
             	}
             	bItem.sendNotification();
+            }
+            
+            resultSet.close();
+            preparedStatement.close();
+        } catch (final SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+	}
+	
+	public static void checkStorage(UUID uuid) {
+		if(!Bukkit.getOfflinePlayer(uuid).isOnline())
+			return;
+		
+		try {
+			if(con == null || con.isClosed()) con = sql.getConnection();
+		} catch(Exception e) {e.printStackTrace();}
+		
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        
+        try {
+            StringBuilder queryBuilder = new StringBuilder();
+            queryBuilder.append("SELECT * FROM `blackitems` WHERE status = 'TIME_OUT' AND notified = false AND owner = '" + uuid.toString() + "'");
+            
+            preparedStatement = con.prepareStatement(queryBuilder.toString());
+            resultSet = preparedStatement.executeQuery();
+            
+            ArrayList<Integer> ids = new ArrayList<>();
+            
+            PlayerData.get(uuid).getStorage().forEach(bItem -> ids.add(bItem.getId()));
+            
+            while (resultSet != null && resultSet.next()) {
+            	if(!ids.contains(resultSet.getInt("id")))
+            		addItem(resultSet, uuid);
             }
             
             resultSet.close();
@@ -232,7 +267,6 @@ public class dbMySQL {
 						item.setItemMeta(meta);
 					}
 				}
-				
 				
 				BlackItem bItem = new BlackItem(item, resultSet.getDouble("value"), uuid, Status.valueOf(resultSet.getString("status")), new Date(resultSet.getLong("date")), resultSet.getInt("id"), resultSet.getBoolean("notified"));
 				
