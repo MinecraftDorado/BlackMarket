@@ -45,7 +45,7 @@ public class Market {
 								
 								if(!l.containsKey(bItem.getId()))
 									if(!bItem.getStatus().equals(Status.ON_SALE)) {
-										Bukkit.getScheduler().runTask(MainClass.main, () -> InventoryManager.updateInventory(p, getInventory(p)));
+										Bukkit.getScheduler().runTask(MainClass.main, () -> InventoryManager.openInventory(p, getInventory(p)));
 										update = false;
 										break;
 									}else
@@ -76,6 +76,7 @@ public class Market {
 	
 	public static void addItem(BlackItem bItem) {
 		list.put(bItem.getId(), bItem);
+		id = id < bItem.getId() ? bItem.getId() : id;
 	}
 	
 	public static BlackItem getBlackItemById(int id) {

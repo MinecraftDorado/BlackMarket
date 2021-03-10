@@ -64,6 +64,8 @@ public class InventoryManager implements Listener {
 		for(int slot = 0; slot < iv.getSize(); slot++)
 			if(inv.getItem(slot) != null)
 				iv.setItem(slot, inv.getItem(slot));
+			else
+				iv.setItem(slot, new ItemStack(Material.AIR));
 		
 		player.updateInventory();
 		

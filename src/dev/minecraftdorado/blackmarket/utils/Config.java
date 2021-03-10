@@ -15,8 +15,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitTask;
 
 import dev.minecraftdorado.blackmarket.mainclass.MainClass;
+import dev.minecraftdorado.blackmarket.utils.database.mysql.dbMySQL;
 import dev.minecraftdorado.blackmarket.utils.entities.npc.NPC;
 import dev.minecraftdorado.blackmarket.utils.entities.npc.skins.SkinData;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.UMaterial;
@@ -36,6 +38,7 @@ public class Config {
 	private static StorageType storageType;
 	private static boolean blacklist_enable, blacklistlore_enable, confirm_enable, multi_server;
 	private static ArrayList<String> sellAlias = new ArrayList<>();
+	private static BukkitTask multi_server_task;
 	
 	public Config() {
 		load();
@@ -47,6 +50,9 @@ public class Config {
 		msgs.clear();
 		slots.clear();
 		desc = null;
+		if(multi_server_task != null)
+			multi_server_task.cancel();
+		
 		load();
 		
 		ArrayList<NPC> npcs = new ArrayList<>();
@@ -86,7 +92,7 @@ public class Config {
 		blacklist_enable = (boolean) getValue("blacklist_enable");
 		blacklistlore_enable = (boolean) getValue("blacklistlore_enable");
 		confirm_enable = (boolean) getValue("confirm_menu_enable");
-		multi_server = (boolean) getValue("multi_server");
+		multi_server = (boolean) getValue("multi_server.enable");
 		
 		if(conf.isSet("sell_alias"))
 			conf.getStringList("sell_alias").forEach(cmd -> sellAlias.add(cmd));
@@ -144,6 +150,16 @@ public class Config {
 						npc.setSkin(SkinData.getSkin(args[4]));
 					npcs.add(npc);
 				}
+		}
+		
+		if(multiServerIsEnable()) {
+			int x = (int) getValue("multi_server.check_new_items")*20;
+			multi_server_task = Bukkit.getScheduler().runTaskTimer(MainClass.main, new Runnable() {
+				@Override
+				public void run() {
+					dbMySQL.loadBlackItems();
+				}
+			}, x, x);
 		}
 	}
 	

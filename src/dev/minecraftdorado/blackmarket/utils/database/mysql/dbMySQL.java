@@ -56,7 +56,7 @@ public class dbMySQL {
 			}
 	}
 	
-	private static void loadBlackItems() {
+	public static void loadBlackItems() {
 		try {
 			if(con == null || con.isClosed()) con = sql.getConnection();
 		} catch(Exception e) {e.printStackTrace();}
@@ -66,8 +66,7 @@ public class dbMySQL {
         
         try {
             StringBuilder queryBuilder = new StringBuilder();
-            queryBuilder.append("SELECT *");
-            queryBuilder.append("FROM `blackitems` WHERE notified = false");
+            queryBuilder.append("SELECT * FROM `blackitems` WHERE notified = false AND id > " + Market.getId());
             
             preparedStatement = con.prepareStatement(queryBuilder.toString());
             resultSet = preparedStatement.executeQuery();
