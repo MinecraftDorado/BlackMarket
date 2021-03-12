@@ -117,8 +117,8 @@ public class BlackItem {
 	}
 	
 	public Status getStatus() {
-		if(Config.getStorageType().equals(StorageType.MySQL) && Config.multiServerIsEnable() && dbMySQL.isSold(id))
-			status = Status.SOLD;
+		if(status.equals(Status.ON_SALE) && Config.getStorageType().equals(StorageType.MySQL) && Config.multiServerIsEnable())
+			status = dbMySQL.getStatus(id);
 		if(status.equals(Status.ON_SALE)) {
 			if(Duration.between(new Date().toInstant(), date.toInstant()).getSeconds() <= 0)
 				setStatus(Status.TIME_OUT);

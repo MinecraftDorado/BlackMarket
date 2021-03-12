@@ -37,7 +37,6 @@ public class PlayerData {
 	public static void save() {
 		switch(Config.getStorageType()) {
 		case MySQL:
-			dbMySQL.save();
 			break;
 		default:
 			dbFolder.save();

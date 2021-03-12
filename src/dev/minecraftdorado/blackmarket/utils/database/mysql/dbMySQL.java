@@ -24,7 +24,6 @@ import dev.minecraftdorado.blackmarket.utils.market.BlackItem;
 import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
 import dev.minecraftdorado.blackmarket.utils.market.BlackItem.Status;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
-import dev.minecraftdorado.blackmarket.utils.market.PlayerData.Data;
 
 public class dbMySQL {
 	
@@ -46,14 +45,6 @@ public class dbMySQL {
 		sql.createTables(Resources.getResource(MainClass.class, "/resources/sql/blackmarket.sql"));
 		con = sql.getConnection();
 		loadBlackItems();
-	}
-	
-	public static void save() {
-		for(Data data : PlayerData.list.values())
-			for(BlackItem bItem : data.getItems()) {
-				updateStatus(bItem);
-				updateNotified(bItem);
-			}
 	}
 	
 	public static void loadBlackItems() {
@@ -240,7 +231,7 @@ public class dbMySQL {
         }
 	}
 	
-	public static boolean isSold(int id) {
+	public static Status getStatus(int id) {
 		try {
 			if(con == null || con.isClosed()) con = sql.getConnection();
 		} catch(Exception e) {e.printStackTrace();}
@@ -248,17 +239,16 @@ public class dbMySQL {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         
-        boolean sold = false;
+        Status status = Status.ON_SALE;
         try {
             StringBuilder queryBuilder = new StringBuilder();
-            queryBuilder.append("SELECT * FROM `blackitems` WHERE status = 'SOLD' AND id = " + id);
+            queryBuilder.append("SELECT * FROM `blackitems` WHERE id = " + id);
             
             preparedStatement = con.prepareStatement(queryBuilder.toString());
             resultSet = preparedStatement.executeQuery();
             
-            
             if (resultSet != null && resultSet.next())
-            	sold = true;
+            	status = Status.valueOf(resultSet.getString("status"));
             
             resultSet.close();
             preparedStatement.close();
@@ -266,7 +256,7 @@ public class dbMySQL {
             sqlException.printStackTrace();
         }
         
-        return sold;
+        return status;
 	}
 	
 	private static BlackItem addItem(ResultSet resultSet, UUID uuid) {
