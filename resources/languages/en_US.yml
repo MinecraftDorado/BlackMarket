@@ -5,7 +5,7 @@ command:
   sell:
     message: "&eItem added!"
     error_limit: "&cYou've reached your listing limit!"
-    error_item_not_found: "&cYour hand's empty, you need to equip item to sell!"
+    error_item_not_found: "&cYour hand's empty, you need to equip an item to sell!"
     error_item_not_allow: "&cThis item isn't allowed on the market!"
     error_lore_not_allow: "&cThis item's lore isn't allowed on the market!"
     error_value: "&cInvalid value!"
