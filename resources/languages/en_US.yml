@@ -1,14 +1,14 @@
 no_permission: "&cYou don't have permission to use this command!"
-only_player: "&cThis command only can be used by Players!"
+only_player: "&cThis command can only be used by Players!"
 offline_player: "&c(&4%player%&c) is offline!"
 command:
   sell:
     message: "&eItem added!"
-    error_limit: "&cYou have reached the limit of published objects!"
-    error_item_not_found: "&cYour hand is empty, you need an item to sell!"
-    error_item_not_allow: "&cThis material is not valid in the market!"
-    error_lore_not_allow: "&cThis lore is not valid in the market!"
-    error_value: "&cValue invalid!"
+    error_limit: "&cYou've reached your listing limit!"
+    error_item_not_found: "&cYour hand's empty, you need to equip item to sell!"
+    error_item_not_allow: "&cThis item isn't allowed on the market!"
+    error_lore_not_allow: "&cThis item's lore isn't allowed on the market!"
+    error_value: "&cInvalid value!"
     error_minimum_price: "&cThe minimum price is %price%!"
     error_maximum_price: "&cThe maximum price is %price%!"
     usage: "&cUsage /%cmd% <value>"
@@ -17,7 +17,7 @@ command:
   setnpc:
     message: "&eNPC placed in your position!"
   removenpc: 
-    message: "&eRight click to a NPC to remove it!"
+    message: "&eRight click an NPC to remove it!"
     removed: "&eNPC removed!"
     invalid: "&cNPC not detected!"
 
@@ -30,17 +30,17 @@ help:
 - "&8 » &7/bm sell <value> &8- &7(&fPost an item&7)"
 
 market:
-  buy: "&eThanks for buy!"
+  buy: "&eThanks for your purchase!"
   inventory_full: "&cInventory full!"
   item_invalid: "&cThis item is not for sale!"
-  missing_money: "&cYou haven't a money to buy this!"
-  item_owner: "&cYou can't buy your items!"
+  missing_money: "&cYou don't have enough money to buy this!"
+  item_owner: "&cYou can't buy your own items!"
   take_items: "&eItems taken!"
-  cancel_post: "&ePost cancelled!"
+  cancel_post: "&eListing cancelled!"
   notification: "&eItem &a%name% &esold for &6%value%&e!"
 
 sales:
-  item_not_found: "&cChoose an item to sell from your inventory!"
+  item_not_found: "&cChoose an item from your inventory to sell!"
   value: "&eWrite the sale value of the item!"
 
 menus:
@@ -50,8 +50,8 @@ menus:
       sales:
         name: "&bSales menu"
         lore:
-        - "&7Menu to publish articles"
-        - "&7in the market."
+        - "&7Menu to publish listings"
+        - "&7on the market."
         - ""
         - "&eClick to open!"
       item_onsale:
@@ -90,8 +90,8 @@ menus:
       info:
         name: "&bInformation"
         lore:
-        - "&7Cmd to sold /bm sell <amount>"
-        - "&4(Time to expired 24 hours)"
+        - "&7Cmd command to sell = /bm sell <amount>"
+        - "&4(Time to expiry 24 hours)"
       storage:
         name: "&bStorage"
         lore:
@@ -165,7 +165,7 @@ menus:
       back:
         name: "&cCancel"
         lore:
-        - "&eClick to cancel sell!"
+        - "&eClick to cancel sale!"
       post:
         name: "&bPost"
         lore:
@@ -181,15 +181,15 @@ menus:
       item:
         name: "&bItem"
         lore:
-        - "&7Change this item so"
-        - "&7you can post."
+        - "&7Place the item you'd"
+        - "&7like to sell here."
         - ""
-        - "&eClick to item in your"
-        - "&einventory to change!"
+        - "&eClick the item in your"
+        - "&einventory to transfer."
       item_changed:
       - ""
-      - "&eClick to item in your"
-      - "&einventory to change!"
+      - "&eClick the item in your"
+      - "&einventory to transfer."
   content:
     title: "BlackMarket - Content"
     items:
