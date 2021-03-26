@@ -18,10 +18,10 @@ import dev.minecraftdorado.blackmarket.listeners.StorageListener;
 import dev.minecraftdorado.blackmarket.utils.Config;
 import dev.minecraftdorado.blackmarket.utils.UpdateChecker;
 import dev.minecraftdorado.blackmarket.utils.UpdateChecker.UpdateReason;
+import dev.minecraftdorado.blackmarket.utils.economy.EconomyManager;
 import dev.minecraftdorado.blackmarket.utils.entities.hologram.HologramManager;
 import dev.minecraftdorado.blackmarket.utils.entities.npc.NPCManager;
 import dev.minecraftdorado.blackmarket.utils.entities.npc.skins.SkinData;
-import dev.minecraftdorado.blackmarket.utils.hook.VaultHook;
 import dev.minecraftdorado.blackmarket.utils.inventory.InventoryManager;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.BlackList;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.BlackListLore;
@@ -32,7 +32,6 @@ import dev.minecraftdorado.blackmarket.utils.metrics.Metrics;
 import dev.minecraftdorado.blackmarket.utils.metrics.custom.CustomMetrics;
 import dev.minecraftdorado.blackmarket.utils.packets.PacketReader;
 import dev.minecraftdorado.blackmarket.utils.packets.Reflections;
-import net.milkbowl.vault.economy.Economy;
 
 public class MainClass extends JavaPlugin {
 	
@@ -40,16 +39,18 @@ public class MainClass extends JavaPlugin {
 	public static HologramManager hm;
 	public static NPCManager npcM;
 	
-	public static Economy econ;
-	
 	public void onEnable() {
 		main = this;
 		
-		if (!VaultHook.setupEconomy() ) {
-            getLogger().severe(String.format("» Disabled due to no Vault dependency found!", getDescription().getName()));
+		new Config();
+		
+		EconomyManager em = new EconomyManager();
+		
+		if(!em.hasEconomy()) {
+			getLogger().severe(String.format("» Disabled due to no Economy plugin dependency found!", getDescription().getName()));
             getServer().getPluginManager().disablePlugin(this);
             return;
-        }
+		}
 		
 		UpdateChecker.init(this, 85558).requestUpdateCheck().whenComplete((result, e) -> {
 			if (result.requiresUpdate()) {
@@ -70,7 +71,6 @@ public class MainClass extends JavaPlugin {
 		
 		new CategoryUtils();
 		new SkinData();
-		new Config();
 		new PlayerData();
 		new Market();
 		new BlackList();

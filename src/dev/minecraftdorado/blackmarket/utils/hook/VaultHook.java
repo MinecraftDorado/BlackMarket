@@ -3,7 +3,7 @@ package dev.minecraftdorado.blackmarket.utils.hook;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import dev.minecraftdorado.blackmarket.mainclass.MainClass;
+import dev.minecraftdorado.blackmarket.utils.economy.EconomyManager;
 import net.milkbowl.vault.economy.Economy;
 
 public class VaultHook {
@@ -12,8 +12,8 @@ public class VaultHook {
 		if (Bukkit.getServer().getPluginManager().getPlugin("Vault") != null) {
 			RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
 			if (economyProvider != null)
-				MainClass.econ = economyProvider.getProvider();
+				EconomyManager.econ = economyProvider.getProvider();
 		}
-        return MainClass.econ != null;
+        return EconomyManager.econ != null;
     }
 }

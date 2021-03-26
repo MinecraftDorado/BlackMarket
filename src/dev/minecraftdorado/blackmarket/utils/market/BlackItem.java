@@ -20,6 +20,7 @@ import dev.minecraftdorado.blackmarket.utils.Config;
 import dev.minecraftdorado.blackmarket.utils.Utils;
 import dev.minecraftdorado.blackmarket.utils.Config.StorageType;
 import dev.minecraftdorado.blackmarket.utils.database.mysql.dbMySQL;
+import dev.minecraftdorado.blackmarket.utils.economy.EconomyManager;
 import net.md_5.bungee.api.chat.TextComponent;
 
 public class BlackItem {
@@ -170,7 +171,7 @@ public class BlackItem {
 	}
 	
 	public boolean buy(Player player) {
-		if(MainClass.econ.has(player, getValue()))
+		if(EconomyManager.has(player, getValue()))
 			if(getStatus().equals(Status.ON_SALE)) {
 				if(Utils.canAddItem(player, getOriginal())) {
 					setStatus(Status.SOLD);
@@ -178,8 +179,8 @@ public class BlackItem {
 					player.closeInventory();
 					Config.sendMessage("market.buy", player);
 					
-					MainClass.econ.withdrawPlayer(player, getValue());
-					MainClass.econ.depositPlayer(Bukkit.getOfflinePlayer(getOwner()), getFinalValue());
+					EconomyManager.withdraw(player, getValue());
+					EconomyManager.deposit(Bukkit.getOfflinePlayer(getOwner()), getFinalValue());
 					return true;
 				}
 				Config.sendMessage("market.inventory_full", player);

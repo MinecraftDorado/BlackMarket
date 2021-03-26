@@ -12,6 +12,9 @@ mysql:
 multi_server:
   enable: false
   check_new_items: 1 # seconds
+
+economy_type: VAULT # VAULT - PLAYERPOINTS
+
 menus:
   market: # You can use custom models like this -> material#custom_model_id - GRAY_STAINED_GLASS_PANE#2200002
     background: GRAY_STAINED_GLASS_PANE

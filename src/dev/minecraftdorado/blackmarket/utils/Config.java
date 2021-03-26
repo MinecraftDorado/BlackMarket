@@ -19,6 +19,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import dev.minecraftdorado.blackmarket.mainclass.MainClass;
 import dev.minecraftdorado.blackmarket.utils.database.mysql.dbMySQL;
+import dev.minecraftdorado.blackmarket.utils.economy.EconomyManager.EconomyType;
 import dev.minecraftdorado.blackmarket.utils.entities.npc.NPC;
 import dev.minecraftdorado.blackmarket.utils.entities.npc.skins.SkinData;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.UMaterial;
@@ -40,6 +41,7 @@ public class Config {
 	private static boolean blacklist_enable, blacklistlore_enable, confirm_enable, multi_server;
 	private static ArrayList<String> sellAlias = new ArrayList<>();
 	private static BukkitTask multi_server_task;
+	private static EconomyType econType;
 	
 	public Config() {
 		load();
@@ -80,6 +82,8 @@ public class Config {
 		taxes = (int) getValue("taxes");
 		minimum_price = (double) getValue("minimum_price");
 		maximum_price = (double) getValue("maximum_price");
+		
+		econType = EconomyType.valueOf((String) getValue("economy_type"));
 		
 		market_background = Utils.getMaterial((String) getValue("menus.market.background"));
 		market_border = Utils.getMaterial((String) getValue("menus.market.border"));
@@ -393,5 +397,9 @@ public class Config {
 	
 	public static ArrayList<String> getSellAlias(){
 		return sellAlias;
+	}
+	
+	public static EconomyType getEconomyType() {
+		return econType;
 	}
 }
