@@ -13,7 +13,8 @@ CREATE TABLE IF NOT EXISTS `blackitems` (
   KEY (`owner`)
 )
   ENGINE =InnoDB
-  DEFAULT CHARSET =latin1;
+  DEFAULT CHARSET =utf8mb4;
 
 ALTER TABLE `blackitems` ADD COLUMN IF NOT EXISTS `notified` BOOLEAN NOT NULL default false ;
 ALTER TABLE `blackitems` ADD COLUMN IF NOT EXISTS `content` LONGTEXT;
+ALTER TABLE `blackitems` CONVERT TO CHARACTER SET utf8mb4;
