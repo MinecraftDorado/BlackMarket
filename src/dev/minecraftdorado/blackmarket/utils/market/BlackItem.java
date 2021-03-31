@@ -152,12 +152,13 @@ public class BlackItem {
 		String[] split = Config.getMessage("market.notification").replace("%value%", "" + getFinalValue()).split("%name%");
 		
 		TextComponent tc = new TextComponent(split[0]);
-		if(item.hasItemMeta() && item.getItemMeta().hasDisplayName())
-			tc.addExtra(item.getItemMeta().getDisplayName());
-		else
-			tc.addExtra(Utils.getTranlatableName(item.getType()));
-		if(split.length > 1)
+		if(split.length > 1) {
+			if(item.hasItemMeta() && item.getItemMeta().hasDisplayName())
+				tc.addExtra(item.getItemMeta().getDisplayName());
+			else
+				tc.addExtra(Utils.getTranlatableName(item.getType()));
 			tc.addExtra(split[1]);
+		}
 		Bukkit.getPlayer(owner).spigot().sendMessage(tc);
 		
 		notified = true;

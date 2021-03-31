@@ -42,6 +42,7 @@ public class MainClass extends JavaPlugin {
 	public void onEnable() {
 		main = this;
 		
+		new SkinData();
 		new Config();
 		
 		EconomyManager em = new EconomyManager();
@@ -70,7 +71,6 @@ public class MainClass extends JavaPlugin {
 		getServer().getPluginCommand("bm").setTabCompleter(new bmTab());
 		
 		new CategoryUtils();
-		new SkinData();
 		new PlayerData();
 		new Market();
 		new BlackList();
