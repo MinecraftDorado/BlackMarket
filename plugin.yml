@@ -3,7 +3,7 @@ name: BlackMarket
 author: MinecraftDorado
 version: 1.34.1
 api-version: 1.13
-softdepend: [Vault, PlayerPoints, Multiverse-Core]
+softdepend: [Vault, PlayerPoints, GemsEconomy, Multiverse-Core]
 commands:
   bm:
     description: Use BlackMarket commands.

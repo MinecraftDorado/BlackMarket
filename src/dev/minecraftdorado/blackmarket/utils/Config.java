@@ -42,6 +42,7 @@ public class Config {
 	private static ArrayList<String> sellAlias = new ArrayList<>();
 	private static BukkitTask multi_server_task;
 	private static EconomyType econType;
+	private static String econValue;
 	
 	public Config() {
 		load();
@@ -83,7 +84,10 @@ public class Config {
 		minimum_price = (double) getValue("minimum_price");
 		maximum_price = (double) getValue("maximum_price");
 		
-		econType = EconomyType.valueOf((String) getValue("economy_type"));
+		String[] eco = ((String) getValue("economy_type")).split("#");
+		
+		econType = EconomyType.valueOf(eco[0]);
+		econValue = eco.length == 1 ? eco[1] : null;
 		
 		market_background = Utils.getMaterial((String) getValue("menus.market.background"));
 		market_border = Utils.getMaterial((String) getValue("menus.market.border"));
@@ -401,5 +405,9 @@ public class Config {
 	
 	public static EconomyType getEconomyType() {
 		return econType;
+	}
+	
+	public static String getEconomyValue() {
+		return econValue;
 	}
 }

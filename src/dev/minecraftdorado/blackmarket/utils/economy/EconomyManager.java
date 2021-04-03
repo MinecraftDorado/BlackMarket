@@ -5,19 +5,22 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import dev.minecraftdorado.blackmarket.utils.Config;
+import dev.minecraftdorado.blackmarket.utils.hook.GemsEconomyHook;
 import dev.minecraftdorado.blackmarket.utils.hook.PlayerPointsHook;
 import dev.minecraftdorado.blackmarket.utils.hook.VaultHook;
+import me.xanium.gemseconomy.api.GemsEconomyAPI;
 import net.milkbowl.vault.economy.Economy;
 
 public class EconomyManager {
 	
 	public static enum EconomyType {
-		VAULT, PLAYERPOINTS;
+		VAULT, PLAYERPOINTS, GEMSECONOMY;
 	}
 	
 	private static EconomyType type;
 	public static Object econ;
 	private boolean status = false;
+	private static String econValue = null;
 	
 	public EconomyManager() {
 		type = Config.getEconomyType(); 
@@ -30,6 +33,13 @@ public class EconomyManager {
 		case VAULT:
 			if(VaultHook.setupEconomy())
 				status = true;
+			break;
+		case GEMSECONOMY:
+			if(GemsEconomyHook.setupEconomy()) {
+				status = true;
+				if(Config.getEconomyValue() != null && ((GemsEconomyAPI) econ).getCurrency(Config.getEconomyValue()) != null)
+					econValue = Config.getEconomyValue();
+			}
 			break;
 		}
 	}
@@ -46,6 +56,11 @@ public class EconomyManager {
 		case VAULT:
 			((Economy) econ).depositPlayer(player, value);
 			break;
+		case GEMSECONOMY:
+			if(econValue != null)
+				((GemsEconomyAPI) econ).deposit(player.getUniqueId(), value, ((GemsEconomyAPI) econ).getCurrency(econValue));
+			else
+				((GemsEconomyAPI) econ).deposit(player.getUniqueId(), value);
 		}
 	}
 	
@@ -58,6 +73,12 @@ public class EconomyManager {
 			break;
 		case VAULT:
 			bal = ((Economy) econ).getBalance(player);
+			break;
+		case GEMSECONOMY:
+			if(econValue != null)
+				((GemsEconomyAPI) econ).getBalance(player.getUniqueId(), ((GemsEconomyAPI) econ).getCurrency(econValue));
+			else
+				((GemsEconomyAPI) econ).getBalance(player.getUniqueId());
 			break;
 		}
 		
@@ -75,6 +96,12 @@ public class EconomyManager {
 			break;
 		case VAULT:
 			((Economy) econ).withdrawPlayer(player, value);
+			break;
+		case GEMSECONOMY:
+			if(econValue != null)
+				((GemsEconomyAPI) econ).withdraw(player.getUniqueId(), value, ((GemsEconomyAPI) econ).getCurrency(econValue));
+			else
+				((GemsEconomyAPI) econ).withdraw(player.getUniqueId(), value);
 			break;
 		}
 	}

@@ -7,9 +7,8 @@ import dev.minecraftdorado.blackmarket.utils.economy.EconomyManager;
 public class PlayerPointsHook {
 	
 	public static boolean setupEconomy() {
-		if(Bukkit.getServer().getPluginManager().getPlugin("PlayerPoints") != null) {
+		if(Bukkit.getServer().getPluginManager().getPlugin("PlayerPoints") != null)
 			EconomyManager.econ = PlayerPoints.class.cast(Bukkit.getServer().getPluginManager().getPlugin("PlayerPoints")).getAPI();
-		}
         return EconomyManager.econ != null;
     }
 }
