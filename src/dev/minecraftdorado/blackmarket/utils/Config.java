@@ -87,7 +87,7 @@ public class Config {
 		String[] eco = ((String) getValue("economy_type")).split("#");
 		
 		econType = EconomyType.valueOf(eco[0]);
-		econValue = eco.length == 1 ? eco[1] : null;
+		econValue = eco.length == 2 ? eco[1] : null;
 		
 		market_background = Utils.getMaterial((String) getValue("menus.market.background"));
 		market_border = Utils.getMaterial((String) getValue("menus.market.border"));
