@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.bukkit.entity.Player;
 
 import dev.minecraftdorado.blackmarket.utils.Config;
-import dev.minecraftdorado.blackmarket.utils.Config.StorageType;
 import dev.minecraftdorado.blackmarket.utils.database.mysql.dbMySQL;
 import dev.minecraftdorado.blackmarket.utils.inventory.InventoryManager.Inv;
 
@@ -16,7 +15,7 @@ public class Storage {
 	}
 	
 	public static Inv getInventory(Player player) {
-		if(Config.getStorageType().equals(StorageType.MySQL) && Config.multiServerIsEnable())
+		if(Config.multiServerIsEnable())
 			dbMySQL.checkStorage(player.getUniqueId());
 		
 		Inv inv = new Inv(getTitle(), 6);

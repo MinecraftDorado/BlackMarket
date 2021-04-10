@@ -24,6 +24,7 @@ import dev.minecraftdorado.blackmarket.utils.entities.npc.NPC;
 import dev.minecraftdorado.blackmarket.utils.entities.npc.skins.SkinData;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.UMaterial;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
+import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
 
 public class Config {
 	
@@ -68,6 +69,7 @@ public class Config {
 			npc.respawn();
 		
 		Utils.dataCopy.clear();
+		PlayerData.reload();
 	}
 	
 	public static void load() {
@@ -389,7 +391,7 @@ public class Config {
 	}
 	
 	public static boolean multiServerIsEnable() {
-		return multi_server;
+		return getStorageType().equals(StorageType.MySQL) && multi_server;
 	}
 	
 	public static String getString(String str) {

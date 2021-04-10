@@ -15,7 +15,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import dev.minecraftdorado.blackmarket.mainclass.MainClass;
 import dev.minecraftdorado.blackmarket.utils.Config;
 import dev.minecraftdorado.blackmarket.utils.UpdateChecker;
-import dev.minecraftdorado.blackmarket.utils.Config.StorageType;
 import dev.minecraftdorado.blackmarket.utils.UpdateChecker.UpdateReason;
 import dev.minecraftdorado.blackmarket.utils.database.mysql.dbMySQL;
 import dev.minecraftdorado.blackmarket.utils.entities.npc.events.NPCInteractEvent;
@@ -57,7 +56,7 @@ public class PlayerListener implements Listener {
 		
 		Bukkit.getScheduler().runTaskLater(MainClass.main, () -> {
 			// Sold notifications
-			if(Config.getStorageType().equals(StorageType.MySQL) && Config.multiServerIsEnable())
+			if(Config.multiServerIsEnable())
 				dbMySQL.checkUnnotified(e.getPlayer().getUniqueId());
 			else {
 				PlayerData.get(e.getPlayer().getUniqueId()).getItems().forEach(bItem -> {

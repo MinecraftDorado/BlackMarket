@@ -18,14 +18,7 @@ public class PlayerData {
 	public static HashMap<UUID, Data> list = new HashMap<>();
 	
 	public PlayerData() {
-		switch(Config.getStorageType()) {
-		case MySQL:
-			dbMySQL.load();
-			break;
-		default:
-			dbFolder.load();
-			break;
-		}
+		load();
 	}
 	
 	public static Data get(UUID uuid) {
@@ -40,6 +33,23 @@ public class PlayerData {
 			break;
 		default:
 			dbFolder.save();
+			break;
+		}
+	}
+	
+	public static void reload() {
+		save();
+		list.clear();
+		load();
+	}
+	
+	private static void load() {
+		switch(Config.getStorageType()) {
+		case MySQL:
+			dbMySQL.load();
+			break;
+		default:
+			dbFolder.load();
 			break;
 		}
 	}

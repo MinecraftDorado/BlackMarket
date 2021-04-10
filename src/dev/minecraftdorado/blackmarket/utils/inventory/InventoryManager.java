@@ -55,7 +55,7 @@ public class InventoryManager implements Listener {
 		a.add(inv);
 		if(a.size() > 5) a.remove(0);
 		history.put(player, a);
-		
+				
 		player.closeInventory();
 		player.openInventory(inv.inv);
 	}
