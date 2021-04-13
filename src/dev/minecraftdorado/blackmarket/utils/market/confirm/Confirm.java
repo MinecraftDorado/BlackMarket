@@ -23,8 +23,8 @@ public class Confirm {
 		inv.setBackgroud(Config.getConfirmMenuBackground(), false);
 		inv.setBackgroud(Config.getConfirmMenuBorder(), true);
 		
-		ItemStack cancel = Config.getItemStack("confirm.buy", "menus.confirm.items.buy");
-		ItemMeta meta = cancel.getItemMeta();
+		ItemStack buy = Config.getItemStack("confirm.buy", "menus.confirm.items.buy");
+		ItemMeta meta = buy.getItemMeta();
 		List<String> lore = meta.hasLore() ? meta.getLore() : null;
 		if(lore != null)
 			for (int i = 0; i < lore.size(); i++) {
@@ -34,9 +34,9 @@ public class Confirm {
 				lore.set(i, l);
 			}
 		meta.setLore(lore);
-		cancel.setItemMeta(meta);
+		buy.setItemMeta(meta);
 		
-		inv.setItem(Config.getSlot("confirm.buy"), cancel);
+		inv.setItem(Config.getSlot("confirm.buy"), buy);
 		inv.setItem(Config.getSlot("confirm.cancel"), Config.getItemStack("confirm.cancel", "menus.confirm.items.cancel"));
 		
 		inv.addBlackItem(bItem, Config.getSlot("confirm.buy"));

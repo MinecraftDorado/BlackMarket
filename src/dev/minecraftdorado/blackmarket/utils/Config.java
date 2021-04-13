@@ -235,9 +235,9 @@ public class Config {
 		
 		if(conf.isSet(key)) {
 			items.put(typeKey, Utils.applyMeta(Utils.getMaterial(conf.getString(key)), metaKey));
-			return items.get(typeKey);
+			return items.get(typeKey).clone();
 		}else
-			return UMaterial.BARRIER.getItemStack();
+			return UMaterial.BARRIER.getItemStack().clone();
 	}
 	
 	public static ItemStack getItemStack(String typeKey, String metaKey, Player player) {
