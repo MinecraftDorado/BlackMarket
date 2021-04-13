@@ -76,9 +76,9 @@ public class EconomyManager {
 			break;
 		case GEMSECONOMY:
 			if(econValue != null)
-				((GemsEconomyAPI) econ).getBalance(player.getUniqueId(), ((GemsEconomyAPI) econ).getCurrency(econValue));
+				bal = ((GemsEconomyAPI) econ).getBalance(player.getUniqueId(), ((GemsEconomyAPI) econ).getCurrency(econValue));
 			else
-				((GemsEconomyAPI) econ).getBalance(player.getUniqueId());
+				bal = ((GemsEconomyAPI) econ).getBalance(player.getUniqueId());
 			break;
 		}
 		
