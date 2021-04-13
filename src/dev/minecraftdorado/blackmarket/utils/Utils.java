@@ -269,21 +269,18 @@ public class Utils {
 		
         if(Bukkit.getOfflinePlayer(uuid).isOnline()) {
         	Bukkit.getPlayer(uuid).getEffectivePermissions().stream().map(PermissionAttachmentInfo::getPermission).map(String::toLowerCase).filter(value -> value.startsWith("blackmarket.limit")).map(value -> value.replace("blackmarket.limit", "")).forEach(value -> {
-        		if (value.equalsIgnoreCase("*")) {
+        		value = value.replace(".", "");
+        		if (value.equalsIgnoreCase("*") || max.get() == -1) {
         			max.set(-1);
         			return;
         		}
-        		
-        		if (max.get() == -1)
-        			return;
         		
         		try {
         			int amount = Integer.parseInt(value);
         			
         			if (amount > max.get())
         				max.set(amount);
-        		} catch (NumberFormatException ignored) {
-        		}
+        		} catch (NumberFormatException ignored) {}
         	});
         }
         
