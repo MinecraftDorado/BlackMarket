@@ -77,6 +77,10 @@ public class PlayerListener implements Listener {
 		npcRemove.remove(e.getPlayer().getUniqueId());
 	}
 	
+	/*
+	 * Interact
+	 */
+	
 	@EventHandler
 	private void interact(PlayerInteractEvent e) {
 		if(npcRemove.contains(e.getPlayer().getUniqueId())) {

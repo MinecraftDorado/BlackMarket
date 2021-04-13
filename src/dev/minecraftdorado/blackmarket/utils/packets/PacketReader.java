@@ -43,8 +43,9 @@ public class PacketReader {
         }
         
         public void inject() {
-        	if(channel.pipeline().get("PacketInjector") == null)
-        		channel.pipeline().addAfter("decoder", "PacketInjector",new MessageToMessageDecoder<Object>() {
+        	if(channel.pipeline() != null
+        			&& channel.pipeline().get("BMPacketInjector") == null)
+        		channel.pipeline().addAfter("decoder", "BMPacketInjector",new MessageToMessageDecoder<Object>() {
         			@Override
         			protected void decode(ChannelHandlerContext arg0,Object p,List<Object> arg2) throws Exception {
         				arg2.add(p);readPacket(p);
@@ -53,8 +54,8 @@ public class PacketReader {
         }
         
         public void uninject(){
-        	if(channel.pipeline().get("PacketInjector") != null)
-        		channel.pipeline().remove("PacketInjector");
+        	if(channel.pipeline().get("BMPacketInjector") != null)
+        		channel.pipeline().remove("BMPacketInjector");
         }
         
         public void readPacket(Object packet){
