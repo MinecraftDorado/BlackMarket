@@ -1,0 +1,226 @@
+no_permission: "&cDu hast zuwenig Rechte um diesen Befehl zu benutzen!"
+only_player: "&cDieser Befehl kann nur von Spielern benutzt werden!"
+offline_player: "&c(&4%player%&c) ist Offline!"
+command:
+  sell:
+    message: "&eGegenstand hinzugefügt!"
+    error_limit: "&cDu hast dein verkaufs Limit erreicht!"
+    error_item_not_found: "&cDeine Hand ist leer, du musst den Gegenstand welches du verkaufen willst in der Hand halten!"
+    error_item_not_allow: "&cDieser Gegenstand ist auf dem Schwarzmarkt nicht erlaubt!"
+    error_lore_not_allow: "&cDie Legende (Lore) von diesem Gegenstand ist auf dem Schwarzmarkt nicht erlaubt!"
+    error_value: "&cUngültige angabe!"
+    error_minimum_price: "&cDer Minimalpreis ist %price%!"
+    error_maximum_price: "&cDer Maximalpreis ist %price%!"
+    usage: "&cBenutzung /%cmd% <eingabe>"
+  reload:
+    message: "&eKonfiguration neugeladen!"
+  setnpc:
+    message: "&eNPC an deiner Position erstellt!"
+  removenpc:
+    message: "&eRechtsklicke ein NPC um diesen zu entfernen!"
+    removed: "&eNPC entfernt!"
+    invalid: "&cNPC nicht erkannt!"
+
+help:
+- "&aSchwarzmarkt - Befehle:"
+- "&8 » &7/bm reload &8- &7(&fLadet die Konfigurationen neu&7)"
+- "&8 » &7/bm open <player> &8- &7(&fÖffnet den Schwarzmarkt&7)"
+- "&8 » &7/bm setnpc <skin_name> &8- &7(&fSetzt einen NPC&7)"
+- "&8 » &7/bm removenpc &8- &7(&fEntfernt einen NPC&7)"
+- "&8 » &7/bm sell <value> &8- &7(&fPostet einen Gegenstand auf dem Schwarzmarkt&7)"
+
+market:
+  buy: "&eDanke für deinen Einkauf!"
+  inventory_full: "&cDein Inventar ist voll!"
+  item_invalid: "&cDieser Gegenstand ist nicht zum verkauf!"
+  missing_money: "&cDu hast nicht genügend Geld um dies zu kaufen!"
+  item_owner: "&cDu kannst deine eigenen Gegenstände nicht kaufen!"
+  take_items: "&eGegenstand wurde bereits genommen!"
+  cancel_post: "&eGegenstands verkauf wurde abgebrochen!"
+  notification: "&eDer Gegenstand &a%name% &ewurde für &6%value%&e verkauft!"
+
+sales:
+  item_not_found: "&cWähle ein Gegenstand aus deinem Inventar welches du verkaufen möchtest!"
+  value: "&eSchreibe den Preis des Gegenstandes!"
+
+menus:
+  market:
+    title: "Schwarzmarkt"
+    items:
+      sales:
+        name: "&bVerkaufsmenü"
+        lore:
+        - "&7Menü um Gegenstände auf dem"
+        - "&7Markt zu verkaufen."
+        - ""
+        - "&eKlicken zum Öffnen!"
+      item_onsale:
+      - "&8Besitzer: &b%owner%"
+      - "&8Preis: &6%value%$"
+      - "&8Abgelaufen in: &b%expired%"
+      - ""
+      - "&eKlicken zum Kaufen!"
+      item_onsale_remove:
+      - "&cRechtsklicken um diesen Gegenstand zu entfernen!"
+      item_onsale_content:
+      - "&3Mittlere Maustaste klicken um diesen Gegenstand anzuschauen!"
+      next:
+        name: "&eNächste Seite (%actual_page%-%pages%)"
+      previous:
+        name: "&eVorherige Seite (%actual_page%-%pages%)"
+      close:
+        name: "&cVerlassen"
+      order:
+        name: "&bSortieren nach"
+        lore:
+        - "&8- &7%order_id%"
+        - "&8- &7%order_type%"
+        - "&8- &7%order_amount%"
+        - "&8- &7%order_value%"
+        - ""
+        - "&eLinks Klicken um es zu wechseln!"
+        - "&eRechts Klicken um es rückwärts zu wechseln!"
+        format: "%active% %value%"
+        active: "&c»&4"
+        values:
+          id: "IDs"
+          type: "Material"
+          amount: "Anzahl"
+          value: "Preis"
+      info:
+        name: "&bInformationen"
+        lore:
+        - "&7Befehl zum verkaufen = /bm sell <Preis>"
+        - "&4(Ablaufs zeit: 24h)"
+      storage:
+        name: "&bLager"
+        lore:
+        - "&7Deine nicht verkauften Gegenstände"
+        - ""
+        - "&eKlicken zum Öffnen!"
+      categories:
+        all:    # categories/all.yml
+          name: "&bAlle"
+          lore:
+          - "&7Alle Gegenstände"
+        ores:
+          name: "&bErze"
+          lore:
+          - "&7Liste:"
+          - "&8 - &7Eisen"
+          - "&8 - &7Gold"
+          - "&8 - &7Diamant"
+          - "&8 - &7Smaragd"
+          - "&8 - &7..."
+        potions:
+          name: "&bTränke"
+          lore:
+          - "&7Liste:"
+          - "&8 - &7Tränke"
+          - "&8 - &7Netherwarzen"
+          - "&8 - &7Lohenrute"
+          - "&8 - &7Ghastträne"
+          - "&8 - &7..."
+        redstone:
+          name: "&bRedstone"
+          lore:
+          - "&7Liste:"
+          - "&8 - &7Redstone"
+          - "&8 - &7TNT"
+          - "&8 - &7Werfer"
+          - "&8 - &7Beobachter"
+          - "&8 - &7..."
+        tools:
+          name: "&bWerkzeug"
+          lore:
+          - "&7Liste:"
+          - "&8 - &7Scheren"
+          - "&8 - &7Äxte"
+          - "&8 - &7Spitzhacken"
+          - "&8 - &7Schaufeln"
+          - "&8 - &7..."
+        wood:
+          name: "&bHolz"
+          lore:
+          - "&7List:"
+          - "&8 - &7Eichenstämme / Eichenholzbretter"
+          - "&8 - &7Fichtenstämme / Fichtenholzbretter"
+          - "&8 - &7Tropenbaumstämme / Tropenholzbretter"
+          - "&8 - &7Akazienstämme / Akazienholzbretter"
+          - "&8 - &7..."
+  storage:
+    title: "Schwarzmarkt - Lager"
+    items:
+      back:
+        name: "&cZurück"
+      take_items:
+        name: "&bGegenstände nehmen"
+        lore:
+        - "&7Nimm alle Gegenstände"
+        - ""
+        - "&eKlicken zum nehmen!"
+  sales:
+    title: "Schwarzmarkt - Verkäufe"
+    items:
+      back:
+        name: "&cAbbrechen"
+        lore:
+        - "&eKlicke um den Verkauf abzubrechen!"
+      post:
+        name: "&bVerkaufen"
+        lore:
+        - "&7Bist du Sicher?"
+        - ""
+        - "&eKlicke zum Verkaufen!"
+      value:
+        name: "&bPreis"
+        lore:
+        - "&7Aktuell: &6$%sale_value%"
+        - ""
+        - "&eKlicken um den Preis zu ändern!"
+      item:
+        name: "&bGegenstände"
+        lore:
+        - "&7Platziere den Gegenstand welches"
+        - "&7du verkaufen willst, hier rein."
+        - ""
+        - "&eKlicke den Gegenstand in deinem Inventar"
+        - "&eum dies in den Markt zu übertragen."
+      item_changed:
+      - ""
+      - "&eKlicke den Gegenstand in deinem Inventar"
+      - "&eum dies in den Markt zu übertragen."
+  content:
+    title: "Schwarzmarkt - Inhalt"
+    items:
+      back:
+        name: "&cZurück"
+  confirm:
+    title: "Schwarzmarkt - Bestätigen"
+    items:
+      back:
+        name: "&cZurück"
+      buy:
+        name: "&aKaufen"
+        lore:
+        - "&8Besitzer: &b%owner%"
+        - "&8Preis: &6%value%$"
+        - ""
+        - "&eKlicken um dies zu Kaufen!"
+      cancel:
+        name: "&cAbbrechen"
+        lore:
+        - "§8Breche den Kauf von"
+        - "&8diesem Gegenstand ab"
+        - ""
+        - "&eKlicken um es abzubrechen!"
+
+npc:
+  name: "Schwarzmarkt"
+  click: "&eKlicke Hier!"
+
+time_data: # Example 16h 23m
+    day: "T"
+    hour: "Std."
+    minute: "Min."
+    second: "s"
