@@ -56,6 +56,7 @@ public class MarketListener implements Listener {
 			}
 			// ItemStack "storage"
 			if(e.getItemStack().equals(Config.getItemStack("market.storage", "menus.market.items.storage"))) {
+				Storage.setPlayerPage(uuid, 0);
 				InventoryManager.openInventory(p, Storage.getInventory(p));
 				return;
 			}

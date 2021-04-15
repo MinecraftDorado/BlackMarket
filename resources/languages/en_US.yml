@@ -159,6 +159,10 @@ menus:
         - "&7Take all items"
         - ""
         - "&eClick to take!"
+      next:
+        name: "&eNext page (%storage_actual_page%-%storage_pages%)"
+      previous:
+        name: "&ePrevious page (%storage_actual_page%-%storage_pages%)"
   sales:
     title: "BlackMarket - Sales"
     items:

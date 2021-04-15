@@ -76,19 +76,16 @@ public class PlayerData {
 		}
 		
 		public boolean addItem(BlackItem bItem) {
-			int i = 0, ti = 0;
+			int i = 0;
 			for(BlackItem item : items)
 				if(item.getStatus().equals(Status.ON_SALE))
 					i++;
-				else if(item.getStatus().equals(Status.TIME_OUT))
-					ti++;
 			int limit = getLimit();
-			if(i < limit || limit == -1) // on_sale items
-				if(ti+i < 28) { // storage limit
-					items.add(bItem);
-					Market.addItem(bItem);
-					return true;
-				}
+			if(i < limit || limit == -1) { // on_sale items
+				items.add(bItem);
+				Market.addItem(bItem);
+				return true;
+			}
 			return false;
 		}
 		

@@ -28,6 +28,22 @@ public class StorageListener implements Listener {
 				InventoryManager.openInventory(p, Market.getInventory(p));
 				return;
 			}
+			
+
+			// ItemStack "previous"
+			if(e.getItemStack().equals(Config.getItemStack("storage.previous", "menus.storage.items.previous", p))) {
+				Storage.setPlayerPage(p.getUniqueId(), Storage.getPlayerPage(p)-1);
+				InventoryManager.openInventory(p, Storage.getInventory(p));
+				return;
+			}
+			
+			// ItemStack "next"
+			if(e.getItemStack().equals(Config.getItemStack("storage.next", "menus.storage.items.next", p))) {
+				Storage.setPlayerPage(p.getUniqueId(), Storage.getPlayerPage(p)+1);
+				InventoryManager.openInventory(p, Storage.getInventory(p));
+				return;
+			}
+			
 			// Take all items
 			if(e.getItemStack().equals(Config.getItemStack("storage.take_items", "menus.storage.items.take_items"))) {
 				boolean taked = false;

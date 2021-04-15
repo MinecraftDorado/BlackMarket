@@ -159,6 +159,10 @@ menus:
         - "&7Recupera los items"
         - ""
         - "&e¡Clic para tomar!"
+      next:
+        name: "&eSiguiente página (%storage_actual_page%-%storage_pages%)"
+      previous:
+        name: "&ePágina anterior (%storage_actual_page%-%storage_pages%)"
   sales:
     title: "BlackMarket - Ventas"
     items:

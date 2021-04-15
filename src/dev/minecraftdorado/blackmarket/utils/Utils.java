@@ -32,6 +32,7 @@ import dev.minecraftdorado.blackmarket.utils.inventory.utils.UMaterial;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.OrderUtils.OrderType;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
 import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
+import dev.minecraftdorado.blackmarket.utils.market.Storage;
 import dev.minecraftdorado.blackmarket.utils.market.sell.Sales;
 import dev.minecraftdorado.blackmarket.utils.packets.Reflections;
 import dev.minecraftdorado.blackmarket.utils.packets.ServerVersion;
@@ -131,6 +132,10 @@ public class Utils {
 		if(s.contains("%")) {
 			if(s.contains("%actual_page%")) s = s.replace("%actual_page%", "" + (Market.getPlayerPage(player)+1));
 			if(s.contains("%pages%")) s = s.replace("%pages%", "" + Market.getPages(PlayerData.get(player.getUniqueId()).getCategory()));
+			
+			if(s.contains("%storage_actual_page%")) s = s.replace("%storage_actual_page%", "" + (Storage.getPlayerPage(player)+1));
+			if(s.contains("%storage_pages%")) s = s.replace("%storage_pages%", String.valueOf(PlayerData.get(player.getUniqueId()).getStorage().size() / 28 + 1));
+			
 			if(s.contains("%order_"))
 				for(OrderType type : OrderType.values()) {
 					String name = type.getName();
