@@ -47,21 +47,23 @@ public class Market {
 								continue;
 							}
 							
-							for(int slot : inv.getBlackList().keySet()) {
-								BlackItem bItem = inv.getBlackList().get(slot);
-								
-								if(!l.containsKey(bItem.getId()))
-									if(!bItem.getStatus().equals(Status.ON_SALE)) {
-										Bukkit.getScheduler().runTask(MainClass.main, () -> InventoryManager.openInventory(p, getInventory(p)));
-										update = false;
-										break;
-									}else
-										l.put(bItem.getId(), bItem.getItemStack(p, true));
-								
-								inv.setItem(slot, l.get(bItem.getId()));
+							if(!inv.getBlackList().keySet().isEmpty()) {
+								for(int slot : inv.getBlackList().keySet()) {
+									BlackItem bItem = inv.getBlackList().get(slot);
+									
+									if(!l.containsKey(bItem.getId()))
+										if(!bItem.getStatus().equals(Status.ON_SALE)) {
+											Bukkit.getScheduler().runTask(MainClass.main, () -> InventoryManager.openInventory(p, getInventory(p)));
+											update = false;
+											break;
+										}else
+											l.put(bItem.getId(), bItem.getItemStack(p, true));
+									
+									inv.setItem(slot, l.get(bItem.getId()));
+								}
+								if(update)
+									InventoryManager.updateInventory(p, inv);
 							}
-							if(update)
-								InventoryManager.updateInventory(p, inv);
 						}
 					}
 				};
