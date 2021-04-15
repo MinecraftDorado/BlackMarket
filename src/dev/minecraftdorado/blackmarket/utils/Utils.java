@@ -223,7 +223,7 @@ public class Utils {
 	public static boolean canAddItem(Player player, ItemStack item) {
 		Inventory inv = Bukkit.createInventory(null, 45);
 		int slot = 0;
-		for(ItemStack i : player.getInventory().getContents())
+		for(ItemStack i : player.getInventory().getStorageContents())
 			if(i != null && !i.getType().equals(Material.AIR)) {
 				inv.setItem(slot, i.clone());
 				slot++;
