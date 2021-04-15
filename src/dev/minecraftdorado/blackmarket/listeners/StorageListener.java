@@ -18,7 +18,7 @@ public class StorageListener implements Listener {
 	
 	@EventHandler
 	private void invClick(InventoryClickEvent e) {
-		if(e.getInv().getTitle().equals(Storage.getTitle())) {
+		if(e.getInv().getTitle().equals(Storage.getTitle()) && e.usingCustomInv()) {
 			Player p = e.getPlayer();
 			
 			// ItemStack "back"

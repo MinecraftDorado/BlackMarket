@@ -31,45 +31,44 @@ public class SalesListener implements Listener {
 			Player p = e.getPlayer();
 			UUID uuid = p.getUniqueId();
 			
-			// ItemStack "back"
-			if(e.getItemStack().equals(Config.getItemStack("sales.back", "menus.sales.items.back"))) {
-				PlayerData.get(uuid).setCategory(null);
-				Market.setPlayerPage(uuid, 0);
-				InventoryManager.openInventory(p, Market.getInventory(p));
-				return;
-			}
-			// ItemStack "value"
-			if(e.getItemStack().equals(Config.getItemStack("sales.value", "menus.sales.items.value", p))) {
-				Config.sendMessage("sales.value", p);
-				list.add(uuid);
-				p.closeInventory();
-				return;
-			}
-			
-			// ItemStack "Post"
-			if(e.getItemStack().equals(Config.getItemStack("sales.post", "menus.sales.items.post", p))) {
-				if(Sales.getPrice(uuid) >= Config.getMinimumPrice())
-					if(Sales.getPrice(uuid) <= Config.getMaximumPrice()) {
-						if(Sales.getItemStack(uuid) != null) {
-							BlackItem bItem = new BlackItem(Sales.getItemStack(uuid), Sales.getPrice(uuid), uuid);
-							
-							if(PlayerData.get(uuid).addItem(bItem)) {
-								Config.sendMessage("command.sell.message", p);
-								p.getInventory().removeItem(Sales.getItemStack(uuid));
-								p.closeInventory();
+			if(e.usingCustomInv()) {
+				// ItemStack "back"
+				if(e.getItemStack().equals(Config.getItemStack("sales.back", "menus.sales.items.back"))) {
+					PlayerData.get(uuid).setCategory(null);
+					Market.setPlayerPage(uuid, 0);
+					InventoryManager.openInventory(p, Market.getInventory(p));
+					return;
+				}
+				// ItemStack "value"
+				if(e.getItemStack().equals(Config.getItemStack("sales.value", "menus.sales.items.value", p))) {
+					Config.sendMessage("sales.value", p);
+					list.add(uuid);
+					p.closeInventory();
+					return;
+				}
+				
+				// ItemStack "Post"
+				if(e.getItemStack().equals(Config.getItemStack("sales.post", "menus.sales.items.post", p))) {
+					if(Sales.getPrice(uuid) >= Config.getMinimumPrice())
+						if(Sales.getPrice(uuid) <= Config.getMaximumPrice()) {
+							if(Sales.getItemStack(uuid) != null) {
+								BlackItem bItem = new BlackItem(Sales.getItemStack(uuid), Sales.getPrice(uuid), uuid);
+								
+								if(PlayerData.get(uuid).addItem(bItem)) {
+									Config.sendMessage("command.sell.message", p);
+									p.getInventory().removeItem(Sales.getItemStack(uuid));
+									p.closeInventory();
+								}else
+									Config.sendMessage("command.sell.error_limit", p);
 							}else
-								Config.sendMessage("command.sell.error_limit", p);
+								Config.sendMessage("sales.item_not_found", p);
 						}else
-							Config.sendMessage("sales.item_not_found", p);
-					}else
-						p.sendMessage(Config.getMessage("command.sell.error_maximum_price").replace("%price%", Config.getMaximumPrice() + ""));
-				else
-					p.sendMessage(Config.getMessage("command.sell.error_minimum_price").replace("%price%", Config.getMinimumPrice() + ""));
-				return;
-			}
-			
-			// ItemStack "Item"
-			if(!e.usingCustomInv())
+							p.sendMessage(Config.getMessage("command.sell.error_maximum_price").replace("%price%", Config.getMaximumPrice() + ""));
+					else
+						p.sendMessage(Config.getMessage("command.sell.error_minimum_price").replace("%price%", Config.getMinimumPrice() + ""));
+					return;
+				}
+			}else // ItemStack "Item"
 				if(!Config.blackListIsEnable() || BlackList.isAllow(UMaterial.match(e.getItemStack()))) {
 					if(!Config.blackListLoreIsEnable() || !e.getItemStack().hasItemMeta() || !e.getItemStack().getItemMeta().hasLore() || BlackListLore.isAllow(e.getItemStack().getItemMeta().getLore())) {
 						Sales.setItemStack(p.getUniqueId(), e.getItemStack());

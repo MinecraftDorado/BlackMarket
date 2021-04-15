@@ -17,7 +17,7 @@ public class ConfirmListener implements Listener {
 	
 	@EventHandler
 	private void invClick(InventoryClickEvent e) {
-		if(e.getInv().getTitle().equals(Confirm.getTitle())) {
+		if(e.getInv().getTitle().equals(Confirm.getTitle()) && e.usingCustomInv()) {
 			Player p = e.getPlayer();
 			UUID uuid = p.getUniqueId();
 			

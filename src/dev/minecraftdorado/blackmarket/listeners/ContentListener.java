@@ -21,7 +21,7 @@ public class ContentListener implements Listener {
 	
 	@EventHandler
 	private void invClick(InventoryClickEvent e) {
-		if(e.getInv().getTitle().equals(Content.getTitle())) {
+		if(e.getInv().getTitle().equals(Content.getTitle()) && e.usingCustomInv()) {
 			Player p = e.getPlayer();
 			UUID uuid = p.getUniqueId();
 			
