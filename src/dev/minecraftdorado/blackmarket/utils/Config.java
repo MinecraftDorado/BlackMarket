@@ -60,7 +60,7 @@ public class Config {
 		
 		StorageType stype = storageType;
 		load();
-		if(!stype.equals(storageType))
+		if(!stype.equals(storageType) || storageType.equals(StorageType.MySQL) && !multi_server)
 			Market.setId(0);
 		
 		ArrayList<NPC> npcs = new ArrayList<>();
