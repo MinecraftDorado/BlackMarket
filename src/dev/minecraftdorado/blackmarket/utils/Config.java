@@ -157,12 +157,25 @@ public class Config {
 				for(String s : npcsYml.getStringList("npc_list")) {
 					String[] args = s.split(",");
 					
-					Location loc = new Location(Bukkit.getWorld(args[0]), Double.valueOf(args[1]), Double.valueOf(args[2]), Double.valueOf(args[3]));
-					
-					NPC npc = new NPC(loc);
-					if(args.length == 5)
-						npc.setSkin(SkinData.getSkin(args[4]));
-					npcs.add(npc);
+					if(Bukkit.getWorld(args[0]) != null) {
+						Location loc = new Location(Bukkit.getWorld(args[0]), Double.valueOf(args[1]), Double.valueOf(args[2]), Double.valueOf(args[3]));
+						
+						NPC npc = new NPC(loc);
+						if(args.length == 5)
+							npc.setSkin(SkinData.getSkin(args[4]));
+						npcs.add(npc);
+					}else {
+						MainClass.main.getLogger().info(String.format("» World ´" + args[0] +  "´ not found! (The NPC will try to spawn again in 1 minute)"));
+						
+						Bukkit.getScheduler().runTaskLater(MainClass.main, () -> {
+							Location loc = new Location(Bukkit.getWorld(args[0]), Double.valueOf(args[1]), Double.valueOf(args[2]), Double.valueOf(args[3]));
+							
+							NPC npc = new NPC(loc);
+							if(args.length == 5)
+								npc.setSkin(SkinData.getSkin(args[4]));
+							npcs.add(npc);
+						}, 20 * 60);
+					}
 				}
 		}
 		
