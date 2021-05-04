@@ -72,6 +72,7 @@ public class Config {
 		PlayerData.reload();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static void load() {
 		confFile = new File(MainClass.main.getDataFolder(), "config.yml");
 		
@@ -108,8 +109,7 @@ public class Config {
 		confirm_enable = (boolean) getValue("confirm_menu_enable");
 		multi_server = (boolean) getValue("multi_server.enable");
 		
-		if(conf.isSet("sell_alias"))
-			conf.getStringList("sell_alias").forEach(cmd -> sellAlias.add(cmd));
+		sellAlias = (ArrayList<String>) getValue("sell_alias");
 		
 		File langs = new File(MainClass.main.getDataFolder(), "languages");
 		if(!langs.exists() || langs.listFiles().length == 0)
