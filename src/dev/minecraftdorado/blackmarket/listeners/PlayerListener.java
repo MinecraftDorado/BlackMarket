@@ -21,6 +21,7 @@ import dev.minecraftdorado.blackmarket.utils.entities.npc.events.NPCInteractEven
 import dev.minecraftdorado.blackmarket.utils.inventory.InventoryManager;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
 import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
+import dev.minecraftdorado.blackmarket.utils.market.sell.Sales;
 import dev.minecraftdorado.blackmarket.utils.market.BlackItem.Status;
 import dev.minecraftdorado.blackmarket.utils.packets.PacketReader;
 
@@ -116,6 +117,11 @@ public class PlayerListener implements Listener {
 			MainClass.npcM.remove(e.getNPC());
 			Config.sendMessage("command.removenpc.removed", e.getPlayer());
 			return;
+		}
+		
+		if(SalesListener.inList(e.getPlayer().getUniqueId())) {
+			Sales.setItemStack(e.getPlayer().getUniqueId(), null);
+			Sales.setPrice(e.getPlayer().getUniqueId(), 0);
 		}
 		
 		// Set default values

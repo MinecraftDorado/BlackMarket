@@ -23,7 +23,7 @@ import dev.minecraftdorado.blackmarket.utils.market.sell.Sales;
 
 public class SalesListener implements Listener {
 	
-	private ArrayList<UUID> list = new ArrayList<>();
+	private static ArrayList<UUID> list = new ArrayList<>();
 	
 	@EventHandler
 	private void invClick(InventoryClickEvent e) {
@@ -99,5 +99,9 @@ public class SalesListener implements Listener {
 				Config.sendMessage("command.sell.error_value", p);
 			}
 		}
+	}
+	
+	public static boolean inList(UUID uuid) {
+		return list.contains(uuid);
 	}
 }
