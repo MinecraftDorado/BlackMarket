@@ -9,6 +9,7 @@ command:
     error_item_not_allow: "&c¡Esté material no es aceptado en el mercado!"
     error_lore_not_allow: "&c¡Está descripción no es aceptada en el mercado!"
     error_value: "&c¡Precio inválido!"
+    error_value_limit: "&c¡Has excedido el límite de intentos para establecer un precio! (Publicación cancelada)"
     error_minimum_price: "&c¡El precio mínimo es %price%!"
     error_maximum_price: "&c¡El precio máximo es %price%!"
     usage: "&cUso /%cmd% <precio>"

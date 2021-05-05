@@ -1,6 +1,6 @@
 package dev.minecraftdorado.blackmarket.listeners;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -23,7 +23,7 @@ import dev.minecraftdorado.blackmarket.utils.market.sell.Sales;
 
 public class SalesListener implements Listener {
 	
-	private static ArrayList<UUID> list = new ArrayList<>();
+	private static HashMap<UUID, Integer> list = new HashMap<>();
 	
 	@EventHandler
 	private void invClick(InventoryClickEvent e) {
@@ -42,7 +42,7 @@ public class SalesListener implements Listener {
 				// ItemStack "value"
 				if(e.getItemStack().equals(Config.getItemStack("sales.value", "menus.sales.items.value", p))) {
 					Config.sendMessage("sales.value", p);
-					list.add(uuid);
+					list.put(uuid, 0);
 					p.closeInventory();
 					return;
 				}
@@ -83,9 +83,10 @@ public class SalesListener implements Listener {
 	@EventHandler
 	private void chat(AsyncPlayerChatEvent e) {
 		Player p = e.getPlayer();
-		if(list.contains(p.getUniqueId())) {
+		if(list.containsKey(p.getUniqueId())) {
 			String s = e.getMessage();
 			e.setCancelled(true);
+			
 			try {
 				double value = Double.parseDouble(s);
 				
@@ -96,12 +97,19 @@ public class SalesListener implements Listener {
 				}else
 					p.sendMessage(Config.getMessage("command.sell.error_minimum_price").replace("%price%", Config.getMinimumPrice() + ""));				
 			}catch (Exception ex) {
-				Config.sendMessage("command.sell.error_value", p);
+				list.put(p.getUniqueId(), list.get(p.getUniqueId()) + 1);
+				if(list.get(p.getUniqueId()) == 3) {
+					list.remove(p.getUniqueId());
+					Sales.setItemStack(p.getUniqueId(), null);
+					Sales.setPrice(p.getUniqueId(), 0);
+					Config.sendMessage("command.sell.error_value_limit", p);
+				}else
+					Config.sendMessage("command.sell.error_value", p);
 			}
 		}
 	}
 	
 	public static boolean inList(UUID uuid) {
-		return list.contains(uuid);
+		return list.containsKey(uuid);
 	}
 }

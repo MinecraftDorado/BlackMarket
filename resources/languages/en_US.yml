@@ -9,6 +9,7 @@ command:
     error_item_not_allow: "&cThis item isn't allowed on the market!"
     error_lore_not_allow: "&cThis item's lore isn't allowed on the market!"
     error_value: "&cInvalid value!"
+    error_value_limit: "&cYou have exceeded the limit of attempts to set a price! (Post canceled)"
     error_minimum_price: "&cThe minimum price is %price%!"
     error_maximum_price: "&cThe maximum price is %price%!"
     usage: "&cUsage /%cmd% <value>"
