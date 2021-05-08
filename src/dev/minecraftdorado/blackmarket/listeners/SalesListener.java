@@ -58,6 +58,9 @@ public class SalesListener implements Listener {
 									Config.sendMessage("command.sell.message", p);
 									p.getInventory().removeItem(Sales.getItemStack(uuid));
 									p.closeInventory();
+									
+									Sales.setItemStack(uuid, null);
+									Sales.setPrice(uuid, 0);
 								}else
 									Config.sendMessage("command.sell.error_limit", p);
 							}else
@@ -91,9 +94,9 @@ public class SalesListener implements Listener {
 				double value = Double.parseDouble(s);
 				
 				if(value >= Config.getMinimumPrice()) {
+					list.remove(p.getUniqueId());
 					Sales.setPrice(p.getUniqueId(), value);
 					Bukkit.getScheduler().runTask(MainClass.main, () -> InventoryManager.openInventory(p, Sales.getInventory(p)));
-					list.remove(p.getUniqueId());
 				}else
 					p.sendMessage(Config.getMessage("command.sell.error_minimum_price").replace("%price%", Config.getMinimumPrice() + ""));				
 			}catch (Exception ex) {
