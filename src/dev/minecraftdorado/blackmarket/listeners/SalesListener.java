@@ -20,96 +20,103 @@ import dev.minecraftdorado.blackmarket.utils.market.BlackItem;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
 import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
 import dev.minecraftdorado.blackmarket.utils.market.sell.Sales;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class SalesListener implements Listener {
 	
-	private static HashMap<UUID, Integer> list = new HashMap<>();
+	private static final HashMap<UUID, Integer> list = new HashMap<>();
 	
 	@EventHandler
-	private void invClick(InventoryClickEvent e) {
-		if(e.getInv().getTitle().equals(Sales.getTitle())) {
-			Player p = e.getPlayer();
-			UUID uuid = p.getUniqueId();
+	private void invClick(InventoryClickEvent event) {
+		if(event.getInv().getTitle().equals(Sales.getTitle())) {
+			Player player = event.getPlayer();
+			UUID uuid = player.getUniqueId();
 			
-			if(e.usingCustomInv()) {
+			if(event.usingCustomInv()) {
 				// ItemStack "back"
-				if(e.getItemStack().equals(Config.getItemStack("sales.back", "menus.sales.items.back"))) {
+				if(event.getItemStack().equals(Config.getItemStack("sales.back", "menus.sales.items.back"))) {
 					PlayerData.get(uuid).setCategory(null);
 					Market.setPlayerPage(uuid, 0);
-					InventoryManager.openInventory(p, Market.getInventory(p));
+					InventoryManager.openInventory(player, Market.getInventory(player));
 					return;
 				}
 				// ItemStack "value"
-				if(e.getItemStack().equals(Config.getItemStack("sales.value", "menus.sales.items.value", p))) {
-					Config.sendMessage("sales.value", p);
+				if(event.getItemStack().equals(Config.getItemStack("sales.value", "menus.sales.items.value", player))) {
+					Config.sendMessage("sales.value", player);
 					list.put(uuid, 0);
-					p.closeInventory();
+					player.closeInventory();
 					return;
 				}
 				
 				// ItemStack "Post"
-				if(e.getItemStack().equals(Config.getItemStack("sales.post", "menus.sales.items.post", p))) {
+				if(event.getItemStack().equals(Config.getItemStack("sales.post", "menus.sales.items.post", player))) {
 					if(Sales.getPrice(uuid) >= Config.getMinimumPrice())
 						if(Sales.getPrice(uuid) <= Config.getMaximumPrice()) {
 							if(Sales.getItemStack(uuid) != null) {
 								BlackItem bItem = new BlackItem(Sales.getItemStack(uuid), Sales.getPrice(uuid), uuid);
 								
 								if(PlayerData.get(uuid).addItem(bItem)) {
-									Config.sendMessage("command.sell.message", p);
-									p.getInventory().removeItem(Sales.getItemStack(uuid));
-									p.closeInventory();
+									Config.sendMessage("command.sell.message", player);
+									player.getInventory().removeItem(Sales.getItemStack(uuid));
+									player.closeInventory();
 									
 									Sales.setItemStack(uuid, null);
 									Sales.setPrice(uuid, 0);
 								}else
-									Config.sendMessage("command.sell.error_limit", p);
+									Config.sendMessage("command.sell.error_limit", player);
 							}else
-								Config.sendMessage("sales.item_not_found", p);
+								Config.sendMessage("sales.item_not_found", player);
 						}else
-							p.sendMessage(Config.getMessage("command.sell.error_maximum_price").replace("%price%", Config.getMaximumPrice() + ""));
+							player.sendMessage(Config.getMessage("command.sell.error_maximum_price").replace("%price%", Config.getMaximumPrice() + ""));
 					else
-						p.sendMessage(Config.getMessage("command.sell.error_minimum_price").replace("%price%", Config.getMinimumPrice() + ""));
-					return;
+						player.sendMessage(Config.getMessage("command.sell.error_minimum_price").replace("%price%", Config.getMinimumPrice() + ""));
 				}
 			}else // ItemStack "Item"
-				if(!Config.blackListIsEnable() || BlackList.isAllow(UMaterial.match(e.getItemStack()))) {
-					if(!Config.blackListLoreIsEnable() || !e.getItemStack().hasItemMeta() || !e.getItemStack().getItemMeta().hasLore() || BlackListLore.isAllow(e.getItemStack().getItemMeta().getLore())) {
-						Sales.setItemStack(p.getUniqueId(), e.getItemStack());
-						InventoryManager.updateInventory(p, Sales.getInventory(p));
+				if(!Config.blackListIsEnable() || BlackList.isAllow(UMaterial.match(event.getItemStack()))) {
+					if(!Config.blackListLoreIsEnable() || !event.getItemStack().hasItemMeta() || !event.getItemStack().getItemMeta().hasLore() || BlackListLore.isAllow(event.getItemStack().getItemMeta().getLore())) {
+						Sales.setItemStack(player.getUniqueId(), event.getItemStack());
+						InventoryManager.updateInventory(player, Sales.getInventory(player));
 					}else
-						Config.sendMessage("command.sell.error_lore_not_allow", p);
+						Config.sendMessage("command.sell.error_lore_not_allow", player);
 				}else
-					Config.sendMessage("command.sell.error_item_not_allow", p);
+					Config.sendMessage("command.sell.error_item_not_allow", player);
 		}
 	}
 	
 	@EventHandler
-	private void chat(AsyncPlayerChatEvent e) {
-		Player p = e.getPlayer();
-		if(list.containsKey(p.getUniqueId())) {
-			String s = e.getMessage();
-			e.setCancelled(true);
+	private void chat(AsyncPlayerChatEvent event) {
+		Player player = event.getPlayer();
+		if(list.containsKey(player.getUniqueId())) {
+			String message = event.getMessage();
+			event.setCancelled(true);
 			
 			try {
-				double value = Double.parseDouble(s);
+				double value = Double.parseDouble(message);
 				
 				if(value >= Config.getMinimumPrice()) {
-					list.remove(p.getUniqueId());
-					Sales.setPrice(p.getUniqueId(), value);
-					Bukkit.getScheduler().runTask(MainClass.main, () -> InventoryManager.openInventory(p, Sales.getInventory(p)));
+					list.remove(player.getUniqueId());
+					Sales.setPrice(player.getUniqueId(), value);
+					Bukkit.getScheduler().runTask(MainClass.main, () -> InventoryManager.openInventory(player, Sales.getInventory(player)));
 				}else
-					p.sendMessage(Config.getMessage("command.sell.error_minimum_price").replace("%price%", Config.getMinimumPrice() + ""));				
+					player.sendMessage(Config.getMessage("command.sell.error_minimum_price").replace("%price%", Config.getMinimumPrice() + ""));
 			}catch (Exception ex) {
-				list.put(p.getUniqueId(), list.get(p.getUniqueId()) + 1);
-				if(list.get(p.getUniqueId()) == 3) {
-					list.remove(p.getUniqueId());
-					Sales.setItemStack(p.getUniqueId(), null);
-					Sales.setPrice(p.getUniqueId(), 0);
-					Config.sendMessage("command.sell.error_value_limit", p);
-				}else
-					Config.sendMessage("command.sell.error_value", p);
+				list.put(player.getUniqueId(), list.get(player.getUniqueId()) + 1);
+				if(list.get(player.getUniqueId()) == 3) {
+					list.remove(player.getUniqueId());
+					Sales.setItemStack(player.getUniqueId(), null);
+					Sales.setPrice(player.getUniqueId(), 0);
+					Config.sendMessage("command.sell.error_value_limit", player);
+				}else {
+					Config.sendMessage("command.sell.error_value", player);
+				}
+
 			}
 		}
+	}
+
+	@EventHandler
+	public void onPlayerQuit(PlayerQuitEvent event){
+		list.remove(event.getPlayer().getUniqueId());
 	}
 	
 	public static boolean inList(UUID uuid) {
