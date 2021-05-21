@@ -117,6 +117,8 @@ public class SalesListener implements Listener {
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event){
 		list.remove(event.getPlayer().getUniqueId());
+		Sales.setItemStack(event.getPlayer().getUniqueId(), null);
+		Sales.setPrice(event.getPlayer().getUniqueId(), 0);
 	}
 	
 	public static boolean inList(UUID uuid) {
