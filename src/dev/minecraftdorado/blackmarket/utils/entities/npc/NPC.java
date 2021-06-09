@@ -64,8 +64,13 @@ public class NPC {
 			getId = null,
 			getServer = null,
 			getDataWatcher = null,
-			set = null
+			set = null,
+			getScoreboard = null,
+			getObjective = null
 			;
+	
+	private static Object a_field = null;
+	private static int index = 16;
 	
 	static {
 		try {
@@ -89,6 +94,10 @@ public class NPC {
 	        
 	        PacketPlayOutNamedEntitySpawnConstructor = PacketPlayOutNamedEntitySpawn.getConstructor(EntityHuman);
 	        
+	        Class<?> Scoreboard = Reflections.getNMSClass("Scoreboard");
+        	getScoreboard = EntityPlayer.getMethod("getScoreboard");
+        	getObjective = Scoreboard.getMethod("getObjective", String.class);
+	        
 	        
 	        if(ServerVersion.getVersion().contains("1_14") || ServerVersion.getVersion().contains("1_15") || ServerVersion.getVersion().contains("1_16")) {
 	        	PlayerInteractManagerConstructor = PlayerInteractManager.getConstructor(WorldServer);
@@ -99,6 +108,58 @@ public class NPC {
 	        	set = DataWatcher.getMethod("set", DataWatcherObject, Object.class);
 	        	DataWatcherObjectConstructor = DataWatcherObject.getConstructor(int.class, DataWatcherSerializer);
 	        }
+        	
+        	switch(ServerVersion.getVersion()) {
+        	case "v1_8_R3":
+        		index = 10;
+        		break;
+        	case "v1_9_R1":
+        		index = 12;
+        		a_field = net.minecraft.server.v1_9_R1.DataWatcherRegistry.a;
+        		break;
+        	case "v1_9_R2":
+        		index = 12;
+        		a_field = net.minecraft.server.v1_9_R2.DataWatcherRegistry.a;
+        		break;
+        	case "v1_10_R1":
+        		index = 13;
+        		a_field = net.minecraft.server.v1_10_R1.DataWatcherRegistry.a;
+        		break;
+        	case "v1_11_R1":
+        		index = 13;
+        		a_field = net.minecraft.server.v1_11_R1.DataWatcherRegistry.a;
+        		break;
+        	case "v1_12_R1":
+        		index = 13;
+        		a_field = net.minecraft.server.v1_12_R1.DataWatcherRegistry.a;
+        		break;
+        	case "v1_13_R1":
+        		index = 14;
+        		a_field = net.minecraft.server.v1_13_R1.DataWatcherRegistry.a;
+        		break;
+        	case "v1_13_R2":
+        		index = 14;
+        		a_field = net.minecraft.server.v1_13_R2.DataWatcherRegistry.a;
+        		break;
+        	case "v1_14_R1":
+        		a_field = net.minecraft.server.v1_14_R1.DataWatcherRegistry.a;
+        		break;
+        	case "v1_15_R1":
+        		a_field = net.minecraft.server.v1_15_R1.DataWatcherRegistry.a;
+        		break;
+        	case "v1_16_R1":
+        		a_field = net.minecraft.server.v1_16_R1.DataWatcherRegistry.a;
+        		break;
+        	case "v1_16_R2":
+        		a_field = net.minecraft.server.v1_16_R2.DataWatcherRegistry.a;
+        		break;
+        	case "v1_16_R3":
+        		a_field = net.minecraft.server.v1_16_R3.DataWatcherRegistry.a;
+        		break;
+        	default:
+        		Bukkit.getConsoleSender().sendMessage("§cServer version: " + ServerVersion.getVersion());
+        		break;
+        	}
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -220,62 +281,6 @@ public class NPC {
 	            	Utils.sendPacket(player, packetPlayOutPlayerInfo_add);
 	            	Utils.sendPacket(player, PacketPlayOutNamedEntitySpawnConstructor.newInstance(getEntity()));
 	            	
-	            	Object a_field = null;
-	            	int index = 16;
-	            	
-	            	switch(ServerVersion.getVersion()) {
-	            	case "v1_8_R3":
-	            		index = 10;
-	            		((net.minecraft.server.v1_8_R3.DataWatcher) getDataWatcher.invoke(entity)).watch(index, (byte) 127);
-	            		break;
-	            	case "v1_9_R1":
-	            		index = 12;
-	            		a_field = net.minecraft.server.v1_9_R1.DataWatcherRegistry.a;
-	            		break;
-	            	case "v1_9_R2":
-	            		index = 12;
-	            		a_field = net.minecraft.server.v1_9_R2.DataWatcherRegistry.a;
-	            		break;
-	            	case "v1_10_R1":
-	            		index = 13;
-	            		a_field = net.minecraft.server.v1_10_R1.DataWatcherRegistry.a;
-	            		break;
-	            	case "v1_11_R1":
-	            		index = 13;
-	            		a_field = net.minecraft.server.v1_11_R1.DataWatcherRegistry.a;
-	            		break;
-	            	case "v1_12_R1":
-	            		index = 13;
-	            		a_field = net.minecraft.server.v1_12_R1.DataWatcherRegistry.a;
-	            		break;
-	            	case "v1_13_R1":
-	            		index = 14;
-	            		a_field = net.minecraft.server.v1_13_R1.DataWatcherRegistry.a;
-	            		break;
-	            	case "v1_13_R2":
-	            		index = 14;
-	            		a_field = net.minecraft.server.v1_13_R2.DataWatcherRegistry.a;
-	            		break;
-	            	case "v1_14_R1":
-	            		a_field = net.minecraft.server.v1_14_R1.DataWatcherRegistry.a;
-	            		break;
-	            	case "v1_15_R1":
-	            		a_field = net.minecraft.server.v1_15_R1.DataWatcherRegistry.a;
-	            		break;
-	            	case "v1_16_R1":
-	            		a_field = net.minecraft.server.v1_16_R1.DataWatcherRegistry.a;
-	            		break;
-	            	case "v1_16_R2":
-	            		a_field = net.minecraft.server.v1_16_R2.DataWatcherRegistry.a;
-	            		break;
-	            	case "v1_16_R3":
-	            		a_field = net.minecraft.server.v1_16_R3.DataWatcherRegistry.a;
-	            		break;
-	            	default:
-	            		Bukkit.getConsoleSender().sendMessage("§cServer version: " + ServerVersion.getVersion());
-	            		break;
-	            	}
-	            	
 	            	if(a_field != null) {
 	            		Object data = getDataWatcher.invoke(entity);
 	            		set.invoke(data,
@@ -286,8 +291,13 @@ public class NPC {
 	            						),
 	            				(byte) 127
 	            				);
+	            	}else if(ServerVersion.getVersion().equals("v1_8_R3"))
+	            		((net.minecraft.server.v1_8_R3.DataWatcher) getDataWatcher.invoke(entity)).watch(index, (byte) 127);
+	            	
+	            	if(getObjective.invoke(getScoreboard.invoke(entity), "health") != null) {
+	            		nameEntity.setLocation(getLocation().clone().add(0, .32, 0));
 	            	}
-	                
+	            	
 	                updateMetadata(player);
 	        		
 	        		Bukkit.getScheduler().scheduleSyncDelayedTask(MainClass.main, new Runnable() {
