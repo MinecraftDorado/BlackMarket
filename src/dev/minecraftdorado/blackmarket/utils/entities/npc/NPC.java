@@ -294,7 +294,7 @@ public class NPC {
 	            	}else if(ServerVersion.getVersion().equals("v1_8_R3"))
 	            		((net.minecraft.server.v1_8_R3.DataWatcher) getDataWatcher.invoke(entity)).watch(index, (byte) 127);
 	            	
-	            	if(getObjective.invoke(getScoreboard.invoke(entity), "health") != null) {
+	            	if(Config.healthBar() || getObjective.invoke(getScoreboard.invoke(entity), "health") != null) {
 	            		nameEntity.setLocation(getLocation().clone().add(0, .32, 0));
 	            	}
 	            	

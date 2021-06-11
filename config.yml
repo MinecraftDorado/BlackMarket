@@ -117,3 +117,5 @@ confirm_menu_enable: false
 
 sell_alias:
 - sell
+
+health_bar: false # enable if you have problems with a health bar plugin

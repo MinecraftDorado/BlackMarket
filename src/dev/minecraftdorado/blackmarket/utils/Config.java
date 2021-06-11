@@ -39,7 +39,7 @@ public class Config {
 	private static ArrayList<NPC> npcs = new ArrayList<>();
 	private static ItemStack market_background, market_border, storage_background, storage_border, sellmenu_background, sellmenu_border, content_border, confirm_background, confirm_border;
 	private static StorageType storageType;
-	private static boolean blacklist_enable, blacklistlore_enable, confirm_enable, multi_server;
+	private static boolean blacklist_enable, blacklistlore_enable, confirm_enable, multi_server, healthBar;
 	private static ArrayList<String> sellAlias = new ArrayList<>();
 	private static BukkitTask multi_server_task;
 	private static EconomyType econType;
@@ -110,6 +110,8 @@ public class Config {
 		multi_server = (boolean) getValue("multi_server.enable");
 		
 		sellAlias = (ArrayList<String>) getValue("sell_alias");
+		
+		healthBar = (boolean) getValue("health_bar");
 		
 		File langs = new File(MainClass.main.getDataFolder(), "languages");
 		if(!langs.exists() || langs.listFiles().length == 0)
@@ -424,5 +426,9 @@ public class Config {
 	
 	public static String getEconomyValue() {
 		return econValue;
+	}
+	
+	public static boolean healthBar() {
+		return healthBar;
 	}
 }
