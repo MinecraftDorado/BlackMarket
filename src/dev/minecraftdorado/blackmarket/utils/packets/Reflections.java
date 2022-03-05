@@ -13,9 +13,35 @@ public class Reflections {
 	    }
 	}
 	
+	public static Class<?> getNMSClass(String className, String source) {
+		try {
+			if(ServerVersion.getVersion().contains("1_17")) {
+				return Class.forName("net.minecraft." + source + "." + className);
+			}
+			
+			return getNMSClass(className);
+		} catch (ClassNotFoundException ex) {
+			throw new RuntimeException("An error occurred while finding NMS class.", ex);
+	    }
+	}
+	
 	public static boolean existNMSClass(String className) {
 		try {
 			Class.forName("net.minecraft.server." + ServerVersion.getVersion() + "." + className);
+		}catch(Exception ex) {
+			return false;
+		}
+		return true;
+	}
+	
+	
+	public static boolean existNMSClass(String className, String source) {
+		try {
+			if(ServerVersion.getVersion().contains("1_17")) {
+				Class.forName("net.minecraft." + source + "." + className);
+			} else {
+				Class.forName("net.minecraft.server." + ServerVersion.getVersion() + "." + className);
+			}			
 		}catch(Exception ex) {
 			return false;
 		}

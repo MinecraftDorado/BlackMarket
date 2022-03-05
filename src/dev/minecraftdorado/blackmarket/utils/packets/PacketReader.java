@@ -2,7 +2,6 @@ package dev.minecraftdorado.blackmarket.utils.packets;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -10,8 +9,6 @@ import org.bukkit.entity.Player;
 import dev.minecraftdorado.blackmarket.mainclass.MainClass;
 import dev.minecraftdorado.blackmarket.utils.entities.npc.events.NPCInteractEvent;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.MessageToMessageDecoder;
 
 public class PacketReader {
 	
@@ -34,23 +31,23 @@ public class PacketReader {
         	this.player = player;
         	try {
         		Object cp = Reflections.getHandle(CraftPlayer.cast(this.player));
-        		cp = Reflections.getField(cp, "playerConnection");
-        		cp = Reflections.getField(cp, "networkManager");
-        		this.channel = (Channel) Reflections.getField(cp, "channel");
+        		cp = Reflections.getField(cp, ServerVersion.getVersion().contains("1_17") ? "b" : "playerConnection");
+        		cp = Reflections.getField(cp, ServerVersion.getVersion().contains("1_17") ? "a" : "networkManager");
+        		//this.channel = (Channel) Reflections.getField(cp, "channel");
         	}catch(Exception ex) {
         		ex.printStackTrace();
         	}
         }
         
         public void inject() {
-        	if(channel.pipeline() != null
+        	/*if(channel.pipeline() != null
         			&& channel.pipeline().get("BMPacketInjector") == null)
         		channel.pipeline().addAfter("decoder", "BMPacketInjector",new MessageToMessageDecoder<Object>() {
         			@Override
         			protected void decode(ChannelHandlerContext arg0,Object p,List<Object> arg2) throws Exception {
         				arg2.add(p);readPacket(p);
         			}
-        		});
+        		});*/
         }
         
         public void uninject(){

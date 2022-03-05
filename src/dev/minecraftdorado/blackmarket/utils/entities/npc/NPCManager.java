@@ -78,7 +78,7 @@ public class NPCManager {
 					a = null;
 					
 					try {
-						Class<?> EntityPlayer = Reflections.getNMSClass("EntityPlayer");
+						Class<?> EntityPlayer = Reflections.getNMSClass("EntityPlayer", "server.level");
 						Method getBukkitEntity = EntityPlayer.getMethod("getBukkitEntity");
 						
 						Class<?> CraftEntity = Reflections.getOBCClass("entity.CraftEntity");

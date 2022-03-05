@@ -25,28 +25,29 @@ import dev.minecraftdorado.blackmarket.utils.packets.ServerVersion;
 
 public class NPC {
 	
-	private static final Class<?> EntityPlayer = Reflections.getNMSClass("EntityPlayer"),
-			World = Reflections.getNMSClass("World"),
+	private static final Class<?> EntityPlayer = Reflections.getNMSClass("EntityPlayer", "server.level"),
+			World = Reflections.getNMSClass("World", "world.level"),
 			CraftWorld = Reflections.getOBCClass("CraftWorld"),
 			CraftServer = Reflections.getOBCClass("CraftServer"),
-	        MinecraftServer = Reflections.getNMSClass("MinecraftServer"),
-	        WorldServer = Reflections.getNMSClass("WorldServer"),
-	        PlayerInteractManager = Reflections.getNMSClass("PlayerInteractManager"),
-	        Entity = Reflections.getNMSClass("Entity"),
-	        PacketPlayOutEntityDestroy = Reflections.getNMSClass("PacketPlayOutEntityDestroy"),
-	        PacketPlayOutEntityMetadata = Reflections.getNMSClass("PacketPlayOutEntityMetadata"),
-	        PacketPlayOutEntityTeleport = Reflections.getNMSClass("PacketPlayOutEntityTeleport"),
-	        PacketPlayOutEntityLook = Reflections.getNMSClass("PacketPlayOutEntity$PacketPlayOutEntityLook"),
-	        PacketPlayOutEntityHeadRotation = Reflections.getNMSClass("PacketPlayOutEntityHeadRotation"),
-	        PacketPlayOutPlayerInfo = Reflections.getNMSClass("PacketPlayOutPlayerInfo"),
-	        PacketPlayOutNamedEntitySpawn = Reflections.getNMSClass("PacketPlayOutNamedEntitySpawn"),
-	        EntityHuman = Reflections.getNMSClass("EntityHuman"),
-	        EnumPlayerInfoAction = Reflections.getNMSClass("PacketPlayOutPlayerInfo$EnumPlayerInfoAction"),
-	        DataWatcher = Reflections.getNMSClass("DataWatcher"),
-	        DataWatcherObject = Reflections.existNMSClass("DataWatcherObject") ? Reflections.getNMSClass("DataWatcherObject") : null,
-	        DataWatcherSerializer = Reflections.existNMSClass("DataWatcherSerializer") ? Reflections.getNMSClass("DataWatcherSerializer") : null
+	        MinecraftServer = Reflections.getNMSClass("MinecraftServer", "server"),
+	        WorldServer = Reflections.getNMSClass("WorldServer", "server.level"),
+	        PlayerInteractManager = Reflections.getNMSClass("PlayerInteractManager", "server.level"),
+	        Entity = Reflections.getNMSClass("Entity", "world.entity"),
+	        PacketPlayOutEntityDestroy = Reflections.getNMSClass("PacketPlayOutEntityDestroy", "network.protocol.game"),
+	        PacketPlayOutEntityMetadata = Reflections.getNMSClass("PacketPlayOutEntityMetadata", "network.protocol.game"),
+	        PacketPlayOutEntityTeleport = Reflections.getNMSClass("PacketPlayOutEntityTeleport", "network.protocol.game"),
+	        PacketPlayOutEntityLook = Reflections.getNMSClass("PacketPlayOutEntity$PacketPlayOutEntityLook", "network.protocol.game"),
+	        PacketPlayOutEntityHeadRotation = Reflections.getNMSClass("PacketPlayOutEntityHeadRotation", "network.protocol.game"),
+	        PacketPlayOutPlayerInfo = Reflections.getNMSClass("PacketPlayOutPlayerInfo", "network.protocol.game"),
+	        PacketPlayOutNamedEntitySpawn = Reflections.getNMSClass("PacketPlayOutNamedEntitySpawn", "network.protocol.game"),
+	        EntityHuman = Reflections.getNMSClass("EntityHuman", "world.entity.player"),
+	        EnumPlayerInfoAction = Reflections.getNMSClass("PacketPlayOutPlayerInfo$EnumPlayerInfoAction", "network.protocol.game"),
+	        DataWatcher = Reflections.getNMSClass("DataWatcher", "network.syncher"),
+	        DataWatcherObject = Reflections.existNMSClass("DataWatcherObject", "network.syncher") ? Reflections.getNMSClass("DataWatcherObject", "network.syncher") : null,
+	        DataWatcherSerializer = Reflections.existNMSClass("DataWatcherSerializer", "network.syncher") ? Reflections.getNMSClass("DataWatcherSerializer", "network.syncher") : null
 	        ;
 	
+	@SuppressWarnings("unused")
 	private static Constructor<?> EntityPlayerConstructor = null,
 	        PacketPlayOutEntityDestroyConstructor = null,
 	        PacketPlayOutEntityMetadataConstructor = null,
@@ -74,7 +75,11 @@ public class NPC {
 	
 	static {
 		try {
-	        EntityPlayerConstructor = EntityPlayer.getConstructor(MinecraftServer, WorldServer, GameProfile.class, PlayerInteractManager);
+			if(ServerVersion.getVersion().contains("1_17")) {
+				EntityPlayerConstructor = EntityPlayer.getConstructor(MinecraftServer, WorldServer, GameProfile.class);				
+			}else {
+				EntityPlayerConstructor = EntityPlayer.getConstructor(MinecraftServer, WorldServer, GameProfile.class, PlayerInteractManager);
+			}
 	        setLocation = Entity.getMethod("setLocation", double.class, double.class, double.class, float.class, float.class);
 	        setPositionRotation = Entity.getMethod("setPositionRotation", double.class, double.class, double.class, float.class, float.class);
 	        getId = Entity.getMethod("getId");
@@ -84,7 +89,7 @@ public class NPC {
 	        PacketPlayOutEntityTeleportConstructor = PacketPlayOutEntityTeleport.getConstructor(Entity);
 	        PacketPlayOutEntityHeadRotationConstructor = PacketPlayOutEntityHeadRotation.getConstructor(Entity, byte.class);
 	        
-	        Class<?> ArrayEntityPlayer = Class.forName("[Lnet.minecraft.server." + ServerVersion.getVersion() + ".EntityPlayer;");
+	        Class<?> ArrayEntityPlayer = !ServerVersion.getVersion().contains("1_17") ? Class.forName("[Lnet.minecraft.server." + ServerVersion.getVersion() + ".EntityPlayer;") : Class.forName("[Lnet.minecraft.server.level.EntityPlayer;");
 	        PacketPlayOutPlayerInfoConstructor = PacketPlayOutPlayerInfo.getConstructor(EnumPlayerInfoAction, ArrayEntityPlayer);
 	        
 	        getServer = CraftServer.getMethod("getServer");
@@ -94,12 +99,14 @@ public class NPC {
 	        
 	        PacketPlayOutNamedEntitySpawnConstructor = PacketPlayOutNamedEntitySpawn.getConstructor(EntityHuman);
 	        
-	        Class<?> Scoreboard = Reflections.getNMSClass("Scoreboard");
+	        Class<?> Scoreboard = Reflections.getNMSClass("Scoreboard", "world.scores");
         	getScoreboard = EntityPlayer.getMethod("getScoreboard");
         	getObjective = Scoreboard.getMethod("getObjective", String.class);
 	        
 	        
-	        if(ServerVersion.getVersion().contains("1_14") || ServerVersion.getVersion().contains("1_15") || ServerVersion.getVersion().contains("1_16")) {
+        	if(ServerVersion.getVersion().contains("1_17")) {
+        		PlayerInteractManagerConstructor = PlayerInteractManager.getConstructor(EntityPlayer);
+        	}else if(ServerVersion.getVersion().contains("1_14") || ServerVersion.getVersion().contains("1_15") || ServerVersion.getVersion().contains("1_16")) {
 	        	PlayerInteractManagerConstructor = PlayerInteractManager.getConstructor(WorldServer);
 	        }else
 	        	PlayerInteractManagerConstructor = PlayerInteractManager.getConstructor(World);
@@ -156,6 +163,9 @@ public class NPC {
         	case "v1_16_R3":
         		a_field = net.minecraft.server.v1_16_R3.DataWatcherRegistry.a;
         		break;
+        	case "v1_17_R1":
+        		a_field = net.minecraft.network.syncher.DataWatcherRegistry.a;
+        		break;
         	default:
         		Bukkit.getConsoleSender().sendMessage("§cServer version: " + ServerVersion.getVersion());
         		break;
@@ -193,12 +203,21 @@ public class NPC {
 			Object server = getServer.invoke(CraftServer.cast(Bukkit.getServer()));
 			Object world = Reflections.getHandle(CraftWorld.cast(loc.getWorld()));
 			
-			Object npc = EntityPlayerConstructor.newInstance(
-					server,
-					world,
-					profile,
-					PlayerInteractManagerConstructor
-							.newInstance(world));
+			Object npc;
+			if(ServerVersion.getVersion().contains("1_17")) {
+				npc = EntityPlayerConstructor.newInstance(
+						server,
+						world,
+						profile);
+			}else {
+				npc = EntityPlayerConstructor.newInstance(
+						server,
+						world,
+						profile,
+						PlayerInteractManagerConstructor
+								.newInstance(world));
+			}
+			
 			setLocation.invoke(npc, loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
 			setPositionRotation.invoke(npc, loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
 			this.entity = npc;
@@ -207,8 +226,8 @@ public class NPC {
 			Object array = Array.newInstance(EntityPlayer, 1);
 	        Array.set(array, 0, npc);
 			
-			this.packetPlayOutPlayerInfo_add = PacketPlayOutPlayerInfoConstructor.newInstance(EnumPlayerInfoAction.getField("ADD_PLAYER").get(null),array);
-			this.packetPlayOutPlayerInfo_remove = PacketPlayOutPlayerInfoConstructor.newInstance(EnumPlayerInfoAction.getField("REMOVE_PLAYER").get(null), array);
+			this.packetPlayOutPlayerInfo_add = PacketPlayOutPlayerInfoConstructor.newInstance(EnumPlayerInfoAction.getField(ServerVersion.getVersion().contains("1_17") ? "d" : "ADD_PLAYER").get(null),array);
+			this.packetPlayOutPlayerInfo_remove = PacketPlayOutPlayerInfoConstructor.newInstance(EnumPlayerInfoAction.getField(ServerVersion.getVersion().contains("1_17") ? "e" : "REMOVE_PLAYER").get(null), array);
 	        this.packetPlayOutEntityDestroy = PacketPlayOutEntityDestroyConstructor.newInstance((Object) new int[]{id});
 	        spawned = true;
 		}catch(Exception ex) {
@@ -328,7 +347,14 @@ public class NPC {
 	}
 	
 	private void updateMetadata(Player player) throws IllegalAccessException, InvocationTargetException, InstantiationException {
-		Utils.sendPacket(player, PacketPlayOutEntityMetadataConstructor.newInstance(id, getDataWatcher.invoke(entity), true));
+		/*Utils.sendPacket(player, 
+				PacketPlayOutEntityMetadataConstructor
+				.newInstance(
+						id,
+						getDataWatcher.
+						invoke(
+								entity),
+						true));*/
 	}
 	
 	private void updateLocation() throws IllegalAccessException, InvocationTargetException, InstantiationException {

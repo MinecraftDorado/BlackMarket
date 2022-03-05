@@ -26,7 +26,7 @@ public class Hologram {
    private static class IChatBaseComponent {
 
       private static final Logger logger = Logger.getLogger(IChatBaseComponent.class.getName());
-      private static final Class<?> IChatBaseComponent = Reflections.getNMSClass("IChatBaseComponent");
+      private static final Class<?> IChatBaseComponent = Reflections.getNMSClass("IChatBaseComponent", "network.chat");
       private static Method newIChatBaseComponent = null;
 
       static {
@@ -44,24 +44,24 @@ public class Hologram {
    
    private static final Class<?> getEnumItemSlot(){
 	   try{
-		   return Reflections.getNMSClass("EnumItemSlot");
+		   return Reflections.getNMSClass("EnumItemSlot", "world.entity");
 	   }catch(Exception ex) {
 		   return null;
 	   }
    }
 
    private static final Class<?> CraftWorld = Reflections.getOBCClass("CraftWorld"),
-         World = Reflections.getNMSClass("World"),
-         EntityArmorStand = Reflections.getNMSClass("EntityArmorStand"),
-         PacketPlayOutSpawnEntityLiving = Reflections.getNMSClass("PacketPlayOutSpawnEntityLiving"),
-         PacketPlayOutEntityDestroy = Reflections.getNMSClass("PacketPlayOutEntityDestroy"),
-         PacketPlayOutEntityMetadata = Reflections.getNMSClass("PacketPlayOutEntityMetadata"),
-         PacketPlayOutEntityTeleport = Reflections.getNMSClass("PacketPlayOutEntityTeleport"),
-         PacketPlayOutEntityEquipment = Reflections.getNMSClass("PacketPlayOutEntityEquipment"),
-         Entity = Reflections.getNMSClass("Entity"),
-         DataWatcher = Reflections.getNMSClass("DataWatcher"),
-         EntityLiving = Reflections.getNMSClass("EntityLiving"),
-         ItemStack = Reflections.getNMSClass("ItemStack"),
+         World = Reflections.getNMSClass("World", "world.level"),
+         EntityArmorStand = Reflections.getNMSClass("EntityArmorStand", "world.entity.decoration"),
+         PacketPlayOutSpawnEntityLiving = Reflections.getNMSClass("PacketPlayOutSpawnEntityLiving", "network.protocol.game"),
+         PacketPlayOutEntityDestroy = Reflections.getNMSClass("PacketPlayOutEntityDestroy", "network.protocol.game"),
+         PacketPlayOutEntityMetadata = Reflections.getNMSClass("PacketPlayOutEntityMetadata", "network.protocol.game"),
+         PacketPlayOutEntityTeleport = Reflections.getNMSClass("PacketPlayOutEntityTeleport", "network.protocol.game"),
+         PacketPlayOutEntityEquipment = Reflections.getNMSClass("PacketPlayOutEntityEquipment", "network.protocol.game"),
+         Entity = Reflections.getNMSClass("Entity", "world.entity"),
+         DataWatcher = Reflections.getNMSClass("DataWatcher", "network.syncher"),
+         EntityLiving = Reflections.getNMSClass("EntityLiving", "world.entity"),
+         ItemStack = Reflections.getNMSClass("ItemStack", "world.item"),
          CraftItemStack = Reflections.getOBCClass("inventory.CraftItemStack");
    private static Constructor<?> EntityArmorStandConstructor = null,
          PacketPlayOutSpawnEntityLivingConstructor = null,
@@ -280,7 +280,7 @@ public class Hologram {
 									   (net.minecraft.server.v1_16_R1.ItemStack) CraftItemStack.getDeclaredMethod("asNMSCopy", ItemStack.class).invoke(null, head)
 									   ));
 					   packet = PacketPlayOutEntityEquipmentConstructor.newInstance(id, list);
-				   }else {
+				   }else if(ServerVersion.getVersion().contains("1_16_R2")) {
 					   List<Pair<net.minecraft.server.v1_16_R2.EnumItemSlot, net.minecraft.server.v1_16_R2.ItemStack>> list = Lists.newArrayList();
 					   list.add(
 							   Pair.of(
@@ -288,7 +288,14 @@ public class Hologram {
 									   (net.minecraft.server.v1_16_R2.ItemStack) CraftItemStack.getDeclaredMethod("asNMSCopy", ItemStack.class).invoke(null, head)
 									   ));
 					   packet = PacketPlayOutEntityEquipmentConstructor.newInstance(id, list);
-
+				   }else {
+					   List<Pair<net.minecraft.world.entity.EnumItemSlot, net.minecraft.world.item.ItemStack>> list = Lists.newArrayList();
+					   list.add(
+							   Pair.of(
+									   net.minecraft.world.entity.EnumItemSlot.fromName("head"),
+									   (net.minecraft.world.item.ItemStack) CraftItemStack.getDeclaredMethod("asNMSCopy", ItemStack.class).invoke(null, head)
+									   ));
+					   packet = PacketPlayOutEntityEquipmentConstructor.newInstance(id, list);
 				   }
 			   }
 		   else

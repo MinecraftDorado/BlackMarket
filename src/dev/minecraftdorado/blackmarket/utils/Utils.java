@@ -120,7 +120,7 @@ public class Utils {
 			Object handle = Reflections.getHandle(player);
 	        Object playerConnection = handle.getClass().getField("playerConnection").get(handle);
 	        if (sendPacket == null)
-	        	sendPacket = playerConnection.getClass().getMethod("sendPacket", Reflections.getNMSClass("Packet"));
+	        	sendPacket = playerConnection.getClass().getMethod("sendPacket", Reflections.getNMSClass("Packet", "network.protocol"));
 	        sendPacket.invoke(playerConnection, packet);
 		} catch (NoSuchMethodException | NoSuchFieldException | IllegalAccessException | InvocationTargetException ignored) {}
 	}
@@ -305,7 +305,7 @@ public class Utils {
 	    	if (newItem == null)
 	    		throw new IllegalArgumentException(material.name() + " material could not be queried!");
 			
-	    	key = (String) Reflections.getNMSClass("Item").getMethod("getName").invoke(newItem);
+	    	key = (String) Reflections.getNMSClass("Item", "world.item").getMethod("getName").invoke(newItem);
 		}catch (Exception ex) {
 			ex.printStackTrace();
 		}

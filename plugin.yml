@@ -1,7 +1,7 @@
 main: dev.minecraftdorado.blackmarket.mainclass.MainClass
 name: BlackMarket
 author: MinecraftDorado
-version: 1.34.1
+version: 1.34.2
 api-version: 1.13
 softdepend: [Vault, PlayerPoints, GemsEconomy, Multiverse-Core]
 commands:
