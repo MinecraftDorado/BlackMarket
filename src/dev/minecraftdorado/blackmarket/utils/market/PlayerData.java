@@ -1,17 +1,15 @@
 package dev.minecraftdorado.blackmarket.utils.market;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.UUID;
-
-import dev.minecraftdorado.blackmarket.utils.Config;
 import dev.minecraftdorado.blackmarket.utils.Utils;
-import dev.minecraftdorado.blackmarket.utils.database.folder.dbFolder;
 import dev.minecraftdorado.blackmarket.utils.database.mysql.dbMySQL;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.CategoryUtils;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.CategoryUtils.Category;
-import dev.minecraftdorado.blackmarket.utils.inventory.utils.OrderUtils.OrderType;
+import dev.minecraftdorado.blackmarket.utils.inventory.utils.OrderType;
 import dev.minecraftdorado.blackmarket.utils.market.BlackItem.Status;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class PlayerData {
 	
@@ -28,13 +26,6 @@ public class PlayerData {
 	}
 	
 	public static void save() {
-		switch(Config.getStorageType()) {
-		case MySQL:
-			break;
-		default:
-			dbFolder.save();
-			break;
-		}
 	}
 	
 	public static void reload() {
@@ -44,22 +35,14 @@ public class PlayerData {
 	}
 	
 	private static void load() {
-		switch(Config.getStorageType()) {
-		case MySQL:
-			dbMySQL.load();
-			break;
-		default:
-			dbFolder.load();
-			break;
-		}
+		dbMySQL.load();
 	}
 	
 	public static class Data {
 		
 		private UUID uuid;
-		private ArrayList<BlackItem> items = new ArrayList<>();
 		private OrderType order = OrderType.ID;
-		private boolean reverse = false;
+		private boolean inverted = false;
 		
 		private Category category = CategoryUtils.getFirstCategory();
 		
@@ -69,29 +52,6 @@ public class PlayerData {
 		
 		public UUID getUUID() {
 			return uuid;
-		}
-		
-		public ArrayList<BlackItem> getItems(){
-			return items;
-		}
-		
-		public boolean addItem(BlackItem bItem) {
-			int i = 0;
-			for(BlackItem item : items)
-				if(item.getStatus().equals(Status.ON_SALE))
-					i++;
-			int limit = getLimit();
-			if(i < limit || limit == -1) { // on_sale items
-				items.add(bItem);
-				Market.addItem(bItem);
-				return true;
-			}
-			return false;
-		}
-		
-		public void setItem(BlackItem bItem) {
-			items.add(bItem);
-			Market.addItem(bItem);
 		}
 		
 		public int getLimit() {
@@ -105,17 +65,6 @@ public class PlayerData {
 		public Category getCategory() {
 			return category;
 		}
-
-		public ArrayList<BlackItem> getStorage() {
-			ArrayList<BlackItem> list = new ArrayList<>();
-			
-			items.forEach(item -> {
-				if(item.getStatus().equals(Status.TIME_OUT))
-					list.add(item);
-			});
-			
-			return list;
-		}
 		
 		public void setOrder(OrderType order) {
 			this.order = order;
@@ -125,12 +74,12 @@ public class PlayerData {
 			return order;
 		}
 		
-		public void setReverse(boolean value) {
-			this.reverse = value;
+		public void setInverted(boolean inverted) {
+			this.inverted = inverted;
 		}
 		
-		public boolean isReverse() {
-			return this.reverse;
+		public boolean isInverted() {
+			return this.inverted;
 		}
 	}
 }

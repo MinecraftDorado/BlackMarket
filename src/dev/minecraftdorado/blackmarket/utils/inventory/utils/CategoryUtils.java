@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import dev.minecraftdorado.blackmarket.utils.database.mysql.dbMySQL;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -22,36 +23,31 @@ public class CategoryUtils {
 	
 	public CategoryUtils() {
 		if(!f.exists() || f.listFiles().length == 0)
-			for(String filter : new String[]{"all","ores","tools","wood","potions","redstone"})
+			for(String filter : new String[]{"all", "ores", "tools", "wood", "potions", "redstone"}){
 				Utils.extract("resources/categories/" + filter + ".yml", "categories/" + filter + ".yml");
-		for(File file : f.listFiles()) {
+			}
+
+		dbMySQL.deleteCategories();
+
+		for(File file : f.listFiles()){
 			YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
-			
+
 			String key = file.getName().replace(".yml", "");
 			Category filter = new Category(key);
-			
+
 			if(yml.isSet("row"))
 				filter.setRow(yml.getInt("row"));
-			
+
 			if(first_category == null || first_category.getRow() > filter.getRow())
 				first_category = filter;
-			
+
 			if(yml.isSet("materials"))
 				yml.getStringList("materials").forEach(mat -> filter.addMaterial(UMaterial.match(mat)));
-			
+
 			list.put(key, filter);
+
+			dbMySQL.loadCategory(filter.getKey(), filter.getMaterials());
 		}
-	}
-	
-	public static Category addCategory(Category category) {
-		list.put(category.getKey(), category);
-		return category;
-	}
-	
-	public static ArrayList<String> getKeys(){
-		ArrayList<String> l = new ArrayList<>();
-		list.keySet().forEach(k -> l.add(k));
-		return l;
 	}
 	
 	public static Collection<Category> getCategories(){
@@ -68,7 +64,6 @@ public class CategoryUtils {
 		private int row;
 		
 		private ArrayList<UMaterial> mats = new ArrayList<>();
-		private ItemStack item;
 		
 		public Category(String key) {
 			this.key = key;
@@ -87,8 +82,6 @@ public class CategoryUtils {
 		}
 		
 		public ItemStack getItemStack(Boolean status) {
-			if(item != null)
-				return item;
 			ItemStack item = Config.getItemStack("market.categories." + key.toLowerCase(), "menus.market.items.categories." + key.toLowerCase());
 			ItemMeta meta = item.getItemMeta();
 			
@@ -107,9 +100,6 @@ public class CategoryUtils {
 		public ArrayList<UMaterial> getMaterials(){
 			return mats;
 		}
-		
-		public boolean contain(UMaterial uMat) {
-			return mats.contains(uMat);
-		}
+
 	}
 }

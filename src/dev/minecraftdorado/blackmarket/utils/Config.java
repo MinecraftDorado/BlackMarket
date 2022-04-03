@@ -38,8 +38,7 @@ public class Config {
 	private static double minimum_price, maximum_price;
 	private static ArrayList<NPC> npcs = new ArrayList<>();
 	private static ItemStack market_background, market_border, storage_background, storage_border, sellmenu_background, sellmenu_border, content_border, confirm_background, confirm_border;
-	private static StorageType storageType;
-	private static boolean blacklist_enable, blacklistlore_enable, confirm_enable, multi_server, healthBar;
+	private static boolean blacklist_enable, blacklistlore_enable, confirm_enable, healthBar;
 	private static ArrayList<String> sellAlias = new ArrayList<>();
 	private static BukkitTask multi_server_task;
 	private static EconomyType econType;
@@ -57,11 +56,8 @@ public class Config {
 		desc = null;
 		if(multi_server_task != null)
 			multi_server_task.cancel();
-		
-		StorageType stype = storageType;
+
 		load();
-		if(!stype.equals(storageType) || storageType.equals(StorageType.MySQL) && !multi_server)
-			Market.setId(0);
 		
 		ArrayList<NPC> npcs = new ArrayList<>();
 		npcs.addAll(MainClass.npcM.list.values());
@@ -102,12 +98,9 @@ public class Config {
 		confirm_background = Utils.getMaterial((String) getValue("menus.confirm.background"));
 		confirm_border = Utils.getMaterial((String) getValue("menus.confirm.border"));
 		
-		storageType = (boolean) getValue("mysql.enable") ? StorageType.MySQL : StorageType.File;
-		
 		blacklist_enable = (boolean) getValue("blacklist_enable");
 		blacklistlore_enable = (boolean) getValue("blacklistlore_enable");
 		confirm_enable = (boolean) getValue("confirm_menu_enable");
-		multi_server = (boolean) getValue("multi_server.enable");
 		
 		sellAlias = (ArrayList<String>) getValue("sell_alias");
 		
@@ -389,24 +382,12 @@ public class Config {
 		return maximum_price;
 	}
 	
-	public static StorageType getStorageType() {
-		return storageType;
-	}
-	
-	public enum StorageType {
-		File, MySQL
-	}
-	
 	public static boolean blackListIsEnable() {
 		return blacklist_enable;
 	}
 	
 	public static boolean blackListLoreIsEnable() {
 		return blacklistlore_enable;
-	}
-	
-	public static boolean multiServerIsEnable() {
-		return getStorageType().equals(StorageType.MySQL) && multi_server;
 	}
 	
 	public static String getString(String str) {

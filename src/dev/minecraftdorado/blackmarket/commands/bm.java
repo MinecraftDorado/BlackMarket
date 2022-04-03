@@ -1,5 +1,6 @@
 package dev.minecraftdorado.blackmarket.commands;
 
+import dev.minecraftdorado.blackmarket.utils.database.mysql.dbMySQL;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -113,7 +114,7 @@ public class bm implements CommandExecutor {
 											if(!Config.blackListLoreIsEnable() || !item.hasItemMeta() || !item.getItemMeta().hasLore() || BlackListLore.isAllow(item.getItemMeta().getLore())) {
 												BlackItem bItem = new BlackItem(item, value, player.getUniqueId());
 												
-												if(PlayerData.get(player.getUniqueId()).addItem(bItem)) {
+												if(dbMySQL.sellBlackItem(bItem)) {
 													Config.sendMessage("command.sell.message", player);
 													player.getInventory().getItemInHand().setType(Material.AIR);
 													player.getInventory().setItemInHand(null);
