@@ -57,14 +57,7 @@ public class PlayerListener implements Listener {
 		
 		Bukkit.getScheduler().runTaskLater(MainClass.main, () -> {
 			// Sold notifications
-			if(Config.multiServerIsEnable())
-				dbMySQL.checkUnnotified(e.getPlayer().getUniqueId());
-			else {
-				PlayerData.get(e.getPlayer().getUniqueId()).getItems().forEach(bItem -> {
-					if(bItem.getStatus().equals(Status.SOLD) && !bItem.isNotified())
-						bItem.sendNotification();
-				});
-			}
+			dbMySQL.checkUnnotified(e.getPlayer().getUniqueId());
 		}, 20);
 	}
 	

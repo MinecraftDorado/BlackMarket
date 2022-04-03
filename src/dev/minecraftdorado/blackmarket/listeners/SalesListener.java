@@ -3,6 +3,7 @@ package dev.minecraftdorado.blackmarket.listeners;
 import java.util.HashMap;
 import java.util.UUID;
 
+import dev.minecraftdorado.blackmarket.utils.database.mysql.dbMySQL;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -55,7 +56,7 @@ public class SalesListener implements Listener {
 							if(Sales.getItemStack(uuid) != null) {
 								BlackItem bItem = new BlackItem(Sales.getItemStack(uuid), Sales.getPrice(uuid), uuid);
 								
-								if(PlayerData.get(uuid).addItem(bItem)) {
+								if(dbMySQL.sellBlackItem(bItem)) {
 									Config.sendMessage("command.sell.message", player);
 									player.getInventory().removeItem(Sales.getItemStack(uuid));
 									player.closeInventory();

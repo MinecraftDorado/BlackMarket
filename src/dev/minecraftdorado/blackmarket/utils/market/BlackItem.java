@@ -1,5 +1,6 @@
 package dev.minecraftdorado.blackmarket.utils.market;
 
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -18,7 +19,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import dev.minecraftdorado.blackmarket.mainclass.MainClass;
 import dev.minecraftdorado.blackmarket.utils.Config;
 import dev.minecraftdorado.blackmarket.utils.Utils;
-import dev.minecraftdorado.blackmarket.utils.Config.StorageType;
 import dev.minecraftdorado.blackmarket.utils.database.mysql.dbMySQL;
 import dev.minecraftdorado.blackmarket.utils.economy.EconomyManager;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -32,25 +32,21 @@ public class BlackItem {
 	private UUID owner;
 	
 	public Status status = Status.ON_SALE;
-	private Date date;
+	private Timestamp expiration_date;
 	
 	private boolean notified = false;
 	
-	public BlackItem(ItemStack item, double value, UUID owner, Status status, Date date, int id, boolean notified) {
+	public BlackItem(ItemStack item, double value, UUID owner, Status status, Timestamp expiration_date, int id, boolean notified) {
 		this.id = id;
-		if(Market.getId() < id)
-			Market.setId(id);
 		this.item = item;
 		this.value = value;
 		this.owner = owner;
-		this.date = date;
+		this.expiration_date = expiration_date;
 		this.status = status;
 		this.notified = notified;
 	}
 	
 	public BlackItem(ItemStack item, double value, UUID owner) {
-		Market.addId();
-		this.id = Market.getId();
 		this.item = item;
 		this.value = value;
 		this.owner = owner;
@@ -59,9 +55,7 @@ public class BlackItem {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
 		cal.add(Calendar.MINUTE, Config.getExpiredTime());
-		this.date = cal.getTime();
-		if(Config.getStorageType().equals(StorageType.MySQL))
-			dbMySQL.addBlackItem(this);
+		this.expiration_date = new Timestamp(cal.getTime().getTime());
 	}
 	
 	public int getId() {
@@ -90,7 +84,7 @@ public class BlackItem {
 			return new ItemStack(Material.STONE);
 		}
 		
-		Duration d = Duration.between(new Date().toInstant(), date.toInstant());
+		Duration d = Duration.between(new Date().toInstant(), expiration_date.toInstant());
 		
 		for(String s : Config.getDesc()) {
 			if(s.contains("%owner%")) s = s.replace("%owner%", Bukkit.getOfflinePlayer(owner) != null ? Bukkit.getOfflinePlayer(owner).getName() : "§cUnknown");
@@ -118,30 +112,30 @@ public class BlackItem {
 	}
 	
 	public Status getStatus() {
-		if(status.equals(Status.ON_SALE) && Config.multiServerIsEnable())
-			status = dbMySQL.getStatus(id);
-		if(status.equals(Status.ON_SALE)) {
-			if(Duration.between(new Date().toInstant(), date.toInstant()).getSeconds() <= 0)
-				setStatus(Status.TIME_OUT);
-		}
-		if(status.equals(Status.SOLD) && !isNotified())
-			if(Bukkit.getOfflinePlayer(owner).isOnline())
-				sendNotification();
 		return status;
 	}
 	
 	public void setStatus(Status status) {
 		this.status = status;
-		if(Config.getStorageType().equals(StorageType.MySQL))
-			dbMySQL.updateStatus(this);
+		dbMySQL.updateStatus(this);
 	}
 	
 	public enum Status {
-		SOLD, ON_SALE, TIME_OUT, TAKED;
+		SOLD(2), ON_SALE(1), TIME_OUT(4), TAKED(3);
+
+		private int id;
+
+		Status(int id){
+			this.id = id;
+		}
+
+		public int getId(){
+			return id;
+		}
 	}
 	
-	public Date getDate() {
-		return date;
+	public Timestamp getExpirationDate() {
+		return expiration_date;
 	}
 	
 	public boolean isNotified() {
@@ -160,11 +154,9 @@ public class BlackItem {
 			tc.addExtra(split[1]);
 		}
 		Bukkit.getPlayer(owner).spigot().sendMessage(tc);
-		
 		notified = true;
-		
-		if(Config.getStorageType().equals(StorageType.MySQL))
-			dbMySQL.updateNotified(this);
+
+		dbMySQL.updateNotified(this);
 	}
 	
 	public double getFinalValue() {

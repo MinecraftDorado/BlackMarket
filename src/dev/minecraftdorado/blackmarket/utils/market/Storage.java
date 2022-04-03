@@ -17,32 +17,29 @@ public class Storage {
 	}
 	
 	public static Inv getInventory(Player player) {
-		if(Config.multiServerIsEnable())
-			dbMySQL.checkStorage(player.getUniqueId());
-		
 		Inv inv = new Inv(getTitle(), 6);
 		
 		inv.setBackgroud(Config.getStorageBackground(), false);
 		inv.setBackgroud(Config.getStorageBorder(), true);
-		
-		ArrayList<BlackItem> l = PlayerData.get(player.getUniqueId()).getStorage();
-		
+
+		int page = getPlayerPage(player);
+
+		ArrayList<BlackItem> l = dbMySQL.loadStorage(player.getUniqueId(), page);
+
 		int slot = 9;
 		int items = 0;
-		
-		int page = getPlayerPage(player);
-		
+
 		for (int i = 0; i < 28; i++) {
-			if(l.size() <= ((page*28) + i))
-				break;
+
+			if(l.size() <= i) break;
+
 			if(items%7 == 0 && items != 0)
 				slot = slot + 3;
 			else
 				slot++;
-			
-			int id = i + (page*28);
-			inv.setItem(slot, l.get(id).getOriginal());
-			inv.addBlackItem(l.get(id), slot);
+
+			inv.setItem(slot, l.get(i).getOriginal());
+			inv.addBlackItem(l.get(i), slot);
 			items++;
 		}
 		
@@ -51,12 +48,11 @@ public class Storage {
 		
 		if(page != 0)
 			inv.setItem(Config.getSlot("storage.previous"), Config.getItemStack("storage.previous", "menus.storage.items.previous", player));
-		if(l.size() > ((page+1)*28))
+		if(l.size() > 28)
 			inv.setItem(Config.getSlot("storage.next"), Config.getItemStack("storage.next", "menus.storage.items.next", player));
 		
 		return inv;
 	}
-	
 
 	private static HashMap<UUID, Integer> playerPage = new HashMap<>();
 	

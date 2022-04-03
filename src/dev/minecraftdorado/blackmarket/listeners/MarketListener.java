@@ -15,7 +15,7 @@ import dev.minecraftdorado.blackmarket.utils.inventory.InventoryManager;
 import dev.minecraftdorado.blackmarket.utils.inventory.events.InventoryClickEvent;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.CategoryUtils;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.CategoryUtils.Category;
-import dev.minecraftdorado.blackmarket.utils.inventory.utils.OrderUtils.OrderType;
+import dev.minecraftdorado.blackmarket.utils.inventory.utils.OrderType;
 import dev.minecraftdorado.blackmarket.utils.market.BlackItem;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
 import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
@@ -111,7 +111,7 @@ public class MarketListener implements Listener {
 					if(!list.contains(uuid)) {
 						list.add(uuid);
 						
-						PlayerData.get(uuid).setReverse(!PlayerData.get(uuid).isReverse());
+						PlayerData.get(uuid).setInverted(!PlayerData.get(uuid).isInverted());
 						Market.setPlayerPage(uuid, 0);
 						InventoryManager.openInventory(p, Market.getInventory(p));
 						
