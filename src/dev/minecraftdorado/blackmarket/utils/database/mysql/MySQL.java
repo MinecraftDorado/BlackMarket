@@ -37,39 +37,25 @@ public class MySQL {
 
 		return con;
 	}
-	
-    public void executeScript(URL url){
-    	try{
-    		if(con == null || con.isClosed()) con = getConnection();
-    		String[] databaseStructure = Resources.toString(url, Charsets.UTF_8).split(";");
-    		
-    		if (databaseStructure.length == 0)
-    			return;
-    		
-    		Statement statement = null;
-    		
-    		try {
-    			con.setAutoCommit(false);
-    			statement = con.createStatement();
-    			
-    			for (String query : databaseStructure) {
-    				query = query.trim();
-    				
-    				if (query.isEmpty()) {
-    					continue;
-    				}
-    				
-    				statement.execute(query);
-    			}
-    			
-    			con.commit();
-    			
-    		} finally {
-    			con.setAutoCommit(true);
-    			
-    			if (statement != null && !statement.isClosed())
-    				statement.close();
-    		}
-    	}catch(Exception ex){}
-    }
+
+	public void executeScript(String resource) {
+		String currentScript = null;
+		try {
+			String[] databaseStructure = Resources.toString(Resources.getResource(MainClass.class, resource), Charsets.UTF_8).split(";;");
+
+			Statement st = getConnection().createStatement();
+
+			for(int i = 0; i < databaseStructure.length; i++){
+				if(!databaseStructure[i].trim().equals("")){
+					currentScript = databaseStructure[i];
+					st.executeUpdate(currentScript);
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("*** Error : " + e.toString());
+			System.out.println("*** ");
+			System.out.println("*** Script : " + currentScript);
+			System.out.println("################################################");
+		}
+	}
 }

@@ -1,6 +1,5 @@
 package dev.minecraftdorado.blackmarket.utils.database.mysql;
 
-import com.google.common.io.Resources;
 import dev.minecraftdorado.blackmarket.mainclass.MainClass;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.ItemStackSerializer;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.SerializeInventory;
@@ -40,7 +39,7 @@ public class dbMySQL {
 					yml.isSet("mysql.database") ? yml.getString("mysql.database") : "server",
 					yml.isSet("mysql.port") ? yml.getInt("mysql.port") : 3306);
 		}
-		sql.executeScript(Resources.getResource(MainClass.class, "/resources/sql/blackmarket.sql"));
+		sql.executeScript("/resources/sql/blackmarket.sql");
 	}
 
 	public static ArrayList<BlackItem> loadBlackItems(String category, String orderType, boolean invert, int offset) {
@@ -93,7 +92,7 @@ public class dbMySQL {
         try {
         	PreparedStatement preparedStatement = null;
 			StringBuilder queryBuilder = new StringBuilder();
-			queryBuilder.append("UPDATE blackmarket_items SET status = ? WHERE id = ?");
+			queryBuilder.append("UPDATE blackmarket_items SET status_id = ? WHERE id = ?");
 			
 			preparedStatement = con.prepareStatement(queryBuilder.toString());
 			preparedStatement.setInt(1, bItem.status.getId());
@@ -222,7 +221,7 @@ public class dbMySQL {
 		con = sql.getConnection();
 
         try {
-			String query = "call bm_load_items_size('" + uuid.toString() + "', 'TIME_OUT', all)";
+			String query = "call bm_load_items_size('" + uuid.toString() + "', 'TIME_OUT', 'all')";
 
 			PreparedStatement preparedStatement = con.prepareStatement(query);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -232,7 +231,7 @@ public class dbMySQL {
             resultSet.close();
             preparedStatement.close();
         } catch (final SQLException sqlException) {
-            sqlException.printStackTrace();
+			sqlException.printStackTrace();
 		}
 		return size;
 	}
