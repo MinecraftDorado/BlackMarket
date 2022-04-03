@@ -10,13 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0a76a77a-c0ed-4042-9450-f84c8bd8c7e1" name="Changes" comment="OrderUtils deleted&#10;Database changed&#10;Sell changed&#10;Database by file deleted">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/sql/blackmarket.sql" beforeDir="false" afterPath="$PROJECT_DIR$/resources/sql/blackmarket.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dev/minecraftdorado/blackmarket/listeners/PlayerListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/dev/minecraftdorado/blackmarket/listeners/PlayerListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dev/minecraftdorado/blackmarket/mainclass/MainClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/dev/minecraftdorado/blackmarket/mainclass/MainClass.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dev/minecraftdorado/blackmarket/utils/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/dev/minecraftdorado/blackmarket/utils/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dev/minecraftdorado/blackmarket/utils/database/mysql/MySQL.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/dev/minecraftdorado/blackmarket/utils/database/mysql/MySQL.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dev/minecraftdorado/blackmarket/utils/database/mysql/dbMySQL.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/dev/minecraftdorado/blackmarket/utils/database/mysql/dbMySQL.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,7 +92,7 @@
       <workItem from="1647740496214" duration="17470000" />
       <workItem from="1648159942305" duration="9039000" />
       <workItem from="1648414710386" duration="6468000" />
-      <workItem from="1648951862025" duration="10009000" />
+      <workItem from="1648951862025" duration="10420000" />
     </task>
     <task id="LOCAL-00001" summary="OrderUtils deleted&#10;Database changed&#10;Sell changed&#10;Database by file deleted">
       <created>1648952671747</created>
@@ -104,7 +101,14 @@
       <option name="project" value="LOCAL" />
       <updated>1648952671747</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary=".sql modified&#10;Bugs with sql solved">
+      <created>1649019204846</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1649019204846</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -156,7 +160,8 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="OrderUtils deleted&#10;Database changed&#10;Sell changed&#10;Database by file deleted" />
-    <option name="LAST_COMMIT_MESSAGE" value="OrderUtils deleted&#10;Database changed&#10;Sell changed&#10;Database by file deleted" />
+    <MESSAGE value=".sql modified&#10;Bugs with sql solved" />
+    <option name="LAST_COMMIT_MESSAGE" value=".sql modified&#10;Bugs with sql solved" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

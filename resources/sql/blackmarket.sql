@@ -32,7 +32,8 @@ CREATE TABLE IF NOT EXISTS blackmarket_items
     price decimal(7,2) not null, /* million */
     notified boolean default false not null,
 
-    foreign key (status_id) references blackmarket_item_status(status_id)
+    foreign key (status_id) references blackmarket_item_status(status_id),
+    index (status_id)
 ) ENGINE =InnoDB DEFAULT CHARSET = utf8mb4;;
 
 CREATE TABLE IF NOT EXISTS blackmarket_item_data
@@ -40,20 +41,26 @@ CREATE TABLE IF NOT EXISTS blackmarket_item_data
     item_id bigint not null references blackmarket_items(id),
     item_data longtext not null,
     amount tinyint not null,
-    material varchar(50) not null
+    material varchar(50) not null,
+
+    index (material)
 ) ENGINE =InnoDB DEFAULT CHARSET = utf8mb4;;
 
 CREATE TABLE IF NOT EXISTS blackmarket_item_content
 (
     item_id bigint not null references blackmarket_items(id),
-    item_data longtext not null
+    item_data longtext not null,
+
+    index (item_id)
 ) ENGINE =InnoDB DEFAULT CHARSET = utf8mb4;;
 
 /* CATEGORIES */
 CREATE TABLE IF NOT EXISTS blackmarket_category
 (
     category varchar(50) not null,
-    materials longtext not null
+    materials longtext not null,
+
+    index (category)
 ) ENGINE =InnoDB DEFAULT CHARSET = utf8mb4;;
 
 
