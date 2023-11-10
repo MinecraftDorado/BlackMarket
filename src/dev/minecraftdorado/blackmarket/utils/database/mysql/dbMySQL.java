@@ -21,9 +21,9 @@ import dev.minecraftdorado.blackmarket.mainclass.MainClass;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.ItemStackSerializer;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.SerializeInventory;
 import dev.minecraftdorado.blackmarket.utils.market.BlackItem;
-import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
 import dev.minecraftdorado.blackmarket.utils.market.BlackItem.Status;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
+import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
 
 public class dbMySQL {
 	

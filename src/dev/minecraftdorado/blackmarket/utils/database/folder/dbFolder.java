@@ -8,9 +8,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import dev.minecraftdorado.blackmarket.mainclass.MainClass;
 import dev.minecraftdorado.blackmarket.utils.market.BlackItem;
+import dev.minecraftdorado.blackmarket.utils.market.BlackItem.Status;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
 import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
-import dev.minecraftdorado.blackmarket.utils.market.BlackItem.Status;
 
 public class dbFolder {
 	
