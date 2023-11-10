@@ -16,9 +16,9 @@ import dev.minecraftdorado.blackmarket.utils.Config;
 import dev.minecraftdorado.blackmarket.utils.inventory.InventoryManager;
 import dev.minecraftdorado.blackmarket.utils.inventory.InventoryManager.Inv;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.CategoryUtils;
+import dev.minecraftdorado.blackmarket.utils.inventory.utils.CategoryUtils.Category;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.OrderUtils;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.UMaterial;
-import dev.minecraftdorado.blackmarket.utils.inventory.utils.CategoryUtils.Category;
 import dev.minecraftdorado.blackmarket.utils.market.BlackItem.Status;
 import dev.minecraftdorado.blackmarket.utils.market.PlayerData.Data;
 

@@ -17,12 +17,12 @@ import dev.minecraftdorado.blackmarket.utils.inventory.utils.CategoryUtils;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.CategoryUtils.Category;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.OrderUtils.OrderType;
 import dev.minecraftdorado.blackmarket.utils.market.BlackItem;
+import dev.minecraftdorado.blackmarket.utils.market.BlackItem.Status;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
 import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
 import dev.minecraftdorado.blackmarket.utils.market.Storage;
 import dev.minecraftdorado.blackmarket.utils.market.confirm.Confirm;
 import dev.minecraftdorado.blackmarket.utils.market.content.Content;
-import dev.minecraftdorado.blackmarket.utils.market.BlackItem.Status;
 import dev.minecraftdorado.blackmarket.utils.market.sell.Sales;
 
 public class MarketListener implements Listener {

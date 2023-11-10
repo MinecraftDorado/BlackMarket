@@ -19,10 +19,10 @@ import dev.minecraftdorado.blackmarket.utils.UpdateChecker.UpdateReason;
 import dev.minecraftdorado.blackmarket.utils.database.mysql.dbMySQL;
 import dev.minecraftdorado.blackmarket.utils.entities.npc.events.NPCInteractEvent;
 import dev.minecraftdorado.blackmarket.utils.inventory.InventoryManager;
+import dev.minecraftdorado.blackmarket.utils.market.BlackItem.Status;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
 import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
 import dev.minecraftdorado.blackmarket.utils.market.sell.Sales;
-import dev.minecraftdorado.blackmarket.utils.market.BlackItem.Status;
 import dev.minecraftdorado.blackmarket.utils.packets.PacketReader;
 
 public class PlayerListener implements Listener {

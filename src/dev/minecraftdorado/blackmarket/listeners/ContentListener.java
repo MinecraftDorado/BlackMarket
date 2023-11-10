@@ -11,9 +11,9 @@ import dev.minecraftdorado.blackmarket.utils.Config;
 import dev.minecraftdorado.blackmarket.utils.inventory.InventoryManager;
 import dev.minecraftdorado.blackmarket.utils.inventory.events.InventoryClickEvent;
 import dev.minecraftdorado.blackmarket.utils.market.BlackItem;
+import dev.minecraftdorado.blackmarket.utils.market.BlackItem.Status;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
 import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
-import dev.minecraftdorado.blackmarket.utils.market.BlackItem.Status;
 import dev.minecraftdorado.blackmarket.utils.market.confirm.Confirm;
 import dev.minecraftdorado.blackmarket.utils.market.content.Content;
 
