@@ -13,12 +13,14 @@ public class HologramManager {
 	private static HashMap<Player, ArrayList<Hologram>> loaded = new HashMap<>();
 	private static ArrayList<Hologram> list = new ArrayList<>();
 	
+	private static int range = 50;
+	
 	public HologramManager() {
 		Bukkit.getScheduler().runTaskTimer(MainClass.main, ()->{
 			
 			list.forEach(holo -> {
 				Bukkit.getOnlinePlayers().forEach(player ->{
-					if(holo.getLocation().getWorld().equals(player.getWorld()) && holo.getLocation().distance(player.getLocation()) < 50) {
+					if(holo.getLocation().getWorld().equals(player.getWorld()) && holo.getLocation().distance(player.getLocation()) < range) {
 						ArrayList<Hologram> l = loaded.containsKey(player) ? loaded.get(player) : new ArrayList<>();
 						l.add(holo);
 						loaded.put(player, l);
@@ -36,7 +38,7 @@ public class HologramManager {
 			MainClass.npcM.list.values().forEach(npc -> {
 				Hologram holo = npc.getNameEntity(); 
 				Bukkit.getOnlinePlayers().forEach(player ->{
-					if(holo.getLocation().getWorld().equals(player.getWorld()) && holo.getLocation().distance(player.getLocation()) < 50) {
+					if(holo.getLocation().getWorld().equals(player.getWorld()) && holo.getLocation().distance(player.getLocation()) < range) {
 						ArrayList<Hologram> l = loaded.containsKey(player) ? loaded.get(player) : new ArrayList<>();
 						l.add(holo);
 						loaded.put(player, l);
