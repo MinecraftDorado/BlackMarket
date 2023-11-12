@@ -91,6 +91,8 @@ public class MainClass extends JavaPlugin {
 		hm = new HologramManager();
 		npcM = new NPCManager();
 		
+		new PacketReader();
+		
 		Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 		Bukkit.getPluginManager().registerEvents(new MarketListener(), this);
 		Bukkit.getPluginManager().registerEvents(new StorageListener(), this);
@@ -98,7 +100,6 @@ public class MainClass extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new ContentListener(), this);
 		Bukkit.getPluginManager().registerEvents(new ConfirmListener(), this);
 		Bukkit.getPluginManager().registerEvents(new InventoryManager(), this);
-		Bukkit.getOnlinePlayers().forEach(player -> PacketReader.get(player).inject());
 	}
 	
 	public void onDisable() {
@@ -109,7 +110,6 @@ public class MainClass extends JavaPlugin {
 				npc.hide(player);
 				npc.getNameEntity().hide(player);
 			});
-			PacketReader.get(player).uninject();
 		});
 		PlayerData.save();
 		if(npcM != null) npcM.saveAll();

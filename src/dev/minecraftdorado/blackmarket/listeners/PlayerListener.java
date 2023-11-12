@@ -11,7 +11,6 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-
 import dev.minecraftdorado.blackmarket.mainclass.MainClass;
 import dev.minecraftdorado.blackmarket.utils.Config;
 import dev.minecraftdorado.blackmarket.utils.UpdateChecker;
@@ -23,7 +22,6 @@ import dev.minecraftdorado.blackmarket.utils.market.BlackItem.Status;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
 import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
 import dev.minecraftdorado.blackmarket.utils.market.sell.Sales;
-import dev.minecraftdorado.blackmarket.utils.packets.PacketReader;
 
 public class PlayerListener implements Listener {
 	
@@ -35,7 +33,6 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler
 	private void join(PlayerJoinEvent e) {
-		PacketReader.get(e.getPlayer()).inject();
 		
 		if(e.getPlayer().hasPermission("blackmarket.admin")) {
 			UpdateChecker.init(MainClass.main, 79819).requestUpdateCheck().whenComplete((result, ee) -> {
@@ -74,7 +71,6 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler
 	private void leave(PlayerQuitEvent e) {
-		PacketReader.get(e.getPlayer()).uninject();
 		npcRemove.remove(e.getPlayer().getUniqueId());
 	}
 	
