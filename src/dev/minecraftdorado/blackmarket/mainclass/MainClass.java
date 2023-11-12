@@ -103,6 +103,7 @@ public class MainClass extends JavaPlugin {
 	}
 	
 	public void onDisable() {
+		PacketReader.stop();
 		InventoryManager.closeInventory();
 		Bukkit.getOnlinePlayers().forEach(player -> {
 			if(npcM != null)
