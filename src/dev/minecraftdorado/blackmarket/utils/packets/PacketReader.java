@@ -17,33 +17,48 @@ import dev.minecraftdorado.blackmarket.utils.entities.npc.events.NPCInteractEven
 
 public class PacketReader {
 	
+	private static PacketAdapter interactAt;
+	
 	public PacketReader() {
-		 ProtocolLibrary.getProtocolManager().addPacketListener(interactAt());
+		interactAt = interactAt();
+		
+		ProtocolLibrary.getProtocolManager().addPacketListener(interactAt);
 	}
 	
 	private PacketAdapter interactAt() {
 		return new PacketAdapter(MainClass.main, ListenerPriority.NORMAL, PacketType.Play.Client.USE_ENTITY) {
 			@Override
-			public void onPacketSending(PacketEvent e) {
+			public void onPacketSending(PacketEvent e) {}
+			
+			@Override
+			public void onPacketReceiving(PacketEvent e) {
 				PacketContainer packet = e.getPacket().deepClone();
+				
 				int entityId = packet.getIntegers().read(0);
+				
+				// Entity isn't a NPC
+				if(!MainClass.npcM.list.containsKey(entityId)) return;
 				
 				Player player = e.getPlayer();
 				
 				ArrayList<Integer> list = new ArrayList<>();
 				if(MainClass.npcM.npcList.containsKey(player)) list = MainClass.npcM.npcList.get(player);
 				
+				// Entity is already clicked
 				if(list.contains(entityId)) return;
+				
 				list.add(entityId);
 				MainClass.npcM.npcList.put(player, list);
 				
 				Bukkit.getScheduler().runTask(MainClass.main, () -> {
-					if(MainClass.npcM.list.containsKey(entityId)) {
-						NPCInteractEvent event = new NPCInteractEvent(player, MainClass.npcM.list.get(entityId));
-						Bukkit.getPluginManager().callEvent(event);
-					}
+					NPCInteractEvent event = new NPCInteractEvent(player, MainClass.npcM.list.get(entityId));
+					Bukkit.getPluginManager().callEvent(event);
 				});
 			}
 		};
+	}
+	
+	public static void stop() {
+		ProtocolLibrary.getProtocolManager().removePacketListener(interactAt);
 	}
 }
