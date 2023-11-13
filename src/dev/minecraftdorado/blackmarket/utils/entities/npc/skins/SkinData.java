@@ -104,6 +104,14 @@ public class SkinData {
 			return skin;
 		}
 		
+		public String getTexture() {
+			return skin[0];
+		}
+		
+		public String getSignature() {
+			return skin[1];
+		}
+		
 		public String getName() {
 			return name;
 		}

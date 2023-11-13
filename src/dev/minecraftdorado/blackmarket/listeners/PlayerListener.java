@@ -4,18 +4,22 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import dev.minecraftdorado.blackmarket.mainclass.MainClass;
 import dev.minecraftdorado.blackmarket.utils.Config;
 import dev.minecraftdorado.blackmarket.utils.UpdateChecker;
 import dev.minecraftdorado.blackmarket.utils.UpdateChecker.UpdateReason;
 import dev.minecraftdorado.blackmarket.utils.database.mysql.dbMySQL;
+import dev.minecraftdorado.blackmarket.utils.entities.hologram.Hologram;
 import dev.minecraftdorado.blackmarket.utils.entities.npc.events.NPCInteractEvent;
 import dev.minecraftdorado.blackmarket.utils.inventory.InventoryManager;
 import dev.minecraftdorado.blackmarket.utils.market.BlackItem.Status;
@@ -124,5 +128,59 @@ public class PlayerListener implements Listener {
 		PlayerData.get(e.getPlayer().getUniqueId()).setCategory(null);
 		Market.setPlayerPage(e.getPlayer().getUniqueId(), 0);
 		InventoryManager.openInventory(e.getPlayer(), Market.getInventory(e.getPlayer()));
+	}
+	
+	@EventHandler
+	private void onPlayerMove(PlayerMoveEvent e) {
+		Player player = e.getPlayer();
+		
+		MainClass.npcM.list.values().forEach(npc -> {
+			
+			Location npcLoc = npc.getLocation().clone();
+			Location playerLoc = player.getLocation().clone();
+			
+			// Check worlds
+			if(!npcLoc.getWorld().equals(playerLoc.getWorld())) return;
+			
+			/*
+			 *	NPC Head rotation
+			 */
+			
+			if(npcLoc.distance(playerLoc) < 10) {
+				Location loc = npcLoc.clone().setDirection(playerLoc.clone().subtract(npcLoc.clone()).toVector());
+				npc.updateHeadRotation(loc.getYaw(), loc.getPitch());
+			}
+			
+			
+			/*
+			 * 	Display/hide npc
+			 */
+			
+			if(npcLoc.distance(playerLoc) < 10) {
+				npc.display(player);
+			}else {
+				npc.hide(player);
+			}
+		});
+		
+		/*
+		 * 	Display/hide holograms
+		 */
+		
+		MainClass.hm.list.forEach(holo -> {
+			Location holoLoc = holo.getLocation().clone();
+			Location playerLoc = player.getLocation().clone();
+			
+			// Check worlds
+			if(!holoLoc.getWorld().equals(playerLoc.getWorld())) return;
+			
+			
+			if(holoLoc.distance(playerLoc) < 10) {
+				holo.display(player);
+			}else {
+				holo.hide(player);
+			}
+		});
+		
 	}
 }
