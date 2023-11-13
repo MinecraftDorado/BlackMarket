@@ -175,6 +175,8 @@ public class InventoryManager implements Listener {
 		Bukkit.getPluginManager().callEvent(event);
 		
 		history.remove(player);
+		
+		MainClass.npcM.npcList.get(player).clear();
 	}
 	
 	public static class Inv {
