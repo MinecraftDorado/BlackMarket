@@ -100,19 +100,26 @@ public class MainClass extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new ContentListener(), this);
 		Bukkit.getPluginManager().registerEvents(new ConfirmListener(), this);
 		Bukkit.getPluginManager().registerEvents(new InventoryManager(), this);
+		
+		Bukkit.getOnlinePlayers().forEach(player -> {
+			PacketReader.inject(player);
+			
+			npcM.list.values().forEach(npc -> {
+				npc.display(player);
+			});
+		});
 	}
 	
 	public void onDisable() {
-		PacketReader.stop();
 		InventoryManager.closeInventory();
-		Bukkit.getOnlinePlayers().forEach(player -> {
-			if(npcM != null)
-				npcM.list.values().forEach(npc ->{
-				npc.hide(player);
-				npc.getNameEntity().hide(player);
-			});
+		
+		npcM.list.values().forEach(npc -> {
+			npc.hide();
 		});
+		npcM.saveAll();
+		npcM.list.clear();
+		npcM.npcList.clear();
+		
 		PlayerData.save();
-		if(npcM != null) npcM.saveAll();
 	}
 }

@@ -19,13 +19,13 @@ import dev.minecraftdorado.blackmarket.utils.Config;
 import dev.minecraftdorado.blackmarket.utils.UpdateChecker;
 import dev.minecraftdorado.blackmarket.utils.UpdateChecker.UpdateReason;
 import dev.minecraftdorado.blackmarket.utils.database.mysql.dbMySQL;
-import dev.minecraftdorado.blackmarket.utils.entities.hologram.Hologram;
 import dev.minecraftdorado.blackmarket.utils.entities.npc.events.NPCInteractEvent;
 import dev.minecraftdorado.blackmarket.utils.inventory.InventoryManager;
 import dev.minecraftdorado.blackmarket.utils.market.BlackItem.Status;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
 import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
 import dev.minecraftdorado.blackmarket.utils.market.sell.Sales;
+import dev.minecraftdorado.blackmarket.utils.packets.PacketReader;
 
 public class PlayerListener implements Listener {
 	
@@ -37,6 +37,12 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler
 	private void join(PlayerJoinEvent e) {
+		
+		PacketReader.inject(e.getPlayer());
+		
+		MainClass.npcM.list.values().forEach(npc -> {
+			npc.display(e.getPlayer());
+		});
 		
 		if(e.getPlayer().hasPermission("blackmarket.admin")) {
 			UpdateChecker.init(MainClass.main, 79819).requestUpdateCheck().whenComplete((result, ee) -> {
@@ -68,10 +74,6 @@ public class PlayerListener implements Listener {
 			}
 		}, 20);
 	}
-	
-	/*
-	 * Uninject PacketReader
-	 */
 	
 	@EventHandler
 	private void leave(PlayerQuitEvent e) {
@@ -146,7 +148,7 @@ public class PlayerListener implements Listener {
 			 *	NPC Head rotation
 			 */
 			
-			if(npcLoc.distance(playerLoc) < 10) {
+			if(npcLoc.distance(playerLoc) < 50) {
 				Location loc = npcLoc.clone().setDirection(playerLoc.clone().subtract(npcLoc.clone()).toVector());
 				npc.updateHeadRotation(loc.getYaw(), loc.getPitch());
 			}
@@ -156,7 +158,7 @@ public class PlayerListener implements Listener {
 			 * 	Display/hide npc
 			 */
 			
-			if(npcLoc.distance(playerLoc) < 10) {
+			if(npcLoc.distance(playerLoc) < 50) {
 				npc.display(player);
 			}else {
 				npc.hide(player);
