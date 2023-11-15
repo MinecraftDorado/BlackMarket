@@ -7,7 +7,6 @@ website: minecraftdorado.dev
 
 version: 2.0.0
 api-version: 1.20
-depend: [ ProtocolLib ]
 softdepend:
   - Vault
   - PlayerPoints
