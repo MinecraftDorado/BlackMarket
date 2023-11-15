@@ -3,6 +3,7 @@ package dev.minecraftdorado.blackmarket.utils.inventory.utils;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import dev.minecraftdorado.blackmarket.mainclass.MainClass;
@@ -12,7 +13,7 @@ import dev.minecraftdorado.blackmarket.utils.Utils;
 public class BlackList {
 	
 	private static File file = new File(MainClass.main.getDataFolder(), "blacklist.yml");
-	private static ArrayList<UMaterial> list = new ArrayList<>();
+	private static ArrayList<Material> list = new ArrayList<>();
 	
 	public BlackList() {
 		if(!file.exists())
@@ -20,7 +21,7 @@ public class BlackList {
 		load();
 	}
 	
-	public static boolean isAllow(UMaterial umat) {
+	public static boolean isAllow(Material umat) {
 		return !list.contains(umat);
 	}
 	
@@ -31,7 +32,7 @@ public class BlackList {
 		
 		if(yml.isSet("list"))
 			for(String s : yml.getStringList("list")) {
-				UMaterial umat = UMaterial.match(s);
+				Material umat = Material.matchMaterial(s);
 				if(umat != null)
 					list.add(umat);
 			}

@@ -18,7 +18,6 @@ import dev.minecraftdorado.blackmarket.utils.inventory.InventoryManager.Inv;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.CategoryUtils;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.CategoryUtils.Category;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.OrderUtils;
-import dev.minecraftdorado.blackmarket.utils.inventory.utils.UMaterial;
 import dev.minecraftdorado.blackmarket.utils.market.BlackItem.Status;
 import dev.minecraftdorado.blackmarket.utils.market.PlayerData.Data;
 
@@ -87,7 +86,7 @@ public class Market {
 		id = id < bItem.getId() ? bItem.getId() : id;
 		
 		for(Category c : CategoryUtils.getCategories()) {
-			if(c.getMaterials().isEmpty() || c.contain(UMaterial.match(bItem.getOriginal()))) {
+			if(c.getMaterials().isEmpty() || c.contain(Material.matchMaterial(bItem.getOriginal().getType().name()))) {
 				if(!catList.containsKey(c))
 					catList.put(c, new ArrayList<>());
 				if(!catList.get(c).contains(bItem))

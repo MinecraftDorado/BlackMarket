@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -37,7 +38,7 @@ public class CategoryUtils {
 				first_category = filter;
 			
 			if(yml.isSet("materials"))
-				yml.getStringList("materials").forEach(mat -> filter.addMaterial(UMaterial.match(mat)));
+				yml.getStringList("materials").forEach(mat -> filter.addMaterial(Material.matchMaterial(mat)));
 			
 			list.put(key, filter);
 		}
@@ -67,7 +68,7 @@ public class CategoryUtils {
 		private String key;
 		private int row;
 		
-		private ArrayList<UMaterial> mats = new ArrayList<>();
+		private ArrayList<Material> mats = new ArrayList<>();
 		private ItemStack item;
 		
 		public Category(String key) {
@@ -99,16 +100,16 @@ public class CategoryUtils {
 			return item;
 		}
 		
-		public void addMaterial(UMaterial uMat) {
+		public void addMaterial(Material uMat) {
 			if(!this.mats.contains(uMat))
 				this.mats.add(uMat);
 		}
 		
-		public ArrayList<UMaterial> getMaterials(){
+		public ArrayList<Material> getMaterials(){
 			return mats;
 		}
 		
-		public boolean contain(UMaterial uMat) {
+		public boolean contain(Material uMat) {
 			return mats.contains(uMat);
 		}
 	}

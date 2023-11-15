@@ -1,9 +1,7 @@
 package dev.minecraftdorado.blackmarket.mainclass;
 
-import java.lang.reflect.Method;
-
 import org.bukkit.Bukkit;
-import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.craftbukkit.v1_20_R1.CraftServer;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.minecraftdorado.blackmarket.commands.bm;
@@ -31,7 +29,6 @@ import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
 import dev.minecraftdorado.blackmarket.utils.metrics.Metrics;
 import dev.minecraftdorado.blackmarket.utils.metrics.custom.CustomMetrics;
 import dev.minecraftdorado.blackmarket.utils.packets.PacketReader;
-import dev.minecraftdorado.blackmarket.utils.packets.Reflections;
 
 public class MainClass extends JavaPlugin {
 	
@@ -79,14 +76,10 @@ public class MainClass extends JavaPlugin {
 		Metrics metrics = new Metrics(this, 10119);
 		new CustomMetrics(metrics);
 		
-		if(!Config.getSellAlias().isEmpty())
-			try {
-				Class<?> CraftServer = Reflections.getOBCClass("CraftServer");
-				Method getCommandMap = CraftServer.getMethod("getCommandMap");
-				((SimpleCommandMap) getCommandMap.invoke(CraftServer.cast(getServer()))).register(Config.getSellAlias().get(0), new sell(Config.getSellAlias().get(0)));
-			}catch(Exception ex) {
-				ex.printStackTrace();
-			}
+		if(!Config.getSellAlias().isEmpty()) {
+			CraftServer craftserver = ((CraftServer) Bukkit.getServer());
+			craftserver.getCommandMap().register(Config.getSellAlias().get(0), new sell(Config.getSellAlias().get(0)));
+		}
 		
 		hm = new HologramManager();
 		npcM = new NPCManager();

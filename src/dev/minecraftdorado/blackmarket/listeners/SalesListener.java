@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,7 +17,6 @@ import dev.minecraftdorado.blackmarket.utils.inventory.InventoryManager;
 import dev.minecraftdorado.blackmarket.utils.inventory.events.InventoryClickEvent;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.BlackList;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.BlackListLore;
-import dev.minecraftdorado.blackmarket.utils.inventory.utils.UMaterial;
 import dev.minecraftdorado.blackmarket.utils.market.BlackItem;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
 import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
@@ -72,7 +72,7 @@ public class SalesListener implements Listener {
 						player.sendMessage(Config.getMessage("command.sell.error_minimum_price").replace("%price%", Config.getMinimumPrice() + ""));
 				}
 			}else // ItemStack "Item"
-				if(!Config.blackListIsEnable() || BlackList.isAllow(UMaterial.match(event.getItemStack()))) {
+				if(!Config.blackListIsEnable() || BlackList.isAllow(Material.matchMaterial(event.getItemStack().getType().name()))) {
 					if(!Config.blackListLoreIsEnable() || !event.getItemStack().hasItemMeta() || !event.getItemStack().getItemMeta().hasLore() || BlackListLore.isAllow(event.getItemStack().getItemMeta().getLore())) {
 						Sales.setItemStack(player.getUniqueId(), event.getItemStack());
 						InventoryManager.updateInventory(player, Sales.getInventory(player));
