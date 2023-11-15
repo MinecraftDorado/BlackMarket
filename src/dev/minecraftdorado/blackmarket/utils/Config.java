@@ -10,6 +10,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -22,7 +23,6 @@ import dev.minecraftdorado.blackmarket.utils.database.mysql.dbMySQL;
 import dev.minecraftdorado.blackmarket.utils.economy.EconomyManager.EconomyType;
 import dev.minecraftdorado.blackmarket.utils.entities.npc.NPC;
 import dev.minecraftdorado.blackmarket.utils.entities.npc.skins.SkinData;
-import dev.minecraftdorado.blackmarket.utils.inventory.utils.UMaterial;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
 import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
 
@@ -77,7 +77,7 @@ public class Config {
 		confFile = new File(MainClass.main.getDataFolder(), "config.yml");
 		
 		if(!confFile.exists())
-			Utils.extract("config.yml", "config.yml");
+			Utils.extract("resources/config.yml", "config.yml");
 		
 		conf = YamlConfiguration.loadConfiguration(confFile);
 		
@@ -252,7 +252,7 @@ public class Config {
 			items.put(typeKey, Utils.applyMeta(Utils.getMaterial(conf.getString(key)), metaKey));
 			return items.get(typeKey).clone();
 		}else
-			return UMaterial.BARRIER.getItemStack().clone();
+			return new ItemStack(Material.BARRIER);
 	}
 	
 	public static ItemStack getItemStack(String typeKey, String metaKey, Player player) {

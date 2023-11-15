@@ -3,8 +3,6 @@ package dev.minecraftdorado.blackmarket.utils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -29,13 +27,10 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import dev.minecraftdorado.blackmarket.mainclass.MainClass;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.OrderUtils.OrderType;
-import dev.minecraftdorado.blackmarket.utils.inventory.utils.UMaterial;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
 import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
 import dev.minecraftdorado.blackmarket.utils.market.Storage;
 import dev.minecraftdorado.blackmarket.utils.market.sell.Sales;
-import dev.minecraftdorado.blackmarket.utils.packets.Reflections;
-import dev.minecraftdorado.blackmarket.utils.packets.ServerVersion;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 
 public class Utils {
@@ -113,18 +108,6 @@ public class Utils {
 		return false;
 	}
 	
-	private static Method sendPacket = null;
-	
-	public static void sendPacket(Player player, Object packet) {
-		try {
-			Object handle = Reflections.getHandle(player);
-	        Object playerConnection = handle.getClass().getField("playerConnection").get(handle);
-	        if (sendPacket == null)
-	        	sendPacket = playerConnection.getClass().getMethod("sendPacket", Reflections.getNMSClass("Packet"));
-	        sendPacket.invoke(playerConnection, packet);
-		} catch (NoSuchMethodException | NoSuchFieldException | IllegalAccessException | InvocationTargetException ignored) {}
-	}
-	
 	private static HashMap<String, ItemStack> mats = new HashMap<>();
 	public static String orderFormat;
 	
@@ -179,36 +162,25 @@ public class Utils {
 	@SuppressWarnings("deprecation")
 	public static ItemStack getMaterial(String key) {
 		if(key == null)
-			return UMaterial.BARRIER.getItemStack();
+			return new ItemStack(Material.BARRIER);
 		if(mats.containsKey(key))
 			return mats.get(key);
 		
-		UMaterial um = null;
+		Material material = null;
 		String[] cm = key.split("#");
 		
 		int data = 0;
 		String[] s = cm[0].split("/");
 		
-		try {
-			um = UMaterial.valueOf(s[0]);
-		}catch(Exception ex) {
-			try {
-				if(Reflections.existMethod(Material.class.toString(), "getMaterial", Integer.class)) {
-					Method getMaterial = Material.class.getMethod("getMaterial", Integer.class);
-					um= UMaterial.valueOf(((Material) getMaterial.invoke(null, Integer.valueOf(s[0]))).name());
-				}
-			}catch(Exception ex2) {
-				ex2.printStackTrace();
-			}
-		}
+		material = Material.matchMaterial(s[0]);
 		
-		if(um == null || um.getMaterial() == null)
-			um = UMaterial.BARRIER;
+		if(material == null)
+			material = Material.BARRIER;
 		
 		if(s.length == 2)
 			data = Integer.valueOf(s[1]);
 		
-		ItemStack item = um.getItemStack();
+		ItemStack item = new ItemStack(material);
 		if(data != 0)
 			item.setDurability((short) data);
 		
@@ -217,7 +189,7 @@ public class Utils {
 		if(cm.length > 1)
 			meta.setCustomModelData(Integer.valueOf(cm[1]));
 		
-		if(!um.equals(UMaterial.AIR))
+		if(!material.equals(Material.AIR))
 			for (ItemFlag flag : ItemFlag.values())
 				meta.addItemFlags(flag);
 		item.setItemMeta(meta);
@@ -293,25 +265,15 @@ public class Utils {
     }
 	
 	public static TranslatableComponent getTranlatableName(Material material) {
-		String key = null;
+		String key = "block.minecraft.air";
 		
-		try {
-			Class<?> craftMagicNumbers = Reflections.getOBCClass("util.CraftMagicNumbers");
-			Object newItem = null;
-			
-	    	Method m = craftMagicNumbers.getDeclaredMethod("getItem", material.getClass());
-	    	m.setAccessible(true);
-	    	newItem = m.invoke(craftMagicNumbers, material);
-	    	if (newItem == null)
-	    		throw new IllegalArgumentException(material.name() + " material could not be queried!");
-			
-	    	key = (String) Reflections.getNMSClass("Item").getMethod("getName").invoke(newItem);
-		}catch (Exception ex) {
-			ex.printStackTrace();
+		if(material.isBlock()) {
+			key = "block.minecraft." + material.getKey().getKey();
+		}else if(material.isItem()) {
+			key = "item.minecraft." + material.getKey().getKey();
 		}
 		
-		if(ServerVersion.getVersion().contains("1_8") || ServerVersion.getVersion().contains("1_9") || ServerVersion.getVersion().contains("1_10") || ServerVersion.getVersion().contains("1_11") || ServerVersion.getVersion().contains("1_12"))
-			key+= ".name";
 		return new TranslatableComponent(key);
 	}
+	
 }

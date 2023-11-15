@@ -17,7 +17,6 @@ import dev.minecraftdorado.blackmarket.utils.entities.npc.skins.SkinData;
 import dev.minecraftdorado.blackmarket.utils.inventory.InventoryManager;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.BlackList;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.BlackListLore;
-import dev.minecraftdorado.blackmarket.utils.inventory.utils.UMaterial;
 import dev.minecraftdorado.blackmarket.utils.market.BlackItem;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
 import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
@@ -109,7 +108,7 @@ public class bm implements CommandExecutor {
 									ItemStack item = player.getInventory().getItemInHand();
 									
 									if(item != null && !item.getType().equals(Material.AIR))
-										if(!Config.blackListIsEnable() || BlackList.isAllow(UMaterial.match(item))) {
+										if(!Config.blackListIsEnable() || BlackList.isAllow(Material.matchMaterial(item.getType().name()))) {
 											if(!Config.blackListLoreIsEnable() || !item.hasItemMeta() || !item.getItemMeta().hasLore() || BlackListLore.isAllow(item.getItemMeta().getLore())) {
 												BlackItem bItem = new BlackItem(item, value, player.getUniqueId());
 												

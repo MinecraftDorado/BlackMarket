@@ -1,6 +1,5 @@
 package dev.minecraftdorado.blackmarket.utils.inventory.utils;
 
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,18 +20,13 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
-import dev.minecraftdorado.blackmarket.utils.packets.Reflections;
-
 @SuppressWarnings("deprecation")
 public class ItemStackSerializer {
 	
 	public static String serialize(ItemStack item){
         StringBuilder builder = new StringBuilder();
-        try {
-        	builder.append(UMaterial.match(item).name());
-        }catch(Exception ex) {
-        	builder.append(item.getType().name());
-        }
+        builder.append(item.getType().name());
+        
         if(item.getDurability() != 0) builder.append(":" + item.getDurability());
         builder.append(" " + item.getAmount());
         String ench = getEnchantments(item);
@@ -63,11 +57,7 @@ public class ItemStackSerializer {
         for (String str: strings) {
             args = str.split(":");
             if(item.getType() == Material.AIR) {
-            	if(UMaterial.match(args[0]) != null){
-            		item = UMaterial.match(args[0]).getItemStack();
-            		if(args.length == 2) item.setDurability(Short.parseShort(args[1]));
-            		break;
-            	}else if(Material.matchMaterial(args[0]) != null) {
+            	if(Material.matchMaterial(args[0]) != null) {
             		item.setType(Material.valueOf(args[0]));
             		if(args.length == 2) item.setDurability(Short.parseShort(args[1]));
             		break;
@@ -281,14 +271,9 @@ public class ItemStackSerializer {
         
         PotionMeta meta = (PotionMeta) item.getItemMeta();
         
-        if(Reflections.existMethod(meta.getClass().toString(), "getBasePotionData")) {
-        	try {
-        		Method getBasePotionData = meta.getClass().getMethod("getBasePotionData");
-        		PotionData pd = (PotionData) getBasePotionData.invoke(meta);
-        		potion = pd.getType().name() + "-" + pd.isUpgraded() + "-" + pd.isExtended();
-        	} catch(Exception e) {
-        		e.printStackTrace();
-        	}
+        if(meta.getBasePotionData() != null) {
+        	PotionData pd = meta.getBasePotionData();
+        	potion = pd.getType().name() + "-" + pd.isUpgraded() + "-" + pd.isExtended();
         }
         
         if(meta.hasCustomEffects()) {
@@ -297,13 +282,6 @@ public class ItemStackSerializer {
         	if(potion.startsWith("@")) potion = potion.replaceFirst("@", "");
         }
         
-        /*
-        if(meta.getBasePotionData() != null) {
-        	PotionData pd = meta.getBasePotionData();
-        	potion = pd.getType().name() + "-" + pd.isUpgraded() + "-" + pd.isExtended();
-        }
-        
-        */
 		if(potion == "") potion = null;
         return potion;
     }
@@ -316,23 +294,11 @@ public class ItemStackSerializer {
     		String[] args = p[i].split("-");
     		
 			if(i == 0) {
-				try {
-					if(Reflections.existMethod(meta.getClass().toString(), "setBasePotionData", PotionData.class)) {
-						try {
-							PotionType type = PotionType.valueOf(args[0]);
-							Method setBasePotionData = meta.getClass().getMethod("setBasePotionData", PotionData.class);
-							setBasePotionData.invoke(meta, new PotionData(type, Boolean.valueOf(args[2]), Boolean.valueOf(args[1])));
-						} catch(Exception e) {
-							e.printStackTrace();
-						}
-					}
-				}catch(Exception ex) {
-					Bukkit.getConsoleSender().sendMessage("§6" + potions);
-					ex.printStackTrace();
-				}
-				
+				PotionType type = PotionType.valueOf(args[0]);
+				meta.setBasePotionData(new PotionData(type, Boolean.valueOf(args[2]), Boolean.valueOf(args[1])));				
 				continue;
 			}
+			
 			PotionEffectType type = PotionEffectType.getByName(args[0]);
 			int amplifier = Integer.valueOf(args[1]);
 			int duration = Integer.valueOf(args[2]);
