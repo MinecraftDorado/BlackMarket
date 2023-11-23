@@ -176,7 +176,9 @@ public class InventoryManager implements Listener {
 		
 		history.remove(player);
 		
-		MainClass.npcM.npcList.get(player).clear();
+		if(MainClass.npcM.npcList.containsKey(player)) {
+			MainClass.npcM.npcList.get(player).clear();
+		}
 	}
 	
 	public static class Inv {
