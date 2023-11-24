@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Date;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import dev.minecraftdorado.blackmarket.mainclass.MainClass;
@@ -25,8 +26,13 @@ public class dbFolder {
 				if(status.equals(Status.ON_SALE) || status.equals(Status.TIME_OUT) || (status.equals(Status.SOLD) && !yml.getBoolean("notified"))) {
 					UUID owner = UUID.fromString(yml.getString("owner"));
 					
-					BlackItem bItem = new BlackItem(yml.getItemStack("item"), yml.getDouble("value"), owner, Status.valueOf(yml.getString("status")), new Date(yml.getLong("date")), id, yml.getBoolean("notified"));
-					PlayerData.get(owner).addItem(bItem);
+					try {
+						BlackItem bItem = new BlackItem(yml.getItemStack("item"), yml.getDouble("value"), owner, Status.valueOf(yml.getString("status")), new Date(yml.getLong("date")), id, yml.getBoolean("notified"));
+						PlayerData.get(owner).addItem(bItem);
+					}catch(Exception e) {
+						Bukkit.getConsoleSender().sendMessage("§c[BlackMarket] §7» Corrupt item: ID#" + id);
+						continue;
+					}
 				}else
 					if(Market.getId()<id)
 						Market.setId(id);

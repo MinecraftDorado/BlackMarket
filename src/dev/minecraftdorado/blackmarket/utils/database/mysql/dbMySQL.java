@@ -261,6 +261,7 @@ public class dbMySQL {
 	
 	private static BlackItem addItem(ResultSet resultSet, UUID uuid) {
 		BlackItem bItem = null;
+		Integer id = null;
 		try {
 			ItemStack item = ItemStackSerializer.deserialize(resultSet.getString("item"));
 			
@@ -281,12 +282,15 @@ public class dbMySQL {
 					}
 				}
 				
-				bItem = new BlackItem(item, resultSet.getDouble("value"), uuid, Status.valueOf(resultSet.getString("status")), new Date(resultSet.getLong("date")), resultSet.getInt("id"), resultSet.getBoolean("notified"));
+				id = resultSet.getInt("id");
+				
+				bItem = new BlackItem(item, resultSet.getDouble("value"), uuid, Status.valueOf(resultSet.getString("status")), new Date(resultSet.getLong("date")), id, resultSet.getBoolean("notified"));
 				
 				PlayerData.get(uuid).setItem(bItem);
 			}
-		}catch(Exception ex) {
-			ex.printStackTrace();
+		}catch(Exception e) {
+			Bukkit.getConsoleSender().sendMessage("§c[BlackMarket] §7» Corrupt item: ID#" + id);
+			return null;
 		}
 		return bItem;
 	}
