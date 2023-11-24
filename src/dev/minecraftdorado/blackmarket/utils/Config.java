@@ -69,7 +69,6 @@ public class Config {
 			npc.respawn();
 		
 		Utils.dataCopy.clear();
-		PlayerData.reload();
 	}
 	
 	@SuppressWarnings("unchecked")
