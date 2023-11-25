@@ -198,6 +198,8 @@ public class Utils {
 	}
 	
 	public static boolean canAddItem(Player player, ItemStack item) {
+		if(item == null) return false;
+		
 		Inventory inv = Bukkit.createInventory(null, 45);
 		int slot = 0;
 		for(ItemStack i : player.getInventory().getStorageContents())

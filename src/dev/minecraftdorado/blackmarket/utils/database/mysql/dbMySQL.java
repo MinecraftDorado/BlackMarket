@@ -288,10 +288,12 @@ public class dbMySQL {
 				
 				PlayerData.get(uuid).setItem(bItem);
 			}
-		}catch(Exception e) {
+		}catch(Exception e) {}
+		
+		if(bItem == null) {
 			Bukkit.getConsoleSender().sendMessage("§c[BlackMarket] §7» Corrupt item: ID#" + id);
-			return null;
 		}
+		
 		return bItem;
 	}
 }

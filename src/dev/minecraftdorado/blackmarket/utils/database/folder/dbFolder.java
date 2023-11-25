@@ -20,22 +20,28 @@ public class dbFolder {
 	public static void load() {
 		if(file.exists() && file.listFiles().length != 0) {
 			for(File f : file.listFiles()) {
-				YamlConfiguration yml = YamlConfiguration.loadConfiguration(f);
-				Status status = Status.valueOf(yml.getString("status"));
 				int id = Integer.parseInt(f.getName().replace(".yml", ""));
-				if(status.equals(Status.ON_SALE) || status.equals(Status.TIME_OUT) || (status.equals(Status.SOLD) && !yml.getBoolean("notified"))) {
-					UUID owner = UUID.fromString(yml.getString("owner"));
-					
-					try {
-						BlackItem bItem = new BlackItem(yml.getItemStack("item"), yml.getDouble("value"), owner, Status.valueOf(yml.getString("status")), new Date(yml.getLong("date")), id, yml.getBoolean("notified"));
-						PlayerData.get(owner).addItem(bItem);
-					}catch(Exception e) {
-						Bukkit.getConsoleSender().sendMessage("§c[BlackMarket] §7» Corrupt item: ID#" + id);
-						continue;
+				
+				try {
+					YamlConfiguration yml = YamlConfiguration.loadConfiguration(f);
+					Status status = Status.valueOf(yml.getString("status"));
+					if(status.equals(Status.ON_SALE) || status.equals(Status.TIME_OUT) || (status.equals(Status.SOLD) && !yml.getBoolean("notified"))) {
+						UUID owner = UUID.fromString(yml.getString("owner"));
+						
+						if(yml.getItemStack("item") != null) {
+							BlackItem bItem = new BlackItem(yml.getItemStack("item"), yml.getDouble("value"), owner, Status.valueOf(yml.getString("status")), new Date(yml.getLong("date")), id, yml.getBoolean("notified"));
+							PlayerData.get(owner).addItem(bItem);
+							continue;
+						}else {
+							Bukkit.getConsoleSender().sendMessage("§c[BlackMarket] §7» Corrupt item: ID#" + id);
+						}
 					}
-				}else
-					if(Market.getId()<id)
-						Market.setId(id);
+				}catch(Exception e) {
+					Bukkit.getConsoleSender().sendMessage("§c[BlackMarket] §7» Corrupt item: ID#" + id);
+				}
+				
+				if(Market.getId()<id)
+					Market.setId(id);
 			}
 		}
 	}
@@ -45,7 +51,8 @@ public class dbFolder {
 			data.getItems().forEach(bItem -> {
 				File f = new File(file, bItem.getId() + ".yml");
 				
-				YamlConfiguration yml = YamlConfiguration.loadConfiguration(f);
+				YamlConfiguration yml = new YamlConfiguration();
+				
 				yml.set("owner", data.getUUID().toString());
 				yml.set("value", bItem.getValue());
 				yml.set("date", bItem.getDate().getTime());
