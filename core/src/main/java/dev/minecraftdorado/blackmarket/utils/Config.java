@@ -24,7 +24,6 @@ import dev.minecraftdorado.blackmarket.utils.economy.EconomyManager.EconomyType;
 import dev.minecraftdorado.blackmarket.utils.entities.npc.NPC;
 import dev.minecraftdorado.blackmarket.utils.entities.npc.skins.SkinData;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
-import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
 
 public class Config {
 	

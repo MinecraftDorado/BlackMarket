@@ -2,6 +2,7 @@ package dev.minecraftdorado.blackmarket.utils.entities.npc;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import org.bukkit.entity.Player;
 
 import dev.minecraftdorado.blackmarket.utils.Config;
