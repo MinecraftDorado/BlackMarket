@@ -1,10 +1,10 @@
-package dev.minecraftdorado.blackmarket.v1_20_R1.utils.packets;
+package dev.minecraftdorado.blackmarket.v1_20_R2.utils.packets;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import dev.minecraftdorado.blackmarket.MainClass;
@@ -17,7 +17,7 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.handler.codec.MessageToMessageDecoder;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ServerboundInteractPacket;
-import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.server.network.ServerCommonPacketListenerImpl;
 
 public class PacketReader extends PacketReaderAbs {
 	
@@ -68,10 +68,10 @@ public class PacketReader extends PacketReaderAbs {
 	public Connection getConnection(final Object playerConnection) {
 		try {
 			if (connectionField == null) {
-				connectionField = ServerGamePacketListenerImpl.class.getDeclaredField("h");
+				connectionField = ServerCommonPacketListenerImpl.class.getDeclaredField("c");
 				connectionField.setAccessible(true);
 			}
-			return (Connection) connectionField.get((ServerGamePacketListenerImpl) playerConnection);
+			return (Connection) connectionField.get((ServerCommonPacketListenerImpl) playerConnection);
 		} catch (final NoSuchFieldException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}

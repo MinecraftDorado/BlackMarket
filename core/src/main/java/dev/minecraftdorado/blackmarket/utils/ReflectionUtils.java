@@ -1,5 +1,7 @@
 package dev.minecraftdorado.blackmarket.utils;
 
+import java.lang.reflect.Field;
+
 import org.bukkit.Bukkit;
 
 import dev.minecraftdorado.blackmarket.MainClass;
@@ -21,4 +23,28 @@ public class ReflectionUtils {
 		}
 	}
 	
+	public static void setValue(Object packet, String fieldName, Object value) {
+	    try {
+	        Field field = packet.getClass().getDeclaredField(fieldName);
+	        field.setAccessible(true);
+	        field.set(packet, value);
+	    } catch (Exception exception) {
+	        exception.printStackTrace();
+	    }
+	}
+	
+	public static Object getValue(Object instance, String name) {
+		Object result = null;
+		
+		try {
+			Field field = instance.getClass().getDeclaredField(name);
+			field.setAccessible(true);
+			result = field.get(instance);
+			field.setAccessible(false);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 }

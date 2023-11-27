@@ -1,12 +1,12 @@
-package dev.minecraftdorado.blackmarket.v1_20_R1.utils.entities;
+package dev.minecraftdorado.blackmarket.v1_20_R2.utils.entities;
 
 import java.util.Collections;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_20_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_20_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import com.mojang.authlib.GameProfile;
@@ -16,7 +16,7 @@ import dev.minecraftdorado.blackmarket.utils.Config;
 import dev.minecraftdorado.blackmarket.utils.ReflectionUtils;
 import dev.minecraftdorado.blackmarket.utils.entities.hologram.HologramAbs;
 import dev.minecraftdorado.blackmarket.utils.entities.npc.NPCAbs;
-import net.minecraft.network.protocol.game.ClientboundAddPlayerPacket;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundMoveEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundPlayerInfoRemovePacket;
 import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
@@ -24,6 +24,7 @@ import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
 import net.minecraft.network.protocol.game.ClientboundRotateHeadPacket;
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
@@ -44,7 +45,7 @@ public class NPC extends NPCAbs {
 			gameProfile.getProperties().put("textures", new Property("textures", skin.getTexture(), skin.getSignature()));
 		}
 		
-		npc = new ServerPlayer(server, level, gameProfile);
+		npc = new ServerPlayer(server, level, gameProfile, ClientInformation.createDefault());
 		entityId = npc.getId();
 		
 		if(Config.healthBar()) {
@@ -62,10 +63,15 @@ public class NPC extends NPCAbs {
 	public void display(Player... players) {
 		for (Player player : players) {
 			if (viewers.add(player)) {
-				
 				ServerGamePacketListenerImpl ps = ((CraftPlayer) player).getHandle().connection;
-				ps.send(new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, npc));
-				ps.send(new ClientboundAddPlayerPacket(npc));
+				
+				ReflectionUtils.setValue(npc, "c", ((CraftPlayer) player).getHandle().connection);
+				
+				ClientboundPlayerInfoUpdatePacket infoUpdatePacket = new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, npc);
+				ClientboundAddEntityPacket addEntityPacket = new ClientboundAddEntityPacket(npc);
+				
+				ps.send(infoUpdatePacket);
+				ps.send(addEntityPacket);
 				
 				getNameEntity().display(player);
 			}
@@ -85,11 +91,11 @@ public class NPC extends NPCAbs {
 		}
 	}
 	
-	protected void updateLocation() {
+	protected void updateLocation() {		
 		viewers.forEach(player -> {
 			ServerGamePacketListenerImpl ps = ((CraftPlayer) player).getHandle().connection;
 			
-			ps.send(new ClientboundSetEntityDataPacket(npc.getId(), npc.getEntityData().getNonDefaultValues()));
+			ps.send(new ClientboundSetEntityDataPacket(getEntityId(), npc.getEntityData().getNonDefaultValues()));
 			
 		});
 	}
