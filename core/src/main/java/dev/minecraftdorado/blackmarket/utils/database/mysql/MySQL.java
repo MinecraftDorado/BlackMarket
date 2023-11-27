@@ -8,7 +8,7 @@ import java.sql.Statement;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
-import dev.minecraftdorado.blackmarket.mainclass.MainClass;
+import dev.minecraftdorado.blackmarket.MainClass;
 
 public class MySQL {
 	

@@ -17,7 +17,7 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 
 import com.google.common.io.Resources;
 
-import dev.minecraftdorado.blackmarket.mainclass.MainClass;
+import dev.minecraftdorado.blackmarket.MainClass;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.ItemStackSerializer;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.SerializeInventory;
 import dev.minecraftdorado.blackmarket.utils.market.BlackItem;

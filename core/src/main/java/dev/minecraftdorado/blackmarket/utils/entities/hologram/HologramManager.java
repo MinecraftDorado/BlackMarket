@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 public class HologramManager {
 	
-	public ArrayList<Hologram> list = new ArrayList<>();
+	public ArrayList<HologramAbs> list = new ArrayList<>();
 	
-	public void add(Hologram holo) {
+	public void add(HologramAbs holo) {
 		list.add(holo);
 	}
 	
-	public void remove(Hologram holo) {
+	public void remove(HologramAbs holo) {
 		list.remove(holo);
 	}
 }

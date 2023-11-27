@@ -25,12 +25,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
-import dev.minecraftdorado.blackmarket.mainclass.MainClass;
+import dev.minecraftdorado.blackmarket.MainClass;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.OrderUtils.OrderType;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
 import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
 import dev.minecraftdorado.blackmarket.utils.market.Storage;
 import dev.minecraftdorado.blackmarket.utils.market.sell.Sales;
+import dev.minecraftdorado.blackmarket.utils.packets.PacketReaderAbs;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 
 public class Utils {
@@ -278,4 +279,8 @@ public class Utils {
 		return new TranslatableComponent(key);
 	}
 	
+	public static void injectPacketReader(Player player) {
+		PacketReaderAbs packetReader = (PacketReaderAbs) ReflectionUtils.getClass("utils.packets.PacketReader");
+		packetReader.inject(player);
+	}
 }

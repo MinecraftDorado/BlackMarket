@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import dev.minecraftdorado.blackmarket.mainclass.MainClass;
+import dev.minecraftdorado.blackmarket.MainClass;
 import dev.minecraftdorado.blackmarket.utils.Config;
 import dev.minecraftdorado.blackmarket.utils.Config.StorageType;
 import dev.minecraftdorado.blackmarket.utils.Utils;

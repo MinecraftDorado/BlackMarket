@@ -34,5 +34,10 @@
 			<artifactId>BlackMarket-core</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>dev.minecraftdorado.BlackMarket</groupId>
+			<artifactId>BlackMarket-v1_20_R1</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
 	</dependencies>
 </project>

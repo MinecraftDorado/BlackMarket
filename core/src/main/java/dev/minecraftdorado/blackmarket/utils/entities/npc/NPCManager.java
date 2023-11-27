@@ -9,14 +9,14 @@ import dev.minecraftdorado.blackmarket.utils.Config;
 
 public class NPCManager {
 	
-	public HashMap<Integer, NPC> list = new HashMap<>();
+	public HashMap<Integer, NPCAbs> list = new HashMap<>();
 	public HashMap<Player, ArrayList<Integer>> npcList = new HashMap<>();
 	
-	public void add(NPC npc) {
+	public void add(NPCAbs npc) {
 		list.put(npc.getEntityId(), npc);
 	}
 	
-	public void remove(NPC npc) {
+	public void remove(NPCAbs npc) {
 		npc.hide();
 		npc.getNameEntity().hide();
 		list.remove(npc.getEntityId());
@@ -28,7 +28,7 @@ public class NPCManager {
 	
 	public NPCManager() {
 		
-		for(NPC npc : Config.getNPCs()) {
+		for(NPCAbs npc : Config.getNPCs()) {
 			npc.spawn();
 			list.put(npc.getEntityId(), npc);
 		}

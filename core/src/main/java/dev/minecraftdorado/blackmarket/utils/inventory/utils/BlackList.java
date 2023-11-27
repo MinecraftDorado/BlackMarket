@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import dev.minecraftdorado.blackmarket.mainclass.MainClass;
+import dev.minecraftdorado.blackmarket.MainClass;
 import dev.minecraftdorado.blackmarket.utils.Config;
 import dev.minecraftdorado.blackmarket.utils.Utils;
 

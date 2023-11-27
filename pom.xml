@@ -27,6 +27,7 @@
   
 	<modules>
 		<module>core</module>
+		<module>v1_20_R1</module>
 		<module>dist</module>
 	</modules>
 </project>

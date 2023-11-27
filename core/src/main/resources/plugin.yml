@@ -1,4 +1,4 @@
-main: dev.minecraftdorado.blackmarket.mainclass.MainClass
+main: dev.minecraftdorado.blackmarket.MainClass
 name: BlackMarket
 author: MinecraftDorado
 

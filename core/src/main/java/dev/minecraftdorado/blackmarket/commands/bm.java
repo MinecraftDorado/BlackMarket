@@ -9,10 +9,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import dev.minecraftdorado.blackmarket.MainClass;
 import dev.minecraftdorado.blackmarket.listeners.PlayerListener;
-import dev.minecraftdorado.blackmarket.mainclass.MainClass;
 import dev.minecraftdorado.blackmarket.utils.Config;
-import dev.minecraftdorado.blackmarket.utils.entities.npc.NPC;
+import dev.minecraftdorado.blackmarket.utils.ReflectionUtils;
+import dev.minecraftdorado.blackmarket.utils.entities.npc.NPCAbs;
 import dev.minecraftdorado.blackmarket.utils.entities.npc.skins.SkinData;
 import dev.minecraftdorado.blackmarket.utils.inventory.InventoryManager;
 import dev.minecraftdorado.blackmarket.utils.inventory.utils.BlackList;
@@ -52,7 +53,8 @@ public class bm implements CommandExecutor {
 					if(args.length <= 2) {
 						if(player.hasPermission("blackmarket.npc.set")) {
 							
-							NPC npc = new NPC(player.getLocation());
+							NPCAbs npc = (NPCAbs) ReflectionUtils.getClass("utils.entities.NPC");
+							npc.setLocation(player.getLocation());
 							
 							if(args.length == 2)
 								npc.setSkin(SkinData.getSkin(args[1]));

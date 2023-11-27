@@ -1,20 +1,21 @@
-package dev.minecraftdorado.blackmarket.mainclass;
+package dev.minecraftdorado.blackmarket;
 
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_20_R1.CraftServer;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.minecraftdorado.blackmarket.commands.bm;
 import dev.minecraftdorado.blackmarket.commands.bmTab;
-import dev.minecraftdorado.blackmarket.commands.sell;
 import dev.minecraftdorado.blackmarket.listeners.ConfirmListener;
 import dev.minecraftdorado.blackmarket.listeners.ContentListener;
 import dev.minecraftdorado.blackmarket.listeners.MarketListener;
 import dev.minecraftdorado.blackmarket.listeners.PlayerListener;
 import dev.minecraftdorado.blackmarket.listeners.SalesListener;
 import dev.minecraftdorado.blackmarket.listeners.StorageListener;
+import dev.minecraftdorado.blackmarket.utils.CommandAliasAbs;
 import dev.minecraftdorado.blackmarket.utils.Config;
+import dev.minecraftdorado.blackmarket.utils.ReflectionUtils;
 import dev.minecraftdorado.blackmarket.utils.UpdateChecker;
+import dev.minecraftdorado.blackmarket.utils.Utils;
 import dev.minecraftdorado.blackmarket.utils.UpdateChecker.UpdateReason;
 import dev.minecraftdorado.blackmarket.utils.economy.EconomyManager;
 import dev.minecraftdorado.blackmarket.utils.entities.hologram.HologramManager;
@@ -28,7 +29,6 @@ import dev.minecraftdorado.blackmarket.utils.market.Market;
 import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
 import dev.minecraftdorado.blackmarket.utils.metrics.Metrics;
 import dev.minecraftdorado.blackmarket.utils.metrics.custom.CustomMetrics;
-import dev.minecraftdorado.blackmarket.utils.packets.PacketReader;
 
 public class MainClass extends JavaPlugin {
 	
@@ -77,14 +77,12 @@ public class MainClass extends JavaPlugin {
 		new CustomMetrics(metrics);
 		
 		if(!Config.getSellAlias().isEmpty()) {
-			CraftServer craftserver = ((CraftServer) Bukkit.getServer());
-			craftserver.getCommandMap().register(Config.getSellAlias().get(0), new sell(Config.getSellAlias().get(0)));
+			CommandAliasAbs commandAlias = (CommandAliasAbs) ReflectionUtils.getClass("utils.CommandAlias");
+			commandAlias.addAlias(Config.getSellAlias());
 		}
 		
 		hm = new HologramManager();
 		npcM = new NPCManager();
-		
-		new PacketReader();
 		
 		Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 		Bukkit.getPluginManager().registerEvents(new MarketListener(), this);
@@ -95,7 +93,7 @@ public class MainClass extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new InventoryManager(), this);
 		
 		Bukkit.getOnlinePlayers().forEach(player -> {
-			PacketReader.inject(player);
+			Utils.injectPacketReader(player);
 			
 			npcM.list.values().forEach(npc -> {
 				npc.display(player);

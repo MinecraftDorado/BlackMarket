@@ -15,10 +15,11 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import dev.minecraftdorado.blackmarket.mainclass.MainClass;
+import dev.minecraftdorado.blackmarket.MainClass;
 import dev.minecraftdorado.blackmarket.utils.Config;
 import dev.minecraftdorado.blackmarket.utils.UpdateChecker;
 import dev.minecraftdorado.blackmarket.utils.UpdateChecker.UpdateReason;
+import dev.minecraftdorado.blackmarket.utils.Utils;
 import dev.minecraftdorado.blackmarket.utils.database.mysql.dbMySQL;
 import dev.minecraftdorado.blackmarket.utils.entities.npc.events.NPCInteractEvent;
 import dev.minecraftdorado.blackmarket.utils.inventory.InventoryManager;
@@ -26,7 +27,6 @@ import dev.minecraftdorado.blackmarket.utils.market.BlackItem.Status;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
 import dev.minecraftdorado.blackmarket.utils.market.PlayerData;
 import dev.minecraftdorado.blackmarket.utils.market.sell.Sales;
-import dev.minecraftdorado.blackmarket.utils.packets.PacketReader;
 
 public class PlayerListener implements Listener {
 	
@@ -39,7 +39,7 @@ public class PlayerListener implements Listener {
 	@EventHandler
 	private void join(PlayerJoinEvent e) {
 		
-		PacketReader.inject(e.getPlayer());
+		Utils.injectPacketReader(e.getPlayer());
 		
 		MainClass.npcM.list.values().forEach(npc -> {
 			npc.display(e.getPlayer());

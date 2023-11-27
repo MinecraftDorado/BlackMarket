@@ -18,10 +18,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
 
-import dev.minecraftdorado.blackmarket.mainclass.MainClass;
+import dev.minecraftdorado.blackmarket.MainClass;
 import dev.minecraftdorado.blackmarket.utils.database.mysql.dbMySQL;
 import dev.minecraftdorado.blackmarket.utils.economy.EconomyManager.EconomyType;
-import dev.minecraftdorado.blackmarket.utils.entities.npc.NPC;
+import dev.minecraftdorado.blackmarket.utils.entities.npc.NPCAbs;
 import dev.minecraftdorado.blackmarket.utils.entities.npc.skins.SkinData;
 import dev.minecraftdorado.blackmarket.utils.market.Market;
 
@@ -35,7 +35,7 @@ public class Config {
 	private static File confFile, langFile;
 	private static int expiredTime, defaultLimit, taxes;
 	private static double minimum_price, maximum_price;
-	private static ArrayList<NPC> npcs = new ArrayList<>();
+	private static ArrayList<NPCAbs> npcs = new ArrayList<>();
 	private static ItemStack market_background, market_border, storage_background, storage_border, sellmenu_background, sellmenu_border, content_border, confirm_background, confirm_border;
 	private static StorageType storageType;
 	private static boolean blacklist_enable, blacklistlore_enable, confirm_enable, multi_server, healthBar;
@@ -62,9 +62,9 @@ public class Config {
 		if(!stype.equals(storageType) || storageType.equals(StorageType.MySQL) && !multi_server)
 			Market.setId(0);
 		
-		ArrayList<NPC> npcs = new ArrayList<>();
+		ArrayList<NPCAbs> npcs = new ArrayList<>();
 		npcs.addAll(MainClass.npcM.list.values());
-		for(NPC npc : npcs)
+		for(NPCAbs npc : npcs)
 			npc.respawn();
 		
 		Utils.dataCopy.clear();
@@ -160,7 +160,8 @@ public class Config {
 					if(Bukkit.getWorld(args[0]) != null) {
 						Location loc = new Location(Bukkit.getWorld(args[0]), Double.valueOf(args[1]), Double.valueOf(args[2]), Double.valueOf(args[3]));
 						
-						NPC npc = new NPC(loc);
+						NPCAbs npc = (NPCAbs) ReflectionUtils.getClass("utils.entities.NPC");
+						npc.setLocation(loc);
 						if(args.length == 5)
 							npc.setSkin(SkinData.getSkin(args[4]));
 						npcs.add(npc);
@@ -170,7 +171,8 @@ public class Config {
 						Bukkit.getScheduler().runTaskLater(MainClass.main, () -> {
 							Location loc = new Location(Bukkit.getWorld(args[0]), Double.valueOf(args[1]), Double.valueOf(args[2]), Double.valueOf(args[3]));
 							
-							NPC npc = new NPC(loc);
+							NPCAbs npc = (NPCAbs) ReflectionUtils.getClass("utils.entities.NPC");
+							npc.setLocation(loc);
 							if(args.length == 5)
 								npc.setSkin(SkinData.getSkin(args[4]));
 							npcs.add(npc);
@@ -311,18 +313,18 @@ public class Config {
 		return defaultLimit;
 	}
 	
-	public static ArrayList<NPC> getNPCs(){
+	public static ArrayList<NPCAbs> getNPCs(){
 		return npcs;
 	}
 	
-	public static void saveNPCs(Collection<NPC> list) {
+	public static void saveNPCs(Collection<NPCAbs> list) {
 		npcs.clear();
 		File file = new File(MainClass.main.getDataFolder(), "npcs.yml");
 		YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
 		
 		List<String> l = new ArrayList<>();
 		
-		for(NPC npc : list) {
+		for(NPCAbs npc : list) {
 			Location loc = npc.getLocation();
 			l.add(loc.getWorld().getName() + "," + loc.getX() + "," + loc.getY() + "," + loc.getZ() +(npc.getSkin() != null ?  "," + npc.getSkin().getName() : ""));
 			npcs.add(npc);
